@@ -1,0 +1,15 @@
+<Project>
+    <PropertyGroup>
+        <AssemblyName Condition="'$(AssemblyName)'==''">Comptatata.$(MSBuildProjectName)</AssemblyName>
+        <RootNamespace Condition="'$(RootNamespace)'==''">Comptatata.$(MSBuildProjectName)</RootNamespace>
+        <LangVersion>14.0</LangVersion>
+        <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <UseArtifactsOutput>true</UseArtifactsOutput>
+        <ArtifactsPath>$(MSBuildThisFileDirectory).artifacts</ArtifactsPath>
+    </PropertyGroup>
+</Project>
