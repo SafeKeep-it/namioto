@@ -12,4 +12,17 @@
         <UseArtifactsOutput>true</UseArtifactsOutput>
         <ArtifactsPath>$(MSBuildThisFileDirectory).artifacts</ArtifactsPath>
     </PropertyGroup>
+
+    <!--
+      Enable Native AOT + trimming only for Console executables by default.
+      - Excludes ASP.NET Core (Web SDK) projects.
+      - Excludes Aspire AppHost projects.
+      Library projects remain non-trimmed and non-AOT to avoid breaking consumers via trimming.
+    -->
+    <PropertyGroup Condition="'$(OutputType)'=='Exe' and '$(UsingMicrosoftNETWebSdk)'!='true' and '$(UsingAspireAppHostSdk)'!='true'">
+        <PublishAot>true</PublishAot>
+        <PublishTrimmed>true</PublishTrimmed>
+        <TrimMode>link</TrimMode>
+        <InvariantGlobalization>true</InvariantGlobalization>
+    </PropertyGroup>
 </Project>
