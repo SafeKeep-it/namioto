@@ -33,9 +33,8 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
             var jsonSerializerContextSymbol = compilationContext.Compilation.GetTypeByMetadataName("System.Text.Json.Serialization.JsonSerializerContext");
             var jsonSerializableAttributeSymbol = compilationContext.Compilation.GetTypeByMetadataName("System.Text.Json.Serialization.JsonSerializableAttribute");
             var jsonPolymorphicAttributeSymbol = compilationContext.Compilation.GetTypeByMetadataName("System.Text.Json.Serialization.JsonPolymorphicAttribute");
-            var jsonRootAttributeSymbol = compilationContext.Compilation.GetTypeByMetadataName("Comptatata.Serialization.JsonRootAttribute");
 
-            if (jsonSerializerContextSymbol == null || jsonSerializableAttributeSymbol == null || jsonPolymorphicAttributeSymbol == null || jsonRootAttributeSymbol == null)
+            if (jsonSerializerContextSymbol == null || jsonSerializableAttributeSymbol == null || jsonPolymorphicAttributeSymbol == null)
             {
                 return;
             }
@@ -55,7 +54,7 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
 
                 var serializableTypes = GetSerializableTypes(contextType, jsonSerializableAttributeSymbol);
                 var baseTypesInContext = serializableTypes.OfType<INamedTypeSymbol>()
-                    .Where(t => t is { IsRecord: true, IsAbstract: true } && HasAttribute(t, jsonPolymorphicAttributeSymbol) && HasAttribute(t, jsonRootAttributeSymbol))
+                    .Where(t => t is { IsRecord: true, IsAbstract: true } && HasAttribute(t, jsonPolymorphicAttributeSymbol) && HasAttributeByName(t, "JsonPolymorphicRootAttribute"))
                     .ToList();
 
                 if (baseTypesInContext.Count == 0)
@@ -92,6 +91,11 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
     private static bool HasAttribute(ISymbol symbol, INamedTypeSymbol attributeSymbol)
     {
         return symbol.GetAttributes().Any(ad => SymbolEqualityComparer.Default.Equals(ad.AttributeClass, attributeSymbol));
+    }
+
+    private static bool HasAttributeByName(ISymbol symbol, string attributeName)
+    {
+        return symbol.GetAttributes().Any(ad => ad.AttributeClass?.Name == attributeName);
     }
 
     private static bool IsDerivedFrom(INamedTypeSymbol type, INamedTypeSymbol baseType)

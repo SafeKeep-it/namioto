@@ -34,7 +34,6 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
     private static (TypeDeclarationSyntax Target, string? NamingPolicy)? GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
     {
         var typeDeclaration = (TypeDeclarationSyntax)context.Node;
-        bool hasJsonPolymorphic = false;
         string? namingPolicy = null;
         bool hasJsonRoot = false;
 
@@ -42,17 +41,8 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         {
             foreach (var attribute in attributeList.Attributes)
             {
-                if (context.SemanticModel.GetSymbolInfo(attribute).Symbol is not IMethodSymbol attributeSymbol)
-                    continue;
-
-                var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
-                var fullName = attributeContainingTypeSymbol.ToDisplayString();
-
-                if (fullName == "System.Text.Json.Serialization.JsonPolymorphicAttribute")
-                {
-                    hasJsonPolymorphic = true;
-                }
-                else if (fullName == "Comptatata.Serialization.JsonRootAttribute")
+                var name = attribute.Name.ToString();
+                if (name == "JsonPolymorphicRoot" || name == "JsonPolymorphicRootAttribute" || name.EndsWith(".JsonPolymorphicRoot") || name.EndsWith(".JsonPolymorphicRootAttribute"))
                 {
                     hasJsonRoot = true;
                     // Try to extract DiscriminatorNamingPolicy
@@ -74,10 +64,10 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
             }
         }
 
-        if (hasJsonPolymorphic && hasJsonRoot)
+        if (hasJsonRoot)
         {
             var symbol = context.SemanticModel.GetDeclaredSymbol(typeDeclaration);
-            if (symbol is INamedTypeSymbol { IsRecord: true, IsAbstract: true } &&
+            if (symbol is INamedTypeSymbol { IsAbstract: true } &&
                 typeDeclaration.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword)))
             {
                 return (typeDeclaration, namingPolicy);
