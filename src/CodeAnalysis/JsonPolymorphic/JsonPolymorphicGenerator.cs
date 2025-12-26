@@ -171,7 +171,8 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         foreach (var derivedType in derivedTypes)
         {
             var discriminator = GetDiscriminator(derivedType.Name, namingPolicy);
-            sb.AppendLine($"[JsonDerivedType(typeof({derivedType.ToDisplayString()}), \"{discriminator}\")]");
+            var typeName = derivedType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            sb.AppendLine($"[JsonDerivedType(typeof({typeName}), \"{discriminator}\")]");
         }
         
         var typeKind = typeSymbol.IsRecord ? "record" : "class";
@@ -182,10 +183,52 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
 
     private static string GetDiscriminator(string typeName, string? namingPolicy)
     {
-        if (string.IsNullOrEmpty(namingPolicy) || namingPolicy == "CamelCase")
+        if (string.IsNullOrEmpty(typeName)) return typeName;
+
+        // 0: Unspecified, 1: CamelCase
+        if (string.IsNullOrEmpty(namingPolicy) || namingPolicy == "0" || namingPolicy == "1" || namingPolicy == "CamelCase")
         {
-            if (string.IsNullOrEmpty(typeName)) return typeName;
             return char.ToLowerInvariant(typeName[0]) + typeName.Substring(1);
+        }
+
+        // 4: KebabCaseLower
+        if (namingPolicy == "4" || namingPolicy == "KebabCaseLower")
+        {
+            var result = new StringBuilder();
+            for (int i = 0; i < typeName.Length; i++)
+            {
+                var c = typeName[i];
+                if (char.IsUpper(c))
+                {
+                    if (i > 0) result.Append('-');
+                    result.Append(char.ToLowerInvariant(c));
+                }
+                else
+                {
+                    result.Append(c);
+                }
+            }
+            return result.ToString();
+        }
+
+        // 2: SnakeCaseLower
+        if (namingPolicy == "2" || namingPolicy == "SnakeCaseLower")
+        {
+            var result = new StringBuilder();
+            for (int i = 0; i < typeName.Length; i++)
+            {
+                var c = typeName[i];
+                if (char.IsUpper(c))
+                {
+                    if (i > 0) result.Append('_');
+                    result.Append(char.ToLowerInvariant(c));
+                }
+                else
+                {
+                    result.Append(c);
+                }
+            }
+            return result.ToString();
         }
         
         // Default to original if unknown policy for now
