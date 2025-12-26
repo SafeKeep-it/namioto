@@ -6,6 +6,7 @@
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
+        <NoWarn>$(NoWarn);RS2008</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
