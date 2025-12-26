@@ -78,7 +78,8 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
                                 location = typeDeclaration.Identifier.GetLocation();
                             }
 
-                            var diagnostic = Diagnostic.Create(Rule, location, derivedType.Name, baseType.Name, contextType.Name);
+                            var properties = ImmutableDictionary<string, string?>.Empty.Add("MissingType", derivedType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+                            var diagnostic = Diagnostic.Create(Rule, location, properties, derivedType.Name, baseType.Name, contextType.Name);
                             symbolContext.ReportDiagnostic(diagnostic);
                         }
                     }
