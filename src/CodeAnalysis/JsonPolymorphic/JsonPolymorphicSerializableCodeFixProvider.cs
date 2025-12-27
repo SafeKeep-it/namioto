@@ -56,13 +56,13 @@ public class JsonPolymorphicSerializableCodeFixProvider : CodeFixProvider
     private async Task<Document> AddJsonSerializableAttributeAsync(Document document, TypeDeclarationSyntax typeDeclaration, string missingType, CancellationToken cancellationToken)
     {
         var editor = await DocumentEditor.CreateAsync(document, cancellationToken).ConfigureAwait(false);
-        
+
         var typeName = SyntaxFactory.ParseTypeName(missingType)
             .WithAdditionalAnnotations(Simplifier.Annotation);
 
         var attributeArgument = SyntaxFactory.AttributeArgument(
             SyntaxFactory.TypeOfExpression(typeName));
-        
+
         var attribute = SyntaxFactory.Attribute(
             SyntaxFactory.ParseName("JsonSerializable"),
             SyntaxFactory.AttributeArgumentList(SyntaxFactory.SingletonSeparatedList(attributeArgument)));
@@ -78,7 +78,7 @@ public class JsonPolymorphicSerializableCodeFixProvider : CodeFixProvider
             // If it's the only attribute in the list, we can just insert a new list after it.
             // But if there are multiple attributes in the list [A, B], it's more complex.
             // STJ usually has one attribute per list for these.
-            
+
             var newAttributeList = SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(attribute))
                 .WithLeadingTrivia(attributeList.GetLeadingTrivia())
                 .WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed);
