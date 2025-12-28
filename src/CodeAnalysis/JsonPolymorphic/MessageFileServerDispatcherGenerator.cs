@@ -13,116 +13,126 @@ public class MessageFileServerDispatcherGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var dispatcherClasses = context.SyntaxProvider
+        var handlerTypes = context.SyntaxProvider
             .CreateSyntaxProvider(
-                predicate: static (s, _) => s is ClassDeclarationSyntax cds && 
-                                            cds.Members.OfType<MethodDeclarationSyntax>()
-                                                .Any(m => m.Identifier.Text == "DispatchAsync" && m.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword))),
-                transform: static (ctx, _) => (ClassDeclarationSyntax)ctx.Node)
+                predicate: static (s, _) => s is InvocationExpressionSyntax ies &&
+                                            ies.Expression is MemberAccessExpressionSyntax mes &&
+                                            mes.Name is GenericNameSyntax gn &&
+                                            gn.Identifier.Text == "AddHandler",
+                transform: static (ctx, _) => GetHandlerType(ctx))
             .Where(static m => m is not null);
 
-        context.RegisterSourceOutput(dispatcherClasses.Collect().Combine(context.CompilationProvider),
-            static (spc, source) => Execute(source.Right, source.Left, spc));
+        context.RegisterSourceOutput(handlerTypes.Collect().Combine(context.CompilationProvider),
+            static (spc, source) => Execute(source.Right, source.Left!, spc));
     }
 
-    private static void Execute(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> dispatcherClasses, SourceProductionContext context)
+    private static ITypeSymbol? GetHandlerType(GeneratorSyntaxContext ctx)
     {
-        if (dispatcherClasses.IsDefaultOrEmpty) return;
+        var ies = (InvocationExpressionSyntax)ctx.Node;
+        if (ies.Expression is not MemberAccessExpressionSyntax mes) return null;
+        if (mes.Name is not GenericNameSyntax gn) return null;
+
+        var typeArg = gn.TypeArgumentList.Arguments.FirstOrDefault();
+        if (typeArg == null) return null;
+
+        var typeInfo = ctx.SemanticModel.GetTypeInfo(typeArg);
+        return typeInfo.Type;
+    }
+
+    private static void Execute(Compilation compilation, ImmutableArray<ITypeSymbol> handlerTypes, SourceProductionContext context)
+    {
+        if (handlerTypes.IsDefaultOrEmpty) return;
 
         var commandSymbol = compilation.GetTypeByMetadataName("Comptatata.Communication.Messages.Command");
         var eventSymbol = compilation.GetTypeByMetadataName("Comptatata.Communication.Messages.Event");
-        var serverBaseSymbol = compilation.GetTypeByMetadataName("Comptatata.Communication.CrossContainer.MessageFileDropServer");
+        var valueTaskSymbol = compilation.GetTypeByMetadataName("System.Threading.Tasks.ValueTask`1");
 
-        if (commandSymbol == null || eventSymbol == null || serverBaseSymbol == null) return;
+        if (commandSymbol == null || eventSymbol == null || valueTaskSymbol == null) return;
 
-        foreach (var dispatcherClass in dispatcherClasses.Distinct())
+        var processedTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+
+        foreach (var handlerType in handlerTypes)
         {
-            var semanticModel = compilation.GetSemanticModel(dispatcherClass.SyntaxTree);
-            if (semanticModel.GetDeclaredSymbol(dispatcherClass) is not INamedTypeSymbol dispatcherSymbol)
+            if (handlerType is not INamedTypeSymbol namedType || !processedTypes.Add(handlerType))
                 continue;
 
-            var serverSymbol = dispatcherSymbol.Constructors
-                .SelectMany(c => c.Parameters)
-                .FirstOrDefault(p => IsAssignableTo(p.Type, serverBaseSymbol))?.Type as INamedTypeSymbol;
+            var methods = FindHandlerMethods(namedType, commandSymbol, eventSymbol, valueTaskSymbol);
+            if (methods.Count == 0) continue;
 
-            if (serverSymbol == null) continue;
-
-            // Find methods in serverSymbol that match the pattern
-            var handlers = new List<IMethodSymbol>();
-            foreach (var member in serverSymbol.GetMembers().OfType<IMethodSymbol>())
-            {
-                if (member.DeclaredAccessibility != Accessibility.Public || member.IsStatic) continue;
-                if (member.Parameters.Length != 1) continue;
-
-                var paramType = member.Parameters[0].Type;
-                if (!IsAssignableTo(paramType, commandSymbol)) continue;
-
-                var returnType = member.ReturnType as INamedTypeSymbol;
-                if (returnType == null) continue;
-
-                // Check if it's Task<T> or ValueTask<T>
-                if (returnType.MetadataName != "Task`1" && returnType.MetadataName != "ValueTask`1") continue;
-                
-                var resultType = returnType.TypeArguments[0];
-                if (!IsAssignableTo(resultType, eventSymbol)) continue;
-
-                handlers.Add(member);
-            }
-
-            var source = GenerateDispatcherPartial(dispatcherSymbol, handlers);
-            if (source != null)
-            {
-                var fileName = $"{dispatcherSymbol.ContainingNamespace}.{dispatcherSymbol.Name}.g.cs";
-                context.AddSource(fileName, source);
-            }
+            var source = GenerateDispatcher(namedType, methods);
+            var fileName = $"{namedType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat).Replace("global::", "").Replace("<", "_").Replace(">", "_")}.Dispatcher.g.cs";
+            context.AddSource(fileName, source);
         }
     }
 
-    private static string? GenerateDispatcherPartial(INamedTypeSymbol dispatcherSymbol, List<IMethodSymbol> handlers)
+    private static List<IMethodSymbol> FindHandlerMethods(INamedTypeSymbol type, INamedTypeSymbol commandSymbol, INamedTypeSymbol eventSymbol, INamedTypeSymbol valueTaskSymbol)
     {
+        var methods = new List<IMethodSymbol>();
+        foreach (var member in type.GetMembers().OfType<IMethodSymbol>())
+        {
+            if (member.DeclaredAccessibility != Accessibility.Public || member.IsStatic) continue;
+            if (member.Parameters.Length != 1) continue;
+
+            var paramType = member.Parameters[0].Type;
+            if (!IsAssignableTo(paramType, commandSymbol)) continue;
+
+            if (member.ReturnType is not INamedTypeSymbol returnType) continue;
+            
+            if (!SymbolEqualityComparer.Default.Equals(returnType.OriginalDefinition, valueTaskSymbol)) continue;
+
+            var responseType = returnType.TypeArguments[0];
+            if (!IsAssignableTo(responseType, eventSymbol)) continue;
+
+            methods.Add(member);
+        }
+        return methods;
+    }
+
+    private static string GenerateDispatcher(INamedTypeSymbol handlerType, List<IMethodSymbol> methods)
+    {
+        var handlerFullName = handlerType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        var dispatcherName = $"{handlerType.Name}Dispatcher";
+        
         var sb = new StringBuilder();
         sb.AppendLine("// <auto-generated />");
-        sb.AppendLine("#nullable enable");
         sb.AppendLine("using System;");
         sb.AppendLine("using System.Threading.Tasks;");
+        sb.AppendLine("using System.Runtime.CompilerServices;");
+        sb.AppendLine("using System.Diagnostics.CodeAnalysis;");
+        sb.AppendLine("using Comptatata.Client.CrossContainer;");
         sb.AppendLine("using Comptatata.Communication.Messages;");
         sb.AppendLine();
-        sb.AppendLine($"namespace {dispatcherSymbol.ContainingNamespace};");
+        
+        // We generate in a unique namespace to avoid collisions
+        sb.AppendLine($"namespace Comptatata.Generated.Dispatchers;");
         sb.AppendLine();
-        sb.AppendLine($"partial class {dispatcherSymbol.Name}");
+        sb.AppendLine($"internal sealed class {dispatcherName}({handlerFullName} handler) : IMethodDispatcher");
         sb.AppendLine("{");
-
-        // Internal DispatchAsync<TRequest, TResponse>
-        sb.AppendLine("    internal partial async ValueTask<TResponse> DispatchAsync<TRequest, TResponse>(TRequest message)");
-        sb.AppendLine("        where TRequest : Command where TResponse : Event");
+        sb.AppendLine($"    readonly {handlerFullName} _handler = handler;");
+        sb.AppendLine();
+        sb.AppendLine("    public async ValueTask<Event> DispatchAsync(Command command)");
         sb.AppendLine("    {");
-        sb.AppendLine("        return (TResponse)await DispatchAsync((Command)message);");
+        sb.AppendLine("        Event response = command switch");
+        sb.AppendLine("        {");
+
+        foreach (var method in methods)
+        {
+            var requestType = method.Parameters[0].Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            sb.AppendLine($"            {requestType} m => await _handler.{method.Name}(m).ConfigureAwait(false),");
+        }
+
+        sb.AppendLine("            _ => new MethodNotFound()");
+        sb.AppendLine("        };");
+        sb.AppendLine("        await MessageFileDrop.SendAsync(response).ConfigureAwait(false);");
+        sb.AppendLine("        return response;");
         sb.AppendLine("    }");
         sb.AppendLine();
-
-        // Non-generic DispatchAsync(Command message) for ReceiveAsync replacement
-        sb.AppendLine("    internal async ValueTask<Event> DispatchAsync(Command message)");
+        sb.AppendLine("    [ModuleInitializer]");
+        sb.AppendLine("    [SuppressMessage(\"Usage\", \"CA2255: The 'ModuleInitializer' attribute should not be used in libraries\", Justification = \"Intentional auto-registration.\")]");
+        sb.AppendLine("    internal static void Register()");
         sb.AppendLine("    {");
-        if (handlers.Count > 0)
-        {
-            sb.AppendLine("        return message switch");
-            sb.AppendLine("        {");
-
-            foreach (var handler in handlers)
-            {
-                var requestType = handler.Parameters[0].Type;
-                sb.AppendLine($"            {requestType.ToDisplayString()} req => await _server.{handler.Name}(req),");
-            }
-
-            sb.AppendLine("            _ => new MethodNotFound(message.GetType().Name)");
-            sb.AppendLine("        };");
-        }
-        else
-        {
-            sb.AppendLine("        return new MethodNotFound(message.GetType().Name);");
-        }
+        sb.AppendLine($"        DispatcherRegistry.RegisterDispatcher(\"{handlerFullName}\", new {dispatcherName}(new {handlerFullName}()));");
         sb.AppendLine("    }");
-
         sb.AppendLine("}");
 
         return sb.ToString();
