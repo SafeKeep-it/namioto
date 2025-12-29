@@ -123,7 +123,10 @@ public class MessageFileServerDispatcherGenerator : IIncrementalGenerator
 
         sb.AppendLine("            _ => new MethodNotFound()");
         sb.AppendLine("        };");
-        sb.AppendLine("        await MessageFileDrop.SendAsync(response).ConfigureAwait(false);");
+        sb.AppendLine("        if (response is not MethodNotFound)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            await MessageFileDrop.SendAsync(response).ConfigureAwait(false);");
+        sb.AppendLine("        }");
         sb.AppendLine("        return response;");
         sb.AppendLine("    }");
         sb.AppendLine();
