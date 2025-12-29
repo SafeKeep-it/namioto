@@ -118,10 +118,10 @@ public class MessageFileServerDispatcherGenerator : IIncrementalGenerator
         foreach (var method in methods)
         {
             var requestType = method.Parameters[0].Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            sb.AppendLine($"            {requestType} m => await _handler.{method.Name}(m).ConfigureAwait(false),");
+            sb.AppendLine($"            {requestType} m => await _handler.{method.Name}(m).ConfigureAwait(false) with {{ ReplyTo = m.Id }},");
         }
 
-        sb.AppendLine("            _ => new MethodNotFound()");
+        sb.AppendLine("            _ => new MethodNotFound { ReplyTo = command.Id }");
         sb.AppendLine("        };");
         sb.AppendLine("        if (response is not MethodNotFound)");
         sb.AppendLine("        {");
