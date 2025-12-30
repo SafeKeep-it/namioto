@@ -1,9 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Text;
 
 namespace Comptatata.CodeAnalysis.JsonPolymorphic;
@@ -75,8 +73,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         if (hasJsonRoot)
         {
             var symbol = context.SemanticModel.GetDeclaredSymbol(typeDeclaration);
-            if (symbol is INamedTypeSymbol { IsAbstract: true } &&
-                typeDeclaration.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword)))
+            if (symbol is INamedTypeSymbol { IsAbstract: true })
             {
                 return (typeDeclaration, namingPolicy);
             }
@@ -90,6 +87,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         if (polymorphicTypes.IsDefaultOrEmpty) return;
 
         var allNamedTypes = GetAllNamedTypes(compilation.GlobalNamespace).ToList();
+        var hierarchies = new List<(INamedTypeSymbol Root, List<INamedTypeSymbol> Derived)>();
 
         foreach (var tuple in polymorphicTypes.Distinct())
         {
@@ -98,6 +96,11 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
 
             var semanticModel = compilation.GetSemanticModel(typeDeclaration.SyntaxTree);
             if (semanticModel.GetDeclaredSymbol(typeDeclaration) is not INamedTypeSymbol typeSymbol)
+                continue;
+
+            // Only process roots that are physically defined in the project being compiled
+            // to ensure MessageDiscriminatorNames is generated alongside the roots.
+            if (!typeSymbol.DeclaringSyntaxReferences.Any(r => compilation.ContainsSyntaxTree(r.SyntaxTree)))
                 continue;
 
             var validDerivedTypes = new List<INamedTypeSymbol>();
@@ -116,7 +119,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
                     {
                         context.ReportDiagnostic(Diagnostic.Create(
                             OpenGenericDerivedTypeRule,
-                            type.Locations.FirstOrDefault() ?? typeDeclaration.Identifier.GetLocation(),
+                            type.Locations.FirstOrDefault() ?? Location.None,
                             type.Name, typeSymbol.Name));
                         continue;
                     }
@@ -129,7 +132,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
                     {
                         context.ReportDiagnostic(Diagnostic.Create(
                             DuplicateDiscriminatorRule,
-                            type.Locations.FirstOrDefault() ?? typeDeclaration.Identifier.GetLocation(),
+                            type.Locations.FirstOrDefault() ?? Location.None,
                             type.Name, discriminator, existingType.Name, typeSymbol.Name));
                         continue;
                     }
@@ -139,37 +142,23 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
                 }
             }
 
-            var source = GeneratePolymorphicPartial(typeSymbol, validDerivedTypes, namingPolicy);
-            if (source != null)
+            if (validDerivedTypes.Count > 0)
             {
-                var fileName = $"{typeSymbol.ContainingNamespace.ToDisplayString()}.{typeSymbol.Name}.g.cs";
-                context.AddSource(fileName, source);
+                hierarchies.Add((typeSymbol, validDerivedTypes));
+                
+                var source = GeneratePolymorphicPartial(typeSymbol, validDerivedTypes, namingPolicy);
+                if (source != null)
+                {
+                    var fileName = $"{typeSymbol.ContainingNamespace.ToDisplayString()}.{typeSymbol.Name}.g.cs";
+                    context.AddSource(fileName, source);
+                }
             }
         }
-    }
 
-    private static IEnumerable<INamedTypeSymbol> GetAllNamedTypes(INamespaceSymbol ns)
-    {
-        foreach (var member in ns.GetMembers())
+        if (hierarchies.Count > 0)
         {
-            if (member is INamespaceSymbol childNs)
-            {
-                foreach (var type in GetAllNamedTypes(childNs)) yield return type;
-            }
-            else if (member is INamedTypeSymbol type)
-            {
-                yield return type;
-                foreach (var nested in GetAllNestedTypes(type)) yield return nested;
-            }
-        }
-    }
-
-    private static IEnumerable<INamedTypeSymbol> GetAllNestedTypes(INamedTypeSymbol type)
-    {
-        foreach (var nested in type.GetTypeMembers())
-        {
-            yield return nested;
-            foreach (var moreNested in GetAllNestedTypes(nested)) yield return moreNested;
+            var metadataSource = GenerateMetadataClass(hierarchies);
+            context.AddSource("MessageDiscriminatorNames.g.cs", metadataSource);
         }
     }
 
@@ -203,6 +192,90 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         sb.AppendLine($"partial {typeKind} {typeSymbol.Name};");
 
         return sb.ToString();
+    }
+
+    private static IEnumerable<INamedTypeSymbol> GetAllNamedTypes(INamespaceSymbol ns)
+    {
+        foreach (var member in ns.GetMembers())
+        {
+            if (member is INamespaceSymbol childNs)
+            {
+                foreach (var type in GetAllNamedTypes(childNs)) yield return type;
+            }
+            else if (member is INamedTypeSymbol type)
+            {
+                yield return type;
+                foreach (var nested in GetAllNestedTypes(type)) yield return nested;
+            }
+        }
+    }
+
+    private static IEnumerable<INamedTypeSymbol> GetAllNestedTypes(INamedTypeSymbol type)
+    {
+        foreach (var nested in type.GetTypeMembers())
+        {
+            yield return nested;
+            foreach (var moreNested in GetAllNestedTypes(nested)) yield return moreNested;
+        }
+    }
+
+    private static string GenerateMetadataClass(List<(INamedTypeSymbol Root, List<INamedTypeSymbol> Derived)> hierarchies)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("// <auto-generated/>");
+        sb.AppendLine("#nullable enable");
+        sb.AppendLine("using System;");
+        sb.AppendLine();
+        
+        var ns = hierarchies[0].Root.ContainingNamespace.ToDisplayString();
+        sb.AppendLine($"namespace {ns};");
+        sb.AppendLine();
+        sb.AppendLine("public static class MessageDiscriminatorNames");
+        sb.AppendLine("{");
+        
+        // GetDiscriminator
+        sb.AppendLine("    public static string GetDiscriminator(object message) => message switch");
+        sb.AppendLine("    {");
+        var allDerived = hierarchies.SelectMany(h => h.Derived).Distinct(SymbolEqualityComparer.Default).Cast<INamedTypeSymbol>().ToList();
+        foreach (var derivedType in allDerived.OrderBy(t => t.Name))
+        {
+            var root = hierarchies.First(h => h.Derived.Contains(derivedType, SymbolEqualityComparer.Default)).Root;
+            var namingPolicyAttr = root.GetAttributes().FirstOrDefault(ad => ad.AttributeClass?.Name == "JsonPolymorphicRootAttribute");
+            var namingPolicyValue = namingPolicyAttr?.NamedArguments.FirstOrDefault(kv => kv.Key == "DiscriminatorNamingPolicy").Value.Value?.ToString() ?? "0";
+            
+            var discriminator = GetDiscriminator(derivedType.Name, namingPolicyValue);
+            var typeName = derivedType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            sb.AppendLine($"        {typeName} _ => \"{discriminator}\",");
+        }
+        sb.AppendLine("        _ => \"\"");
+        sb.AppendLine("    };");
+        sb.AppendLine();
+
+        // GetTypeName
+        sb.AppendLine("    public static string? GetTypeName(string discriminator) => discriminator switch");
+        sb.AppendLine("    {");
+        foreach (var derivedType in allDerived.OrderBy(t => t.Name))
+        {
+             var root = hierarchies.First(h => h.Derived.Contains(derivedType, SymbolEqualityComparer.Default)).Root;
+             var namingPolicyAttr = root.GetAttributes().FirstOrDefault(ad => ad.AttributeClass?.Name == "JsonPolymorphicRootAttribute");
+             var namingPolicyValue = namingPolicyAttr?.NamedArguments.FirstOrDefault(kv => kv.Key == "DiscriminatorNamingPolicy").Value.Value?.ToString() ?? "0";
+             
+             var discriminator = GetDiscriminator(derivedType.Name, namingPolicyValue);
+             sb.AppendLine($"        \"{discriminator}\" => \"{derivedType.Name}\",");
+        }
+        sb.AppendLine("        _ => null");
+        sb.AppendLine("    };");
+
+        sb.AppendLine("}");
+        return sb.ToString();
+    }
+
+    private static string? GetNamingPolicy(INamedTypeSymbol root)
+    {
+        var attr = root.GetAttributes().FirstOrDefault(ad => ad.AttributeClass?.Name == "JsonPolymorphicRootAttribute");
+        if (attr == null) return null;
+        var policy = attr.NamedArguments.FirstOrDefault(kv => kv.Key == "DiscriminatorNamingPolicy").Value.Value?.ToString();
+        return policy;
     }
 
     private static string GetDiscriminator(string typeName, string? namingPolicy)
