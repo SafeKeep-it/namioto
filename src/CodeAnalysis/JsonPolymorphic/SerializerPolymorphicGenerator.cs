@@ -1,0 +1,245 @@
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Immutable;
+using System.Text;
+
+namespace Comptatata.CodeAnalysis.JsonPolymorphic;
+
+[Generator(LanguageNames.CSharp)]
+public class SerializerPolymorphicGenerator : IIncrementalGenerator
+{
+    public void Initialize(IncrementalGeneratorInitializationContext context)
+    {
+        var serializerContexts = context.SyntaxProvider.CreateSyntaxProvider(
+            predicate: static (s, _) => s is ClassDeclarationSyntax { AttributeLists.Count: > 0 },
+            transform: static (ctx, _) => GetSerializerContext(ctx))
+            .Where(static m => m is not null);
+
+        context.RegisterSourceOutput(serializerContexts.Collect().Combine(context.CompilationProvider),
+            static (spc, source) => Execute(source.Right, source.Left!, spc));
+    }
+
+    private static ClassDeclarationSyntax? GetSerializerContext(GeneratorSyntaxContext context)
+    {
+        var classDecl = (ClassDeclarationSyntax)context.Node;
+        if (!classDecl.Modifiers.Any(SyntaxKind.PartialKeyword)) return null;
+
+        var symbol = context.SemanticModel.GetDeclaredSymbol(classDecl);
+        if (symbol is not INamedTypeSymbol typeSymbol) return null;
+
+        var baseType = typeSymbol.BaseType;
+        while (baseType != null)
+        {
+            if (baseType.ToDisplayString() == "System.Text.Json.Serialization.JsonSerializerContext")
+            {
+                return classDecl;
+            }
+            baseType = baseType.BaseType;
+        }
+
+        return null;
+    }
+
+    private static void Execute(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> contexts, SourceProductionContext context)
+    {
+        if (contexts.IsDefaultOrEmpty) return;
+
+        var allNamedTypes = GetAllNamedTypes(compilation.GlobalNamespace).ToList();
+
+        foreach (var classDecl in contexts.Distinct())
+        {
+            var semanticModel = compilation.GetSemanticModel(classDecl.SyntaxTree);
+            if (semanticModel.GetDeclaredSymbol(classDecl) is not INamedTypeSymbol typeSymbol) continue;
+
+            var serializableRoots = GetSerializableRoots(typeSymbol);
+            if (serializableRoots.Count == 0) continue;
+
+            var source = GeneratePartial(typeSymbol, serializableRoots, allNamedTypes);
+            if (source != null)
+            {
+                context.AddSource($"{typeSymbol.Name}.Polymorphic.g.cs", source);
+            }
+        }
+    }
+
+    private static List<(INamedTypeSymbol Root, string? NamingPolicy)> GetSerializableRoots(INamedTypeSymbol typeSymbol)
+    {
+        var roots = new List<(INamedTypeSymbol Root, string? NamingPolicy)>();
+        var registeredTypes = new List<INamedTypeSymbol>();
+
+        foreach (var attr in typeSymbol.GetAttributes())
+        {
+            if (attr.AttributeClass?.ToDisplayString() == "System.Text.Json.Serialization.JsonSerializableAttribute")
+            {
+                if (attr.ConstructorArguments.Length > 0 && attr.ConstructorArguments[0].Value is INamedTypeSymbol targetType)
+                {
+                    registeredTypes.Add(targetType);
+                }
+            }
+        }
+
+        foreach (var targetType in registeredTypes)
+        {
+            var rootAttr = targetType.GetAttributes().FirstOrDefault(a => a.AttributeClass?.Name == "JsonPolymorphicRootAttribute");
+            if (rootAttr != null)
+            {
+                // Only add if no base type of targetType is also a root in this context
+                bool hasBaseRoot = false;
+                var current = targetType.BaseType;
+                while (current != null)
+                {
+                    if (registeredTypes.Any(t => SymbolEqualityComparer.Default.Equals(t, current)) &&
+                        current.GetAttributes().Any(a => a.AttributeClass?.Name == "JsonPolymorphicRootAttribute"))
+                    {
+                        hasBaseRoot = true;
+                        break;
+                    }
+                    current = current.BaseType;
+                }
+
+                if (!hasBaseRoot)
+                {
+                    string? namingPolicy = null;
+                    var namingPolicyArg = rootAttr.NamedArguments.FirstOrDefault(kv => kv.Key == "DiscriminatorNamingPolicy");
+                    if (namingPolicyArg.Key != null)
+                    {
+                        namingPolicy = namingPolicyArg.Value.Value?.ToString();
+                    }
+                    roots.Add((targetType, namingPolicy));
+                }
+            }
+        }
+        return roots;
+    }
+
+    private static string? GeneratePartial(INamedTypeSymbol typeSymbol, List<(INamedTypeSymbol Root, string? NamingPolicy)> roots, List<INamedTypeSymbol> allTypes)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("// <auto-generated/>");
+        sb.AppendLine("#nullable enable");
+        sb.AppendLine();
+
+        if (!typeSymbol.ContainingNamespace.IsGlobalNamespace)
+        {
+            sb.AppendLine($"namespace {typeSymbol.ContainingNamespace.ToDisplayString()};");
+            sb.AppendLine();
+        }
+
+        sb.AppendLine($"partial class {typeSymbol.Name}");
+        sb.AppendLine("{");
+
+        foreach (var root in roots)
+        {
+            var rootType = root.Root;
+            var namingPolicy = root.NamingPolicy;
+
+            sb.AppendLine($"    public static string GetDiscriminatorName<T>(T message) where T : {rootType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} => message switch");
+            sb.AppendLine("    {");
+
+            var derivedTypes = allTypes.Where(t => IsAssignableTo(t, rootType) && !t.IsAbstract && t.TypeKind != TypeKind.Interface && !SymbolEqualityComparer.Default.Equals(t, rootType)).OrderBy(t => t.Name);
+
+            foreach (var derived in derivedTypes)
+            {
+                var discriminator = GetDiscriminator(derived.Name, namingPolicy);
+                sb.AppendLine($"        {derived.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{discriminator}\",");
+            }
+
+            sb.AppendLine("        _ => \"\"");
+            sb.AppendLine("    };");
+            sb.AppendLine();
+        }
+
+        sb.AppendLine("}");
+
+        return sb.ToString();
+    }
+
+    private static IEnumerable<INamedTypeSymbol> GetAllNamedTypes(INamespaceSymbol ns)
+    {
+        foreach (var member in ns.GetMembers())
+        {
+            if (member is INamespaceSymbol childNs)
+            {
+                foreach (var type in GetAllNamedTypes(childNs)) yield return type;
+            }
+            else if (member is INamedTypeSymbol type)
+            {
+                yield return type;
+                foreach (var nested in GetAllNestedTypes(type)) yield return nested;
+            }
+        }
+    }
+
+    private static IEnumerable<INamedTypeSymbol> GetAllNestedTypes(INamedTypeSymbol type)
+    {
+        foreach (var nested in type.GetTypeMembers())
+        {
+            yield return nested;
+            foreach (var moreNested in GetAllNestedTypes(nested)) yield return moreNested;
+        }
+    }
+
+    private static bool IsAssignableTo(ITypeSymbol type, ITypeSymbol baseType)
+    {
+        var current = type;
+        while (current != null)
+        {
+            if (SymbolEqualityComparer.Default.Equals(current, baseType)) return true;
+            if (baseType.TypeKind == TypeKind.Interface && current.AllInterfaces.Any(i => SymbolEqualityComparer.Default.Equals(i, baseType)))
+                return true;
+            current = current.BaseType;
+        }
+        return false;
+    }
+
+    private static string GetDiscriminator(string typeName, string? namingPolicy)
+    {
+        if (string.IsNullOrEmpty(typeName)) return typeName;
+
+        if (string.IsNullOrEmpty(namingPolicy) || namingPolicy == "0" || namingPolicy == "1" || namingPolicy == "CamelCase")
+        {
+            return char.ToLowerInvariant(typeName[0]) + typeName.Substring(1);
+        }
+
+        if (namingPolicy == "4" || namingPolicy == "KebabCaseLower")
+        {
+            var result = new StringBuilder();
+            for (int i = 0; i < typeName.Length; i++)
+            {
+                var c = typeName[i];
+                if (char.IsUpper(c))
+                {
+                    if (i > 0) result.Append('-');
+                    result.Append(char.ToLowerInvariant(c));
+                }
+                else
+                {
+                    result.Append(c);
+                }
+            }
+            return result.ToString();
+        }
+
+        if (namingPolicy == "2" || namingPolicy == "SnakeCaseLower")
+        {
+            var result = new StringBuilder();
+            for (int i = 0; i < typeName.Length; i++)
+            {
+                var c = typeName[i];
+                if (char.IsUpper(c))
+                {
+                    if (i > 0) result.Append('_');
+                    result.Append(char.ToLowerInvariant(c));
+                }
+                else
+                {
+                    result.Append(c);
+                }
+            }
+            return result.ToString();
+        }
+
+        return typeName;
+    }
+}
