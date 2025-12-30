@@ -137,10 +137,15 @@ public class SerializerPolymorphicGenerator : IIncrementalGenerator
             sb.AppendLine($"    public static string GetDiscriminatorName<T>(T message) where T : {rootType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} => message switch");
             sb.AppendLine("    {");
 
-            var derivedTypes = allTypes.Where(t => IsAssignableTo(t, rootType) && !t.IsAbstract && t.TypeKind != TypeKind.Interface && !SymbolEqualityComparer.Default.Equals(t, rootType)).OrderBy(t => t.Name);
+            var derivedTypes = allTypes
+                .Where(t => IsAssignableTo(t, rootType) && !t.IsAbstract && t.TypeKind != TypeKind.Interface && !SymbolEqualityComparer.Default.Equals(t, rootType))
+                .Select(t => new { Type = t, Depth = GetInheritanceDepth(t) })
+                .OrderByDescending(x => x.Depth)
+                .ThenBy(x => x.Type.Name);
 
-            foreach (var derived in derivedTypes)
+            foreach (var item in derivedTypes)
             {
+                var derived = item.Type;
                 var discriminator = GetDiscriminator(derived.Name, namingPolicy);
                 sb.AppendLine($"        {derived.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{discriminator}\",");
             }
@@ -178,6 +183,18 @@ public class SerializerPolymorphicGenerator : IIncrementalGenerator
             yield return nested;
             foreach (var moreNested in GetAllNestedTypes(nested)) yield return moreNested;
         }
+    }
+
+    private static int GetInheritanceDepth(ITypeSymbol type)
+    {
+        int depth = 0;
+        var current = type.BaseType;
+        while (current != null)
+        {
+            depth++;
+            current = current.BaseType;
+        }
+        return depth;
     }
 
     private static bool IsAssignableTo(ITypeSymbol type, ITypeSymbol baseType)
