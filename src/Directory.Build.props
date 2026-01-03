@@ -2,28 +2,44 @@
     <PropertyGroup>
         <AssemblyName Condition="'$(AssemblyName)'==''">Comptatata.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace Condition="'$(RootNamespace)'==''">Comptatata.$(MSBuildProjectName)</RootNamespace>
-
-        
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <ImplicitUsings>enable</ImplicitUsings>
+
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <WarningsAsErrors>$(WarningsAsErrors);CA2000</WarningsAsErrors>
+
     </PropertyGroup>
-    
+
+    <ItemGroup>
+        <PackageReference Include="IDisposableAnalyzers" Version="4.0.8">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
     <PropertyGroup>
         <UseArtifactsOutput>true</UseArtifactsOutput>
         <ArtifactsPath>$(MSBuildThisFileDirectory).artifacts</ArtifactsPath>
     </PropertyGroup>
 
-    <!--
-      Enable Native AOT + trimming only for Console executables by default.
-      - Excludes ASP.NET Core (Web SDK) projects.
-      - Excludes Aspire AppHost projects.
-      Library projects remain non-trimmed and non-AOT to avoid breaking consumers via trimming.
-    -->
+    <PropertyGroup Condition="'$(OutputType)' == 'Library'">
+        <IsAotCompatible>true</IsAotCompatible>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(OutputType)'=='Exe' and '$(UsingMicrosoftNETWebSdk)'!='true' and '$(UsingAspireAppHostSdk)'!='true'">
         <PublishAot>true</PublishAot>
         <PublishTrimmed>true</PublishTrimmed>
         <TrimMode>link</TrimMode>
         <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
+
+
+    <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Messages'))">
+        <ProjectReference Include="$(MSBuildThisFileDirectory)CodeAnalysis/JsonPolymorphic/CodeAnalysis.JsonPolymorphic.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false"/>
+    </ItemGroup>
 </Project>

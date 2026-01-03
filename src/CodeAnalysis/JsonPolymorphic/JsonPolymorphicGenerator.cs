@@ -9,7 +9,7 @@ namespace Comptatata.CodeAnalysis.JsonPolymorphic;
 [Generator(LanguageNames.CSharp)]
 public class JsonPolymorphicGenerator : IIncrementalGenerator
 {
-    private static readonly DiagnosticDescriptor OpenGenericDerivedTypeRule = new DiagnosticDescriptor(
+    static readonly DiagnosticDescriptor OpenGenericDerivedTypeRule = new DiagnosticDescriptor(
         "COMPTATATA003",
         "Open generic derived type",
         "The type '{0}' is a derived type of '{1}' but it is an open generic or contained in one, which is not supported for JSON polymorphism",
@@ -30,7 +30,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
             static (spc, source) => Execute(source.Right, source.Left, spc));
     }
 
-    private static (TypeDeclarationSyntax Target, string? NamingPolicy)? GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
+    static (TypeDeclarationSyntax Target, string? NamingPolicy)? GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
     {
         var typeDeclaration = (TypeDeclarationSyntax)context.Node;
         string? namingPolicy = null;
@@ -74,7 +74,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         return null;
     }
 
-    private static void Execute(Compilation compilation, ImmutableArray<(TypeDeclarationSyntax Target, string? NamingPolicy)> polymorphicTypes, SourceProductionContext context)
+    static void Execute(Compilation compilation, ImmutableArray<(TypeDeclarationSyntax Target, string? NamingPolicy)> polymorphicTypes, SourceProductionContext context)
     {
         if (polymorphicTypes.IsDefaultOrEmpty) return;
 
@@ -131,7 +131,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         }
     }
 
-    private static string? GeneratePolymorphicPartial(INamedTypeSymbol typeSymbol, List<INamedTypeSymbol> derivedTypes, string? namingPolicy)
+    static string? GeneratePolymorphicPartial(INamedTypeSymbol typeSymbol, List<INamedTypeSymbol> derivedTypes, string? namingPolicy)
     {
         if (derivedTypes.Count == 0) return null;
 
@@ -163,7 +163,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         return sb.ToString();
     }
 
-    private static IEnumerable<INamedTypeSymbol> GetAllNamedTypes(INamespaceSymbol ns)
+    static IEnumerable<INamedTypeSymbol> GetAllNamedTypes(INamespaceSymbol ns)
     {
         foreach (var member in ns.GetMembers())
         {
@@ -179,7 +179,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         }
     }
 
-    private static IEnumerable<INamedTypeSymbol> GetAllNestedTypes(INamedTypeSymbol type)
+    static IEnumerable<INamedTypeSymbol> GetAllNestedTypes(INamedTypeSymbol type)
     {
         foreach (var nested in type.GetTypeMembers())
         {
@@ -188,7 +188,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         }
     }
 
-    private static string GetDiscriminator(string typeName, string? namingPolicy)
+    static string GetDiscriminator(string typeName, string? namingPolicy)
     {
         if (string.IsNullOrEmpty(typeName)) return typeName;
 
@@ -238,7 +238,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         return typeName;
     }
 
-    private static bool IsAssignableTo(ITypeSymbol type, ITypeSymbol baseType)
+    static bool IsAssignableTo(ITypeSymbol type, ITypeSymbol baseType)
     {
         var current = type;
         while (current != null)
@@ -251,7 +251,7 @@ public class JsonPolymorphicGenerator : IIncrementalGenerator
         return false;
     }
 
-    private static bool HasGenericParameters(INamedTypeSymbol type)
+    static bool HasGenericParameters(INamedTypeSymbol type)
     {
         if (type.TypeParameters.Length > 0) return true;
         if (type.TypeArguments.Any(t => t.Kind == SymbolKind.TypeParameter)) return true;

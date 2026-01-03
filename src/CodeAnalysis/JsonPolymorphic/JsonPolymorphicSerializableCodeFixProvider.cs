@@ -40,7 +40,7 @@ public class JsonPolymorphicSerializableCodeFixProvider : CodeFixProvider
         }
     }
 
-    private string GetShortName(string fullyQualifiedName)
+    string GetShortName(string fullyQualifiedName)
     {
         if (fullyQualifiedName.StartsWith("global::"))
         {
@@ -50,7 +50,7 @@ public class JsonPolymorphicSerializableCodeFixProvider : CodeFixProvider
         return lastDot == -1 ? fullyQualifiedName : fullyQualifiedName.Substring(lastDot + 1);
     }
 
-    private async Task<Document> AddJsonSerializableAttributeAsync(Document document, TypeDeclarationSyntax typeDeclaration, string missingType, CancellationToken cancellationToken)
+    async Task<Document> AddJsonSerializableAttributeAsync(Document document, TypeDeclarationSyntax typeDeclaration, string missingType, CancellationToken cancellationToken)
     {
         var editor = await DocumentEditor.CreateAsync(document, cancellationToken).ConfigureAwait(false);
 
@@ -90,7 +90,7 @@ public class JsonPolymorphicSerializableCodeFixProvider : CodeFixProvider
         return editor.GetChangedDocument();
     }
 
-    private bool IsJsonSerializable(AttributeSyntax attribute)
+    bool IsJsonSerializable(AttributeSyntax attribute)
     {
         var name = attribute.Name.ToString();
         return name == "JsonSerializable" || name == "JsonSerializableAttribute" || name.EndsWith(".JsonSerializable") || name.EndsWith(".JsonSerializableAttribute");

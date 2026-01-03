@@ -10,7 +10,7 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
 {
     public const string DiagnosticId = "COMPTATATA001";
 
-    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+    static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
         DiagnosticId,
         "Missing [JsonSerializable] attribute for derived type",
         "The type '{0}' is a derived type of '{1}' which is registered for JSON serialization in '{2}', but '{0}' is not explicitly registered with [JsonSerializable]",
@@ -22,6 +22,7 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
 
     public override void Initialize(AnalysisContext context)
     {
+        context = context ?? throw new ArgumentNullException(nameof(context));
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
         context.RegisterCompilationStartAction(compilationContext =>
@@ -90,7 +91,7 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
         });
     }
 
-    private static IEnumerable<INamedTypeSymbol> GetAllNamedTypes(INamespaceSymbol ns)
+    static IEnumerable<INamedTypeSymbol> GetAllNamedTypes(INamespaceSymbol ns)
     {
         foreach (var member in ns.GetMembers())
         {
@@ -106,7 +107,7 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
         }
     }
 
-    private static IEnumerable<INamedTypeSymbol> GetAllNestedTypes(INamedTypeSymbol type)
+    static IEnumerable<INamedTypeSymbol> GetAllNestedTypes(INamedTypeSymbol type)
     {
         foreach (var nested in type.GetTypeMembers())
         {
@@ -115,7 +116,7 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
         }
     }
 
-    private static bool HasGenericParameters(INamedTypeSymbol type)
+    static bool HasGenericParameters(INamedTypeSymbol type)
     {
         if (type.TypeParameters.Length > 0) return true;
         if (type.TypeArguments.Any(t => t.Kind == SymbolKind.TypeParameter)) return true;
@@ -123,12 +124,12 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
         return false;
     }
 
-    private static bool HasAttributeByName(ISymbol symbol, string attributeName)
+    static bool HasAttributeByName(ISymbol symbol, string attributeName)
     {
         return symbol.GetAttributes().Any(ad => ad.AttributeClass?.Name == attributeName);
     }
 
-    private static bool IsDerivedFrom(ITypeSymbol type, ITypeSymbol baseType)
+    static bool IsDerivedFrom(ITypeSymbol type, ITypeSymbol baseType)
     {
         if (SymbolEqualityComparer.Default.Equals(type, baseType)) return false;
         var current = type;
@@ -142,7 +143,7 @@ public class JsonPolymorphicSerializableAnalyzer : DiagnosticAnalyzer
         return false;
     }
 
-    private static HashSet<ITypeSymbol> GetSerializableTypes(INamedTypeSymbol contextType, INamedTypeSymbol jsonSerializableAttributeSymbol)
+    static HashSet<ITypeSymbol> GetSerializableTypes(INamedTypeSymbol contextType, INamedTypeSymbol jsonSerializableAttributeSymbol)
     {
         var types = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         foreach (var attribute in contextType.GetAttributes())
