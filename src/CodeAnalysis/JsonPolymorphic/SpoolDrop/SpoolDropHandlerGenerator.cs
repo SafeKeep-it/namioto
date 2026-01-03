@@ -174,8 +174,9 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             sb.AppendLine("{");
             sb.AppendLine($"    public static async global::System.Threading.Tasks.ValueTask<global::Comptatata.MessageDrop.Messages.Message?> DispatchAsync(");
             sb.AppendLine($"        {handler.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} handler,");
-            sb.AppendLine($"        global::Comptatata.MessageDrop.Messages.Message message)");
+            sb.AppendLine($"        byte[] buffer)");
             sb.AppendLine("    {");
+            sb.AppendLine($"        var message = global::System.Text.Json.JsonSerializer.Deserialize<global::Comptatata.MessageDrop.Messages.Message>(buffer, {handler.Name}SpoolBusSerializer.SpoolBusOptions);");
             sb.AppendLine("        return message switch");
             sb.AppendLine("        {");
 
@@ -187,6 +188,19 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
             sb.AppendLine("            _ => null");
             sb.AppendLine("        };");
+            sb.AppendLine("    }");
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            // Generate Infrastructure Initializer
+            sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
+            sb.AppendLine($"internal static class {handler.Name}SpoolBusInfrastructureInitializer");
+            sb.AppendLine("{");
+            sb.AppendLine("    [global::System.Runtime.CompilerServices.ModuleInitializer]");
+            sb.AppendLine("    public static void Initialize()");
+            sb.AppendLine("    {");
+            sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{handler.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Options = {handler.Name}SpoolBusSerializer.SpoolBusOptions;");
+            sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{handler.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Dispatcher = {handler.Name}SpoolBusDispatcher.DispatchAsync;");
             sb.AppendLine("    }");
             sb.AppendLine("}");
             sb.AppendLine();
