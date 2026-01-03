@@ -142,10 +142,20 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 returnType.ContainingNamespace.ToDisplayString() == "System.Threading.Tasks" &&
                 returnType.TypeArguments.Length == 1)
             {
-                messageTypes.Add(returnType.TypeArguments[0]);
-                messageTypes.Add(method.Parameters[0].Type);
+                AddWithHierarchy(messageTypes, returnType.TypeArguments[0]);
+                AddWithHierarchy(messageTypes, method.Parameters[0].Type);
             }
         }
         return messageTypes;
+    }
+
+    private static void AddWithHierarchy(HashSet<ITypeSymbol> types, ITypeSymbol type)
+    {
+        var current = type;
+        while (current != null && current.SpecialType != SpecialType.System_Object)
+        {
+            types.Add(current);
+            current = current.BaseType;
+        }
     }
 }
