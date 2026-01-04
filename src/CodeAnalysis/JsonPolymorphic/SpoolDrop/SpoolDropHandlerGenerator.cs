@@ -174,16 +174,17 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             sb.AppendLine("{");
             sb.AppendLine($"    public static async global::System.Threading.Tasks.ValueTask<global::Comptatata.MessageDrop.Messages.Message?> DispatchAsync(");
             sb.AppendLine($"        {handler.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} handler,");
-            sb.AppendLine($"        byte[] buffer)");
+            sb.AppendLine($"        global::System.IO.Stream stream,");
+            sb.AppendLine($"        global::System.Threading.CancellationToken ct)");
             sb.AppendLine("    {");
-            sb.AppendLine($"        var message = global::System.Text.Json.JsonSerializer.Deserialize<global::Comptatata.MessageDrop.Messages.Message>(buffer, {handler.Name}SpoolBusSerializer.SpoolBusOptions);");
+            sb.AppendLine($"        var message = await global::System.Text.Json.JsonSerializer.DeserializeAsync<global::Comptatata.MessageDrop.Messages.Message>(stream, {handler.Name}SpoolBusSerializer.SpoolBusOptions, ct).ConfigureAwait(false);");
             sb.AppendLine("        return message switch");
             sb.AppendLine("        {");
 
             foreach (var method in handlerInfo.Methods)
             {
                 var awaitPrefix = method.IsAsync ? "await " : "";
-                sb.AppendLine($"            {method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m => {awaitPrefix}handler.{method.Method.Name}(m),");
+                sb.AppendLine($"            {method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m => {awaitPrefix}handler.{method.Method.Name}(m) ?? throw new global::System.InvalidOperationException($\"Handler method '{method.Method.Name}' in '{handler.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)}' returned null, which is not allowed.\"),");
             }
 
             sb.AppendLine("            _ => null");
