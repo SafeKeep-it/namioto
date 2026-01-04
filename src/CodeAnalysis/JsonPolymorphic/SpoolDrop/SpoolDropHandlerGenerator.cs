@@ -51,7 +51,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
         var allRegistrations = handlerTypes.Collect().Combine(clientTypes.Collect());
 
-        context.RegisterSourceOutput(allRegistrations.Combine(context.CompilationProvider), 
+        context.RegisterSourceOutput(allRegistrations.Combine(context.CompilationProvider),
             static (spc, source) => Execute(source.Left.Left.AddRange(source.Left.Right), source.Right, spc));
     }
 
@@ -97,18 +97,22 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
     private class HandlerMethodInfo
     {
-        public HandlerMethodInfo(IMethodSymbol method, ITypeSymbol parameterType, ITypeSymbol messageResultType, bool isAsync)
+        public HandlerMethodInfo(IMethodSymbol method, ITypeSymbol parameterType, ITypeSymbol? messageResultType, bool isAsync, bool isOneWay, bool hasCancellationToken)
         {
             Method = method;
             ParameterType = parameterType;
             MessageResultType = messageResultType;
             IsAsync = isAsync;
+            IsOneWay = isOneWay;
+            HasCancellationToken = hasCancellationToken;
         }
 
         public IMethodSymbol Method { get; }
         public ITypeSymbol ParameterType { get; }
-        public ITypeSymbol MessageResultType { get; }
+        public ITypeSymbol? MessageResultType { get; }
         public bool IsAsync { get; }
+        public bool IsOneWay { get; }
+        public bool HasCancellationToken { get; }
     }
 
     private static void Execute(ImmutableArray<Registration> registrations, Compilation compilation, SourceProductionContext context)
@@ -174,9 +178,9 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine($"[JsonSerializable(typeof({messageType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}))]");
             }
             sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
-            
-            var contextClassName = reg.Kind == RegistrationType.Handler 
-                ? $"{type.Name}SpoolBusServerSerializer" 
+
+            var contextClassName = reg.Kind == RegistrationType.Handler
+                ? $"{type.Name}SpoolBusServerSerializer"
                 : $"{type.Name}SpoolBusClientSerializer";
 
             sb.AppendLine($"public partial class {contextClassName} : JsonSerializerContext");
@@ -233,19 +237,44 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine($"        global::System.IO.Stream stream,");
                 sb.AppendLine($"        global::System.Threading.CancellationToken ct)");
                 sb.AppendLine("    {");
+                sb.AppendLine("        #pragma warning disable CS1998");
                 sb.AppendLine($"        var request = await global::System.Text.Json.JsonSerializer.DeserializeAsync<global::Comptatata.MessageDrop.Messages.Message>(stream, {type.Name}SpoolBusServerSerializer.SpoolBusOptions, ct).ConfigureAwait(false);");
                 sb.AppendLine($"        {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}? handler = null;");
-                sb.AppendLine("        var response = request switch");
-                sb.AppendLine("        {");
+                sb.AppendLine();
 
                 foreach (var method in info.Methods)
                 {
                     var awaitPrefix = method.IsAsync ? "await " : "";
-                    sb.AppendLine($"            {method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m => {awaitPrefix}(handler ??= handlerFactory()).{method.Method.Name}(m) ?? throw new global::System.InvalidOperationException($\"Handler method '{method.Method.Name}' in '{type.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)}' returned null, which is not allowed.\"),");
+                    var ctArg = method.HasCancellationToken ? ", ct" : "";
+                    var awaitExpr = method.IsAsync ? ".ConfigureAwait(false)" : "";
+
+                    sb.AppendLine($"        async global::System.Threading.Tasks.ValueTask<global::Comptatata.MessageDrop.Messages.Message?> Invoke_{method.Method.Name}({method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m)");
+                    sb.AppendLine("        {");
+                    if (method.IsOneWay)
+                    {
+                        sb.AppendLine($"            {awaitPrefix}(handler ??= handlerFactory()).{method.Method.Name}(m{ctArg}){awaitExpr};");
+                        sb.AppendLine("            return null;");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"            var result = {awaitPrefix}(handler ??= handlerFactory()).{method.Method.Name}(m{ctArg}){awaitExpr};");
+                        sb.AppendLine($"            return result ?? throw new global::System.InvalidOperationException($\"Handler method '{method.Method.Name}' in '{type.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)}' returned null, which is not allowed.\");");
+                    }
+                    sb.AppendLine("        }");
+                    sb.AppendLine();
                 }
 
-                sb.AppendLine("            _ => null");
-                sb.AppendLine("        };");
+                sb.AppendLine("        var response = await (request switch");
+                sb.AppendLine("        {");
+
+                foreach (var method in info.Methods)
+                {
+                    sb.AppendLine($"            {method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m => Invoke_{method.Method.Name}(m),");
+                }
+
+                sb.AppendLine("            _ => global::System.Threading.Tasks.ValueTask.FromResult<global::Comptatata.MessageDrop.Messages.Message?>(null)");
+                sb.AppendLine("        }).ConfigureAwait(false);");
+                sb.AppendLine("        #pragma warning restore CS1998");
                 sb.AppendLine();
                 sb.AppendLine("        if (response is global::Comptatata.MessageDrop.Messages.Event e)");
                 sb.AppendLine("        {");
@@ -292,10 +321,30 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 foreach (var method in info.Methods)
                 {
                     var paramName = method.Method.Parameters[0].Name;
-                    sb.AppendLine($"    public async {method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {method.Method.Name}({method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {paramName})");
+                    var ctParam = method.HasCancellationToken ? ", global::System.Threading.CancellationToken ct" : "";
+                    var ctArg = method.HasCancellationToken ? ", ct" : "";
+                    var isAsync = method.IsAsync || !method.IsOneWay;
+                    var asyncKeyword = isAsync ? "async " : "";
+
+                    sb.AppendLine($"    public {asyncKeyword}{method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {method.Method.Name}({method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {paramName}{ctParam})");
                     sb.AppendLine("    {");
-                    sb.AppendLine($"        await global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.SendAsync({paramName}, _factory.Directory).ConfigureAwait(false);");
-                    sb.AppendLine($"        return await _factory.WaitForResponseAsync<{method.MessageResultType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {type.Name}SpoolBusClientSerializer.SpoolBusOptions).ConfigureAwait(false);");
+
+                    if (isAsync)
+                    {
+                        sb.AppendLine($"        await global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.SendAsync({paramName}, _factory.Directory{ctArg}).ConfigureAwait(false);");
+                        if (!method.IsOneWay)
+                        {
+                            sb.AppendLine($"        return await _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {type.Name}SpoolBusClientSerializer.SpoolBusOptions{ctArg}).ConfigureAwait(false);");
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.SendAsync({paramName}, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
+                        if (!method.IsOneWay)
+                        {
+                            sb.AppendLine($"        return _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {type.Name}SpoolBusClientSerializer.SpoolBusOptions{ctArg}).GetAwaiter().GetResult();");
+                        }
+                    }
                     sb.AppendLine("    }");
                 }
                 sb.AppendLine("}");
@@ -428,40 +477,78 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
         foreach (var method in methods)
         {
-            if (method.Parameters.Length != 1) continue;
+            if (method.Parameters.Length < 1 || method.Parameters.Length > 2) continue;
+
+            var paramType = method.Parameters[0].Type;
+            if (!IsOrInheritsFromMessage(paramType)) continue;
+
+            bool hasCancellationToken = false;
+            if (method.Parameters.Length == 2)
+            {
+                var secondParamType = method.Parameters[1].Type;
+                if (secondParamType.Name == "CancellationToken" && secondParamType.ContainingNamespace?.ToDisplayString() == "System.Threading")
+                {
+                    hasCancellationToken = true;
+                }
+                else
+                {
+                    continue;
+                }
+            }
 
             ITypeSymbol? messageResultType = null;
             bool isAsync = false;
+            bool isOneWay = false;
 
-            var returnType = method.ReturnType as INamedTypeSymbol;
-            if (returnType != null && returnType.IsGenericType)
+            var returnType = method.ReturnType;
+            if (returnType.SpecialType == SpecialType.System_Void)
             {
-                var fullName = returnType.ConstructedFrom.ToDisplayString();
-                if (fullName == "System.Threading.Tasks.ValueTask<TResult>" ||
-                    fullName == "System.Threading.Tasks.Task<TResult>" ||
-                    fullName == "System.Threading.Tasks.ValueTask<T>" ||
-                    fullName == "System.Threading.Tasks.Task<T>")
-                {
-                    messageResultType = returnType.TypeArguments[0];
-                    isAsync = true;
-                }
-            }
-
-            if (messageResultType == null)
-            {
-                messageResultType = method.ReturnType;
+                isOneWay = true;
                 isAsync = false;
             }
-
-            if (messageResultType != null && IsOrInheritsFromMessage(messageResultType))
+            else if (returnType is INamedTypeSymbol namedReturnType)
             {
-                var paramType = method.Parameters[0].Type;
-                if (IsOrInheritsFromMessage(paramType))
+                var returnNamespace = namedReturnType.ContainingNamespace?.ToDisplayString();
+                var returnName = namedReturnType.Name;
+
+                if (returnNamespace == "System.Threading.Tasks" && (returnName == "Task" || returnName == "ValueTask"))
                 {
-                    handlerMethods.Add(new HandlerMethodInfo(method, paramType, messageResultType, isAsync));
-                    AddWithHierarchy(messageTypes, messageResultType);
-                    AddWithHierarchy(messageTypes, paramType);
+                    if (namedReturnType.IsGenericType)
+                    {
+                        messageResultType = namedReturnType.TypeArguments[0];
+                        isAsync = true;
+                        if (!IsOrInheritsFromMessage(messageResultType))
+                        {
+                            messageResultType = null;
+                            isOneWay = true;
+                        }
+                    }
+                    else
+                    {
+                        isOneWay = true;
+                        isAsync = true;
+                    }
                 }
+                else if (IsOrInheritsFromMessage(returnType))
+                {
+                    messageResultType = returnType;
+                    isAsync = false;
+                }
+                else
+                {
+                    isOneWay = true;
+                    isAsync = false;
+                }
+            }
+
+            if (isOneWay || messageResultType != null)
+            {
+                handlerMethods.Add(new HandlerMethodInfo(method, paramType, messageResultType, isAsync, isOneWay, hasCancellationToken));
+                if (messageResultType != null)
+                {
+                    AddWithHierarchy(messageTypes, messageResultType);
+                }
+                AddWithHierarchy(messageTypes, paramType);
             }
         }
 
