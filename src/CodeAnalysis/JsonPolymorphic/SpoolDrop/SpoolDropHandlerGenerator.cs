@@ -151,6 +151,8 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         sb.AppendLine("#nullable enable");
         sb.AppendLine();
         sb.AppendLine("using System.ComponentModel;");
+        sb.AppendLine("using System.Collections.Generic;");
+        sb.AppendLine("using System.Runtime.CompilerServices;");
         sb.AppendLine("using System.Text.Json;");
         sb.AppendLine("using System.Text.Json.Serialization;");
         sb.AppendLine("using System.Text.Json.Serialization.Metadata;");
@@ -232,7 +234,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
                 sb.AppendLine($"public static class {type.Name}SpoolBusDispatcher");
                 sb.AppendLine("{");
-                sb.AppendLine($"    public static async global::System.Threading.Tasks.ValueTask<global::Comptatata.MessageDrop.Messages.Message?> DispatchAsync(");
+                sb.AppendLine($"    public static async global::System.Threading.Tasks.ValueTask<global::System.Collections.Generic.IReadOnlyList<global::Comptatata.MessageDrop.Messages.Message?>> DispatchAsync(");
                 sb.AppendLine($"        global::System.Func<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}> handlerFactory,");
                 sb.AppendLine($"        global::System.IO.Stream stream,");
                 sb.AppendLine($"        global::System.Threading.CancellationToken ct)");
@@ -240,6 +242,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("        #pragma warning disable CS1998");
                 sb.AppendLine($"        var request = await global::System.Text.Json.JsonSerializer.DeserializeAsync<global::Comptatata.MessageDrop.Messages.Message>(stream, {type.Name}SpoolBusServerSerializer.SpoolBusOptions, ct).ConfigureAwait(false);");
                 sb.AppendLine($"        {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}? handler = null;");
+                sb.AppendLine($"        var responses = new global::System.Collections.Generic.List<global::Comptatata.MessageDrop.Messages.Message?>();");
                 sb.AppendLine();
 
                 foreach (var method in info.Methods)
@@ -264,23 +267,24 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                     sb.AppendLine();
                 }
 
-                sb.AppendLine("        var response = await (request switch");
-                sb.AppendLine("        {");
-
                 foreach (var method in info.Methods)
                 {
-                    sb.AppendLine($"            {method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m => Invoke_{method.Method.Name}(m),");
+                    sb.AppendLine($"        if (request is {method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m_{method.Method.Name})");
+                    sb.AppendLine("        {");
+                    sb.AppendLine($"            var response = await Invoke_{method.Method.Name}(m_{method.Method.Name}).ConfigureAwait(false);");
+                    sb.AppendLine("            if (response is global::Comptatata.MessageDrop.Messages.Event e)");
+                    sb.AppendLine("            {");
+                    sb.AppendLine("                responses.Add(e with { ReplyTo = request?.Id });");
+                    sb.AppendLine("            }");
+                    sb.AppendLine("            else");
+                    sb.AppendLine("            {");
+                    sb.AppendLine("                responses.Add(response);");
+                    sb.AppendLine("            }");
+                    sb.AppendLine("        }");
                 }
 
-                sb.AppendLine("            _ => global::System.Threading.Tasks.ValueTask.FromResult<global::Comptatata.MessageDrop.Messages.Message?>(null)");
-                sb.AppendLine("        }).ConfigureAwait(false);");
+                sb.AppendLine("        return responses;");
                 sb.AppendLine("        #pragma warning restore CS1998");
-                sb.AppendLine();
-                sb.AppendLine("        if (response is global::Comptatata.MessageDrop.Messages.Event e)");
-                sb.AppendLine("        {");
-                sb.AppendLine("            return e with { ReplyTo = request?.Id };");
-                sb.AppendLine("        }");
-                sb.AppendLine("        return response;");
                 sb.AppendLine("    }");
                 sb.AppendLine();
                 sb.AppendLine("    public static string GetDiscriminator(global::Comptatata.MessageDrop.Messages.Message message) => message switch");
