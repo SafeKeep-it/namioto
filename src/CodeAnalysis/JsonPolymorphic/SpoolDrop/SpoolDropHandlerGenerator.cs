@@ -176,8 +176,8 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
             
             var contextClassName = reg.Kind == RegistrationType.Handler 
-                ? $"{type.Name}SpoolBusSerializer" 
-                : $"{type.Name}SpoolBusClientContext";
+                ? $"{type.Name}SpoolBusServerSerializer" 
+                : $"{type.Name}SpoolBusClientSerializer";
 
             sb.AppendLine($"public partial class {contextClassName} : JsonSerializerContext");
             sb.AppendLine("{");
@@ -233,7 +233,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine($"        global::System.IO.Stream stream,");
                 sb.AppendLine($"        global::System.Threading.CancellationToken ct)");
                 sb.AppendLine("    {");
-                sb.AppendLine($"        var request = await global::System.Text.Json.JsonSerializer.DeserializeAsync<global::Comptatata.MessageDrop.Messages.Message>(stream, {type.Name}SpoolBusSerializer.SpoolBusOptions, ct).ConfigureAwait(false);");
+                sb.AppendLine($"        var request = await global::System.Text.Json.JsonSerializer.DeserializeAsync<global::Comptatata.MessageDrop.Messages.Message>(stream, {type.Name}SpoolBusServerSerializer.SpoolBusOptions, ct).ConfigureAwait(false);");
                 sb.AppendLine($"        {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}? handler = null;");
                 sb.AppendLine("        var response = request switch");
                 sb.AppendLine("        {");
@@ -272,7 +272,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("    [global::System.Runtime.CompilerServices.ModuleInitializer]");
                 sb.AppendLine("    public static void Initialize()");
                 sb.AppendLine("    {");
-                sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Options = {type.Name}SpoolBusSerializer.SpoolBusOptions;");
+                sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Options = {type.Name}SpoolBusServerSerializer.SpoolBusOptions;");
                 sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Dispatcher = {type.Name}SpoolBusDispatcher.DispatchAsync;");
                 sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.GetDiscriminator = {type.Name}SpoolBusDispatcher.GetDiscriminator;");
                 sb.AppendLine("    }");
@@ -295,7 +295,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                     sb.AppendLine($"    public async {method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {method.Method.Name}({method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {paramName})");
                     sb.AppendLine("    {");
                     sb.AppendLine($"        await global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.SendAsync({paramName}, _factory.Directory).ConfigureAwait(false);");
-                    sb.AppendLine($"        return await _factory.WaitForResponseAsync<{method.MessageResultType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {type.Name}SpoolBusClientContext.SpoolBusOptions).ConfigureAwait(false);");
+                    sb.AppendLine($"        return await _factory.WaitForResponseAsync<{method.MessageResultType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {type.Name}SpoolBusClientSerializer.SpoolBusOptions).ConfigureAwait(false);");
                     sb.AppendLine("    }");
                 }
                 sb.AppendLine("}");
@@ -323,7 +323,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("    [global::System.Runtime.CompilerServices.ModuleInitializer]");
                 sb.AppendLine("    public static void Initialize()");
                 sb.AppendLine("    {");
-                sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Options = {type.Name}SpoolBusClientContext.SpoolBusOptions;");
+                sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Options = {type.Name}SpoolBusClientSerializer.SpoolBusOptions;");
                 sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.GetDiscriminator = {type.Name}SpoolBusClientHelper.GetDiscriminator;");
                 sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.ClientFactory = factory => new {type.Name}SpoolBusClient(factory);");
                 sb.AppendLine("    }");
