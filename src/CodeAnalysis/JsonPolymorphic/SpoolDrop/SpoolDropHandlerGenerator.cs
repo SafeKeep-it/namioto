@@ -173,23 +173,39 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             sb.AppendLine($"public static class {handler.Name}SpoolBusDispatcher");
             sb.AppendLine("{");
             sb.AppendLine($"    public static async global::System.Threading.Tasks.ValueTask<global::Comptatata.MessageDrop.Messages.Message?> DispatchAsync(");
-            sb.AppendLine($"        {handler.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} handler,");
+            sb.AppendLine($"        global::System.Func<{handler.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}> handlerFactory,");
             sb.AppendLine($"        global::System.IO.Stream stream,");
             sb.AppendLine($"        global::System.Threading.CancellationToken ct)");
             sb.AppendLine("    {");
-            sb.AppendLine($"        var message = await global::System.Text.Json.JsonSerializer.DeserializeAsync<global::Comptatata.MessageDrop.Messages.Message>(stream, {handler.Name}SpoolBusSerializer.SpoolBusOptions, ct).ConfigureAwait(false);");
-            sb.AppendLine("        return message switch");
+            sb.AppendLine($"        var request = await global::System.Text.Json.JsonSerializer.DeserializeAsync<global::Comptatata.MessageDrop.Messages.Message>(stream, {handler.Name}SpoolBusSerializer.SpoolBusOptions, ct).ConfigureAwait(false);");
+            sb.AppendLine($"        {handler.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}? handler = null;");
+            sb.AppendLine("        var response = request switch");
             sb.AppendLine("        {");
 
             foreach (var method in handlerInfo.Methods)
             {
                 var awaitPrefix = method.IsAsync ? "await " : "";
-                sb.AppendLine($"            {method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m => {awaitPrefix}handler.{method.Method.Name}(m) ?? throw new global::System.InvalidOperationException($\"Handler method '{method.Method.Name}' in '{handler.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)}' returned null, which is not allowed.\"),");
+                sb.AppendLine($"            {method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m => {awaitPrefix}(handler ??= handlerFactory()).{method.Method.Name}(m) ?? throw new global::System.InvalidOperationException($\"Handler method '{method.Method.Name}' in '{handler.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)}' returned null, which is not allowed.\"),");
             }
 
             sb.AppendLine("            _ => null");
             sb.AppendLine("        };");
+            sb.AppendLine();
+            sb.AppendLine("        if (response is global::Comptatata.MessageDrop.Messages.Event e)");
+            sb.AppendLine("        {");
+            sb.AppendLine("            return e with { ReplyTo = request?.Id };");
+            sb.AppendLine("        }");
+            sb.AppendLine("        return response;");
             sb.AppendLine("    }");
+            sb.AppendLine();
+            sb.AppendLine("    public static string GetDiscriminator(global::Comptatata.MessageDrop.Messages.Message message) => message switch");
+            sb.AppendLine("    {");
+            foreach (var type in handlerInfo.MessageTypes.Where(t => !t.IsAbstract).OrderBy(t => t.Name))
+            {
+                sb.AppendLine($"        {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{ToKebabCase(type.Name)}\",");
+            }
+            sb.AppendLine("        _ => \"unknown-message\"");
+            sb.AppendLine("    };");
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -202,6 +218,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             sb.AppendLine("    {");
             sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{handler.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Options = {handler.Name}SpoolBusSerializer.SpoolBusOptions;");
             sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{handler.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Dispatcher = {handler.Name}SpoolBusDispatcher.DispatchAsync;");
+            sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{handler.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.GetDiscriminator = {handler.Name}SpoolBusDispatcher.GetDiscriminator;");
             sb.AppendLine("    }");
             sb.AppendLine("}");
             sb.AppendLine();
