@@ -419,20 +419,30 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
                     if (isAsync)
                     {
-                        sb.AppendLine($"        await global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
                         if (!method.IsOneWay)
                         {
                             var resultTypeName = method.MessageResultType!.Name;
-                            sb.AppendLine($"        return await _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {contextClassName}.SpoolBusMessages.{resultTypeName}{ctArg}).ConfigureAwait(false);");
+                            sb.AppendLine($"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {contextClassName}.SpoolBusMessages.{resultTypeName}{ctArg});");
+                            sb.AppendLine($"        await global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
+                            sb.AppendLine($"        return await responseTask.ConfigureAwait(false);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"        await global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
                         }
                     }
                     else
                     {
-                        sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
                         if (!method.IsOneWay)
                         {
                             var resultTypeName = method.MessageResultType!.Name;
-                            sb.AppendLine($"        return _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {contextClassName}.SpoolBusMessages.{resultTypeName}{ctArg}).GetAwaiter().GetResult();");
+                            sb.AppendLine($"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {contextClassName}.SpoolBusMessages.{resultTypeName}{ctArg});");
+                            sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
+                            sb.AppendLine($"        return responseTask.GetAwaiter().GetResult();");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
                         }
                     }
                     sb.AppendLine("    }");
