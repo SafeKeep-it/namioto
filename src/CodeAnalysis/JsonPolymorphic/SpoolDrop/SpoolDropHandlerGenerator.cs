@@ -49,10 +49,72 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             .Where(static t => t is not null)
             .Select(static (t, _) => new Registration(t!, RegistrationType.Client));
 
-        var allRegistrations = handlerTypes.Collect().Combine(clientTypes.Collect());
+        var potentialHandlers = context.SyntaxProvider
+            .CreateSyntaxProvider(
+                predicate: static (s, _) => s is ClassDeclarationSyntax,
+                transform: static (ctx, _) => GetPotentialHandlerType(ctx))
+            .Where(static t => t is not null)
+            .Select(static (t, _) => new Registration(t!, RegistrationType.Handler));
+
+        var potentialClients = context.SyntaxProvider
+            .CreateSyntaxProvider(
+                predicate: static (s, _) => s is InterfaceDeclarationSyntax,
+                transform: static (ctx, _) => GetPotentialClientType(ctx))
+            .Where(static t => t is not null)
+            .Select(static (t, _) => new Registration(t!, RegistrationType.Client));
+
+        var allRegistrations = handlerTypes.Collect()
+            .Combine(clientTypes.Collect())
+            .Combine(potentialHandlers.Collect())
+            .Combine(potentialClients.Collect());
 
         context.RegisterSourceOutput(allRegistrations.Combine(context.CompilationProvider),
-            static (spc, source) => Execute(source.Left.Left.AddRange(source.Left.Right), source.Right, spc));
+            static (spc, source) => Execute(
+                source.Left.Left.Left.Left.AddRange(source.Left.Left.Left.Right)
+                    .AddRange(source.Left.Left.Right)
+                    .AddRange(source.Left.Right), 
+                source.Right, spc));
+    }
+
+    private static ITypeSymbol? GetPotentialHandlerType(GeneratorSyntaxContext context)
+    {
+        if (context.Node.SyntaxTree.FilePath.EndsWith(".generated.cs")) return null;
+        var classDecl = (ClassDeclarationSyntax)context.Node;
+        var symbol = context.SemanticModel.GetDeclaredSymbol(classDecl);
+        if (symbol is null) return null;
+
+        // A potential handler is a class that has at least one method taking a Message as first parameter
+        // and whose name starts with "Handle" (convention) or just any public method taking a Message?
+        // Let's stick to the convention used in the project.
+        if (symbol.GetMembers().OfType<IMethodSymbol>().Any(m => 
+                m.MethodKind == MethodKind.Ordinary && 
+                m.DeclaredAccessibility == Accessibility.Public && 
+                !m.IsStatic &&
+                m.Parameters.Length >= 1 && 
+                IsOrInheritsFromMessage(m.Parameters[0].Type)))
+        {
+            return symbol;
+        }
+
+        return null;
+    }
+
+    private static ITypeSymbol? GetPotentialClientType(GeneratorSyntaxContext context)
+    {
+        if (context.Node.SyntaxTree.FilePath.EndsWith(".generated.cs")) return null;
+        var interfaceDecl = (InterfaceDeclarationSyntax)context.Node;
+        var symbol = context.SemanticModel.GetDeclaredSymbol(interfaceDecl);
+        if (symbol is null) return null;
+
+        // A potential client is an interface where at least one method takes a Message as first parameter
+        if (symbol.GetMembers().OfType<IMethodSymbol>().Any(m => 
+                m.Parameters.Length >= 1 && 
+                IsOrInheritsFromMessage(m.Parameters[0].Type)))
+        {
+            return symbol;
+        }
+
+        return null;
     }
 
     private static bool IsAddHandlerInvocation(SyntaxNode node)
@@ -64,6 +126,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
     private static ITypeSymbol? GetHandlerType(GeneratorSyntaxContext context)
     {
+        if (context.Node.SyntaxTree.FilePath.EndsWith(".generated.cs")) return null;
         var invocation = (InvocationExpressionSyntax)context.Node;
         var symbol = context.SemanticModel.GetSymbolInfo(invocation).Symbol as IMethodSymbol;
 
@@ -84,6 +147,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
     private static ITypeSymbol? GetClientType(GeneratorSyntaxContext context)
     {
+        if (context.Node.SyntaxTree.FilePath.EndsWith(".generated.cs")) return null;
         var invocation = (InvocationExpressionSyntax)context.Node;
         var symbol = context.SemanticModel.GetSymbolInfo(invocation).Symbol as IMethodSymbol;
 
@@ -119,12 +183,13 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
     {
         var distinctRegistrations = registrations.Distinct(RegistrationComparer.Instance);
 
-        var groupedByFile = distinctRegistrations.GroupBy(r => r.Type.DeclaringSyntaxReferences.FirstOrDefault()?.SyntaxTree.FilePath)
-            .Where(g => !string.IsNullOrEmpty(g.Key));
+        var localGroups = distinctRegistrations
+            .Where(r => r.Type.DeclaringSyntaxReferences.Any())
+            .GroupBy(r => r.Type.DeclaringSyntaxReferences.First().SyntaxTree.FilePath);
 
-        foreach (var group in groupedByFile)
+        foreach (var group in localGroups)
         {
-            GenerateFileForGroup(group.Key!, group.ToList(), compilation, context);
+            GenerateFileForGroup(group.Key, group.ToList(), compilation, context);
         }
     }
 
@@ -135,6 +200,10 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
         var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
         var outputPath = Path.Combine(directory, $"{sourceFileName}.generated.cs");
+        if (sourceFileName.StartsWith("SpoolBus.Remote."))
+        {
+            outputPath = Path.Combine(directory, $"{sourceFileName}.generated.cs");
+        }
 
         // Cleanup old per-handler files
         foreach (var reg in registrations)
@@ -185,7 +254,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 ? $"{type.Name}SpoolBusServerSerializer"
                 : $"{type.Name}SpoolBusClientSerializer";
 
-            sb.AppendLine($"public partial class {contextClassName} : JsonSerializerContext");
+            sb.AppendLine($"internal partial class {contextClassName} : JsonSerializerContext");
             sb.AppendLine("{");
             sb.AppendLine("    public static JsonSerializerOptions SpoolBusOptions => field ??= ConstructPolymorphism();");
             sb.AppendLine();
@@ -245,7 +314,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             {
                 // Generate Dispatcher
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
-                sb.AppendLine($"public static class {type.Name}SpoolBusDispatcher");
+                sb.AppendLine($"internal static class {type.Name}SpoolBusDispatcher");
                 sb.AppendLine("{");
                 sb.AppendLine($"    public static async global::System.Threading.Tasks.ValueTask<bool> DispatchAsync(");
                 sb.AppendLine($"        global::System.Func<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}> handlerFactory,");
@@ -330,7 +399,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             {
                 // Generate Client Implementation
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
-                sb.AppendLine($"public class {type.Name}SpoolBusClient : {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}");
+                sb.AppendLine($"internal class {type.Name}SpoolBusClient : {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}");
                 sb.AppendLine("{");
                 sb.AppendLine($"    private readonly global::Comptatata.MessageDrop.SpoolBusClientFactory _factory;");
                 sb.AppendLine($"    public {type.Name}SpoolBusClient(global::Comptatata.MessageDrop.SpoolBusClientFactory factory) => _factory = factory;");
@@ -353,7 +422,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                         sb.AppendLine($"        await global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
                         if (!method.IsOneWay)
                         {
-                            var resultTypeName = method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+                            var resultTypeName = method.MessageResultType!.Name;
                             sb.AppendLine($"        return await _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {contextClassName}.SpoolBusMessages.{resultTypeName}{ctArg}).ConfigureAwait(false);");
                         }
                     }
@@ -362,7 +431,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                         sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
                         if (!method.IsOneWay)
                         {
-                            var resultTypeName = method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+                            var resultTypeName = method.MessageResultType!.Name;
                             sb.AppendLine($"        return _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {contextClassName}.SpoolBusMessages.{resultTypeName}{ctArg}).GetAwaiter().GetResult();");
                         }
                     }
@@ -373,7 +442,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
                 // Generate Discriminator helper for Client
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
-                sb.AppendLine($"public static class {type.Name}SpoolBusClientHelper");
+                sb.AppendLine($"internal static class {type.Name}SpoolBusClientHelper");
                 sb.AppendLine("{");
                 sb.AppendLine("    public static string GetDiscriminator(global::Comptatata.MessageDrop.Messages.Message message) => message switch");
                 sb.AppendLine("    {");
@@ -578,7 +647,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         {
             if (type.IsAbstract || type.TypeKind == TypeKind.Interface)
             {
-                AddConcreteDescendants(messageTypes, type, compilation.Assembly.GlobalNamespace);
+                AddConcreteDescendants(messageTypes, type, compilation.GlobalNamespace);
             }
         }
 
