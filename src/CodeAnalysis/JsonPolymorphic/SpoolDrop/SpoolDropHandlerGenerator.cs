@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
-using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
-namespace Comptatata.CodeAnalysis.SpoolDrop;
+namespace Comptatata.CodeAnalysis.JsonPolymorphic.SpoolDrop;
 
 [Generator(LanguageNames.CSharp)]
 public class SpoolDropHandlerGenerator : IIncrementalGenerator
@@ -133,7 +128,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         if (symbol is null || symbol.Name != "AddHandler") return null;
 
         var containingType = symbol.ContainingType?.ToDisplayString();
-        if (containingType != "Comptatata.MessageDrop.SpoolDropServer") return null;
+        if (containingType != "Comptatata.SpoolBus.SpoolDropServer") return null;
 
         return symbol.TypeArguments.FirstOrDefault();
     }
@@ -154,7 +149,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         if (symbol is null || symbol.Name != "CreateClient") return null;
 
         var containingType = symbol.ContainingType?.ToDisplayString();
-        if (containingType != "Comptatata.MessageDrop.SpoolBusClientFactory") return null;
+        if (containingType != "Comptatata.SpoolBus.SpoolBusClientFactory") return null;
 
         return symbol.TypeArguments.FirstOrDefault();
     }
@@ -225,7 +220,8 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         sb.AppendLine("using System.Text.Json;");
         sb.AppendLine("using System.Text.Json.Serialization;");
         sb.AppendLine("using System.Text.Json.Serialization.Metadata;");
-        sb.AppendLine("using Comptatata.MessageDrop;");
+        sb.AppendLine("using Comptatata.SpoolBus;");
+        sb.AppendLine("using Comptatata.SpoolDrop.Messages;");
         sb.AppendLine();
 
         // Assume same namespace for now as it's the 99% case for file-scoped namespaces
@@ -334,7 +330,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                     var ctArg = method.HasCancellationToken ? ", ct" : "";
                     var awaitExpr = method.IsAsync ? ".ConfigureAwait(false)" : "";
 
-                    sb.AppendLine($"        async global::System.Threading.Tasks.ValueTask<global::Comptatata.MessageDrop.Messages.Message?> Invoke_{method.Method.Name}({method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m)");
+                    sb.AppendLine($"        async global::System.Threading.Tasks.ValueTask<global::Comptatata.SpoolDrop.Messages.Message?> Invoke_{method.Method.Name}({method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} m)");
                     sb.AppendLine("        {");
                     if (method.IsOneWay)
                     {
@@ -357,11 +353,11 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                     sb.AppendLine($"            var response = await Invoke_{method.Method.Name}(m_{method.Method.Name}).ConfigureAwait(false);");
                     sb.AppendLine("            if (response != null)");
                     sb.AppendLine("            {");
-                    sb.AppendLine("                if (response is global::Comptatata.MessageDrop.Messages.Event e)");
+                    sb.AppendLine("                if (response is global::Comptatata.SpoolDrop.Messages.Event e)");
                     sb.AppendLine("                {");
                     sb.AppendLine("                    response = e with { ReplyTo = request?.Id };");
                     sb.AppendLine("                }");
-                    sb.AppendLine($"                await global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync(response, {contextClassName}.SpoolBusMessages.Message, GetDiscriminator, directory, ct).ConfigureAwait(false);");
+                    sb.AppendLine($"                await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync(response, {contextClassName}.SpoolBusMessages.Message, GetDiscriminator, directory, ct).ConfigureAwait(false);");
                     sb.AppendLine("            }");
                     sb.AppendLine("            handled = true;");
                     sb.AppendLine("        }");
@@ -371,7 +367,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("        #pragma warning restore CS1998");
                 sb.AppendLine("    }");
                 sb.AppendLine();
-                sb.AppendLine("    public static string GetDiscriminator(global::Comptatata.MessageDrop.Messages.Message message) => message switch");
+                sb.AppendLine("    public static string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => message switch");
                 sb.AppendLine("    {");
                 foreach (var t in info.MessageTypes.Where(t => !t.IsAbstract).OrderBy(t => t.Name))
                 {
@@ -389,8 +385,8 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("    [global::System.Runtime.CompilerServices.ModuleInitializer]");
                 sb.AppendLine("    public static void Initialize()");
                 sb.AppendLine("    {");
-                sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Dispatcher = {type.Name}SpoolBusDispatcher.DispatchAsync;");
-                sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.GetDiscriminator = {type.Name}SpoolBusDispatcher.GetDiscriminator;");
+                sb.AppendLine($"        global::Comptatata.SpoolBus.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Dispatcher = {type.Name}SpoolBusDispatcher.DispatchAsync;");
+                sb.AppendLine($"        global::Comptatata.SpoolBus.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.GetDiscriminator = {type.Name}SpoolBusDispatcher.GetDiscriminator;");
                 sb.AppendLine("    }");
                 sb.AppendLine("}");
                 sb.AppendLine();
@@ -401,8 +397,8 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
                 sb.AppendLine($"internal class {type.Name}SpoolBusClient : {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}");
                 sb.AppendLine("{");
-                sb.AppendLine($"    private readonly global::Comptatata.MessageDrop.SpoolBusClientFactory _factory;");
-                sb.AppendLine($"    public {type.Name}SpoolBusClient(global::Comptatata.MessageDrop.SpoolBusClientFactory factory) => _factory = factory;");
+                sb.AppendLine("    private readonly global::Comptatata.SpoolBus.SpoolBusClientFactory _factory;");
+                sb.AppendLine($"    public {type.Name}SpoolBusClient(global::Comptatata.SpoolBus.SpoolBusClientFactory factory) => _factory = factory;");
                 sb.AppendLine();
 
                 foreach (var method in info.Methods)
@@ -423,12 +419,21 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                         {
                             var resultTypeName = method.MessageResultType!.Name;
                             sb.AppendLine($"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {contextClassName}.SpoolBusMessages.{resultTypeName}{ctArg});");
-                            sb.AppendLine($"        await global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
+                            sb.AppendLine($"        await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
                             sb.AppendLine($"        return await responseTask.ConfigureAwait(false);");
                         }
                         else
                         {
-                            sb.AppendLine($"        await global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
+                            sb.AppendLine($"        await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
+                            var returnType = method.Method.ReturnType.ToDisplayString();
+                            if (returnType == "global::System.Threading.Tasks.Task")
+                            {
+                                sb.AppendLine("        return global::System.Threading.Tasks.Task.CompletedTask;");
+                            }
+                            else if (returnType == "global::System.Threading.Tasks.ValueTask")
+                            {
+                                sb.AppendLine("        return global::System.Threading.Tasks.ValueTask.CompletedTask;");
+                            }
                         }
                     }
                     else
@@ -437,12 +442,12 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                         {
                             var resultTypeName = method.MessageResultType!.Name;
                             sb.AppendLine($"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, {contextClassName}.SpoolBusMessages.{resultTypeName}{ctArg});");
-                            sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
+                            sb.AppendLine($"        global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
                             sb.AppendLine($"        return responseTask.GetAwaiter().GetResult();");
                         }
                         else
                         {
-                            sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
+                            sb.AppendLine($"        global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, {contextClassName}.SpoolBusMessages.Message, {type.Name}SpoolBusClientHelper.GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
                         }
                     }
                     sb.AppendLine("    }");
@@ -454,7 +459,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
                 sb.AppendLine($"internal static class {type.Name}SpoolBusClientHelper");
                 sb.AppendLine("{");
-                sb.AppendLine("    public static string GetDiscriminator(global::Comptatata.MessageDrop.Messages.Message message) => message switch");
+                sb.AppendLine("    public static string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => message switch");
                 sb.AppendLine("    {");
                 foreach (var t in info.MessageTypes.Where(t => !t.IsAbstract).OrderBy(t => t.Name))
                 {
@@ -472,8 +477,8 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("    [global::System.Runtime.CompilerServices.ModuleInitializer]");
                 sb.AppendLine("    public static void Initialize()");
                 sb.AppendLine("    {");
-                sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.GetDiscriminator = {type.Name}SpoolBusClientHelper.GetDiscriminator;");
-                sb.AppendLine($"        global::Comptatata.MessageDrop.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.ClientFactory = factory => new {type.Name}SpoolBusClient(factory);");
+                sb.AppendLine($"        global::Comptatata.SpoolBus.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.GetDiscriminator = {type.Name}SpoolBusClientHelper.GetDiscriminator;");
+                sb.AppendLine($"        global::Comptatata.SpoolBus.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.ClientFactory = factory => new {type.Name}SpoolBusClient(factory);");
                 sb.AppendLine("    }");
                 sb.AppendLine("}");
                 sb.AppendLine();
@@ -693,7 +698,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         var current = type;
         while (current != null)
         {
-            if (current.Name == "Message" && current.ContainingNamespace?.ToDisplayString() == "Comptatata.MessageDrop.Messages") return true;
+            if (current.Name == "Message" && current.ContainingNamespace?.ToDisplayString() == "Comptatata.SpoolDrop.Messages") return true;
             current = current.BaseType;
         }
         return false;
