@@ -37,9 +37,4 @@
     </PropertyGroup>
 
 
-    <ItemGroup Condition="'$(MSBuildProjectName)' != 'CodeAnalysis.JsonPolymorphic'">
-        <ProjectReference Include="$(MSBuildThisFileDirectory)CodeAnalysis/JsonPolymorphic/CodeAnalysis.JsonPolymorphic.csproj"
-                          OutputItemType="Analyzer"
-                          ReferenceOutputAssembly="false"/>
-    </ItemGroup>
 </Project>
