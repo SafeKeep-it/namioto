@@ -207,33 +207,9 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         {
             if (types.Add(type))
             {
+                // We register types that are send or received. 
+                // We also register their base types to support polymorphic serialization via the base type.
                 AddWithHierarchy(types, type.BaseType);
-
-                if (type is INamedTypeSymbol namedType)
-                {
-                    foreach (var member in namedType.GetMembers())
-                    {
-                        if (member is IPropertySymbol property)
-                        {
-                            AddWithHierarchy(types, property.Type);
-                        }
-                        else if (member is IFieldSymbol field && field.CanBeReferencedByName)
-                        {
-                            AddWithHierarchy(types, field.Type);
-                        }
-                    }
-                }
-
-                foreach (var attr in type.GetAttributes())
-                {
-                    if (attr.AttributeClass?.ToDisplayString() == "System.Text.Json.Serialization.JsonDerivedTypeAttribute")
-                    {
-                        if (attr.ConstructorArguments.Length > 0 && attr.ConstructorArguments[0].Value is ITypeSymbol derivedType)
-                        {
-                            AddWithHierarchy(types, derivedType);
-                        }
-                    }
-                }
             }
         }
     }
@@ -349,7 +325,7 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
                 var identifiedTypes = allTypes.ToList();
                 foreach (var type in identifiedTypes)
                 {
-                    if (type.IsAbstract || type.TypeKind == TypeKind.Interface)
+                    if (!type.IsSealed || type.TypeKind == TypeKind.Interface)
                     {
                         JsonSerializerContextEmitter.AddConcreteDescendants(allTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
                     }

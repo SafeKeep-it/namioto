@@ -96,6 +96,11 @@ public static class JsonSerializerContextEmitter
         sb.AppendLine($"{indent}}}");
     }
 
+    private static string GetDiscriminator(ITypeSymbol descendant, ITypeSymbol parent)
+    {
+        return ToKebabCase(descendant.Name);
+    }
+
     public static void EmitAddPolymorphism(StringBuilder sb, IEnumerable<ITypeSymbol> allTypes, string indent = "    ")
     {
         sb.AppendLine($"{indent}private static void AddPolymorphism(JsonTypeInfo typeInfo) =>");
@@ -103,11 +108,12 @@ public static class JsonSerializerContextEmitter
         sb.AppendLine($"{indent}    {{");
         sb.AppendLine();
         
-        var abstractTypes = allTypes.Where(t => t.IsAbstract || t.TypeKind == TypeKind.Interface).ToList();
-        foreach (var parent in abstractTypes.OrderBy(t => t.ToDisplayString()))
+        // Generate polymorphism options for any type that has descendants in the set
+        var potentialParents = allTypes.Where(t => !t.IsSealed || t.TypeKind == TypeKind.Interface).ToList();
+        foreach (var parent in potentialParents.OrderBy(t => t.ToDisplayString()))
         {
             var concreteDescendants = allTypes
-                .Where(t => !t.IsAbstract && t.TypeKind != TypeKind.Interface && IsDescendantOf(t, parent))
+                .Where(t => !SymbolEqualityComparer.Default.Equals(t, parent) && !t.IsAbstract && t.TypeKind != TypeKind.Interface && IsDescendantOf(t, parent))
                 .OrderBy(t => t.Name)
                 .ToList();
 
@@ -120,7 +126,7 @@ public static class JsonSerializerContextEmitter
                 sb.AppendLine($"{indent}            {{");
                 foreach (var descendant in concreteDescendants)
                 {
-                    var discriminator = ToKebabCase(descendant.Name);
+                    var discriminator = GetDiscriminator(descendant, parent);
                     sb.AppendLine($"{indent}                new JsonDerivedType(typeof({descendant.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}), \"{discriminator}\"),");
                 }
                 sb.AppendLine($"{indent}            }}");

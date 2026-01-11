@@ -591,10 +591,18 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         var identifiedTypes = messageTypes.ToList();
         foreach (var type in identifiedTypes)
         {
-            if (type.IsAbstract || type.TypeKind == TypeKind.Interface)
+            if (!type.IsSealed || type.TypeKind == TypeKind.Interface)
             {
                 JsonSerializerContextEmitter.AddConcreteDescendants(messageTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
             }
+        }
+
+        if (messageTypes.Count > 0)
+        {
+            var messageBase = compilation.GetTypeByMetadataName("Comptatata.SpoolDrop.Messages.Message");
+            var eventBase = compilation.GetTypeByMetadataName("Comptatata.SpoolDrop.Messages.Event");
+            if (messageBase != null) messageTypes.Add(messageBase);
+            if (eventBase != null) messageTypes.Add(eventBase);
         }
 
         return new HandlerInfo(messageTypes, handlerMethods);
