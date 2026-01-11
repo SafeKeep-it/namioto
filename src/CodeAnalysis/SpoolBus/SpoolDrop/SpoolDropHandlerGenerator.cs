@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Comptatata.CodeAnalysis;
 
 namespace Comptatata.CodeAnalysis.JsonPolymorphic.SpoolDrop;
 
@@ -78,9 +79,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         var symbol = context.SemanticModel.GetDeclaredSymbol(classDecl);
         if (symbol is null) return null;
 
-        // A potential handler is a class that has at least one method taking a Message as first parameter
-        // and whose name starts with "Handle" (convention) or just any public method taking a Message?
-        // Let's stick to the convention used in the project.
         if (symbol.GetMembers().OfType<IMethodSymbol>().Any(m => 
                 m.MethodKind == MethodKind.Ordinary && 
                 m.DeclaredAccessibility == Accessibility.Public && 
@@ -101,7 +99,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         var symbol = context.SemanticModel.GetDeclaredSymbol(interfaceDecl);
         if (symbol is null) return null;
 
-        // A potential client is an interface where at least one method takes a Message as first parameter
         if (symbol.GetMembers().OfType<IMethodSymbol>().Any(m => 
                 m.Parameters.Length >= 1 && 
                 IsOrInheritsFromMessage(m.Parameters[0].Type)))
@@ -197,7 +194,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         var outputPath = Path.Combine(directory, $"{sourceFileName}.generated.cs");
         if (sourceFileName.StartsWith("SpoolBus.Remote."))
         {
-            // Cleanup old per-handler files
             foreach (var reg in registrations)
             {
                 var oldPath = Path.Combine(directory, $"{sourceFileName}.{reg.Type.Name}.generated.cs");
@@ -206,10 +202,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                     try { File.Delete(oldPath); } catch { }
                 }
             }
-        }
-        else
-        {
-            outputPath = Path.Combine(directory, $"{sourceFileName}.generated.cs");
         }
 
         var sb = new StringBuilder();
@@ -226,7 +218,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         sb.AppendLine("using Comptatata.SpoolDrop.Messages;");
         sb.AppendLine();
 
-        // Assume same namespace for now as it's the 99% case for file-scoped namespaces
         var firstReg = registrations.First();
         var ns = firstReg.Type.ContainingNamespace.IsGlobalNamespace ? "" : firstReg.Type.ContainingNamespace.ToDisplayString();
 
@@ -254,70 +245,34 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             sb.AppendLine($"internal partial class {contextClassName} : JsonSerializerContext");
             sb.AppendLine("{");
             sb.AppendLine("    public static global::System.Threading.Tasks.ValueTask<global::Comptatata.SpoolDrop.Messages.Message?> DeserializeAsync(global::System.IO.Stream stream, global::System.Threading.CancellationToken ct = default) =>");
-            sb.AppendLine("        global::System.Text.Json.JsonSerializer.DeserializeAsync(stream, SpoolBusMessages.Message, ct);");
+            sb.AppendLine("        global::System.Text.Json.JsonSerializer.DeserializeAsync(stream, Generated.Message, ct);");
             sb.AppendLine();
             sb.AppendLine("    public static global::Comptatata.SpoolDrop.Messages.Message? Deserialize(global::System.IO.Stream stream) =>");
-            sb.AppendLine("        global::System.Text.Json.JsonSerializer.Deserialize(stream, SpoolBusMessages.Message);");
+            sb.AppendLine("        global::System.Text.Json.JsonSerializer.Deserialize(stream, Generated.Message);");
             sb.AppendLine();
             sb.AppendLine("    public static global::System.Threading.Tasks.Task SerializeAsync(global::System.IO.Stream stream, global::Comptatata.SpoolDrop.Messages.Message message, global::System.Threading.CancellationToken ct = default) =>");
-            sb.AppendLine("        global::System.Text.Json.JsonSerializer.SerializeAsync(stream, message, SpoolBusMessages.Message, ct);");
+            sb.AppendLine("        global::System.Text.Json.JsonSerializer.SerializeAsync(stream, message, Generated.Message, ct);");
             sb.AppendLine();
             sb.AppendLine("    public static void Serialize(global::System.IO.Stream stream, global::Comptatata.SpoolDrop.Messages.Message message) =>");
-            sb.AppendLine("        global::System.Text.Json.JsonSerializer.Serialize(stream, message, SpoolBusMessages.Message);");
+            sb.AppendLine("        global::System.Text.Json.JsonSerializer.Serialize(stream, message, Generated.Message);");
             sb.AppendLine();
-            sb.AppendLine("    private static JsonSerializerOptions? _spoolBusOptions;");
-            sb.AppendLine("    public static JsonSerializerOptions SpoolBusOptions => _spoolBusOptions ??= ConstructPolymorphism();");
+            sb.AppendLine("    public static JsonSerializerOptions SpoolBusOptions => field ??= ConstructPolymorphism();");
             sb.AppendLine();
             sb.AppendLine("    private static JsonSerializerOptions ConstructPolymorphism()");
             sb.AppendLine("    {");
             sb.AppendLine("        var options = new JsonSerializerOptions();");
             sb.AppendLine("        options.TypeInfoResolver = JsonTypeInfoResolver.WithAddedModifier(Default, AddPolymorphism);");
+            sb.AppendLine("        Generated.Initialize(options);");
             sb.AppendLine("        return options;");
             sb.AppendLine("    }");
             sb.AppendLine();
-            sb.AppendLine("    private static void AddPolymorphism(JsonTypeInfo typeInfo)");
-            sb.AppendLine("    {");
-            sb.AppendLine("        typeInfo.PolymorphismOptions = typeInfo switch");
-            sb.AppendLine("        {");
-
-            var abstractTypes = info.MessageTypes.Where(t => t.IsAbstract).ToList();
-            foreach (var parent in abstractTypes.OrderBy(t => t.ToDisplayString()))
-            {
-                var concreteDescendants = info.MessageTypes
-                    .Where(t => !t.IsAbstract && IsDescendantOf(t, parent))
-                    .OrderBy(t => t.Name)
-                    .ToList();
-
-                if (concreteDescendants.Count > 0)
-                {
-                    sb.AppendLine($"            var t when t.Type == typeof({parent.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}) => new JsonPolymorphismOptions");
-                    sb.AppendLine("            {");
-                    sb.AppendLine("                TypeDiscriminatorPropertyName = \"type\",");
-                    sb.AppendLine("                DerivedTypes =");
-                    sb.AppendLine("                {");
-                    foreach (var descendant in concreteDescendants)
-                    {
-                        var discriminator = ToKebabCase(descendant.Name);
-                        sb.AppendLine($"                    new JsonDerivedType(typeof({descendant.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}), \"{discriminator}\"),");
-                    }
-                    sb.AppendLine("                }");
-                    sb.AppendLine("            },");
-                }
-            }
-
-            sb.AppendLine("            _ => typeInfo.PolymorphismOptions");
-            sb.AppendLine("        };");
-            sb.AppendLine("    }");
+            
+            JsonSerializerContextEmitter.EmitAddPolymorphism(sb, info.MessageTypes);
+            
             sb.AppendLine();
-            sb.AppendLine("    public static class SpoolBusMessages");
-            sb.AppendLine("    {");
-            foreach (var messageType in info.MessageTypes.OrderBy(t => t.Name))
-            {
-                var typeName = messageType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                sb.AppendLine($"        private static JsonTypeInfo<{typeName}>? _{messageType.Name};");
-                sb.AppendLine($"        public static JsonTypeInfo<{typeName}> {messageType.Name} => _{messageType.Name} ??= (JsonTypeInfo<{typeName}>)SpoolBusOptions.GetTypeInfo(typeof({typeName}));");
-            }
-            sb.AppendLine("    }");
+            
+            JsonSerializerContextEmitter.EmitGeneratedClass(sb, info.MessageTypes);
+            
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -326,6 +281,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             sb.AppendLine("    [global::System.Runtime.CompilerServices.ModuleInitializer]");
             sb.AppendLine("    public static void InitializeSpoolBus()");
             sb.AppendLine("    {");
+            sb.AppendLine("        _ = SpoolBusOptions;");
             if (reg.Kind == RegistrationType.Handler)
             {
                 sb.AppendLine($"        global::Comptatata.SpoolBus.SpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.Default = new {type.Name}SpoolBusHandlerInfrastructure();");
@@ -340,7 +296,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
             if (reg.Kind == RegistrationType.Handler)
             {
-                // Generate Infrastructure class
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
                 sb.AppendLine($"file class {type.Name}SpoolBusHandlerInfrastructure : global::Comptatata.SpoolBus.ISpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>");
                 sb.AppendLine("{");
@@ -360,7 +315,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("}");
                 sb.AppendLine();
 
-                // Generate Dispatcher
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
                 sb.AppendLine($"file static class {type.Name}SpoolBusDispatcher");
                 sb.AppendLine("{");
@@ -423,19 +377,15 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("    {");
                 foreach (var t in info.MessageTypes.Where(t => !t.IsAbstract).OrderBy(t => t.Name))
                 {
-                    sb.AppendLine($"        {t.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{ToKebabCase(t.Name)}\",");
+                    sb.AppendLine($"        {t.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{JsonSerializerContextEmitter.ToKebabCase(t.Name)}\",");
                 }
                 sb.AppendLine("        _ => \"unknown-message\"");
                 sb.AppendLine("    };");
                 sb.AppendLine("}");
                 sb.AppendLine();
-
-                // Generate Infrastructure Initializer
-                sb.AppendLine();
             }
             else if (reg.Kind == RegistrationType.Client)
             {
-                // Generate Client Implementation
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
                 sb.AppendLine($"file class {type.Name}SpoolBusClient : {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}, global::Comptatata.SpoolBus.ISpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>");
                 sb.AppendLine("{");
@@ -460,7 +410,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                     var ctArg = method.HasCancellationToken ? ", ct" : "";
                     var isAsync = method.IsAsync || !method.IsOneWay;
                     var asyncKeyword = isAsync ? "async " : "";
-                    var paramTypeInfoName = method.ParameterType.Name;
 
                     sb.AppendLine($"    public {asyncKeyword}{method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {method.Method.Name}({method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {paramName}{ctParam})");
                     sb.AppendLine("    {");
@@ -469,7 +418,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                     {
                         if (!method.IsOneWay)
                         {
-                            var resultTypeName = method.MessageResultType!.Name;
                             sb.AppendLine($"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, this{ctArg});");
                             sb.AppendLine($"        await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
                             sb.AppendLine($"        return await responseTask.ConfigureAwait(false);");
@@ -492,7 +440,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                     {
                         if (!method.IsOneWay)
                         {
-                            var resultTypeName = method.MessageResultType!.Name;
                             sb.AppendLine($"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, this{ctArg});");
                             sb.AppendLine($"        global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
                             sb.AppendLine($"        return responseTask.GetAwaiter().GetResult();");
@@ -507,7 +454,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("}");
                 sb.AppendLine();
 
-                // Generate Discriminator helper for Client
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
                 sb.AppendLine($"file static class {type.Name}SpoolBusClientHelper");
                 sb.AppendLine("{");
@@ -515,14 +461,11 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("    {");
                 foreach (var t in info.MessageTypes.Where(t => !t.IsAbstract).OrderBy(t => t.Name))
                 {
-                    sb.AppendLine($"        {t.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{ToKebabCase(t.Name)}\",");
+                    sb.AppendLine($"        {t.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{JsonSerializerContextEmitter.ToKebabCase(t.Name)}\",");
                 }
                 sb.AppendLine("        _ => \"unknown-message\"");
                 sb.AppendLine("    };");
                 sb.AppendLine("}");
-                sb.AppendLine();
-
-                // Generate Infrastructure Initializer for Client
                 sb.AppendLine();
             }
         }
@@ -532,38 +475,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         {
             File.WriteAllText(outputPath, newContent);
         }
-    }
-
-    private static bool IsDescendantOf(ITypeSymbol type, ITypeSymbol potentialBase)
-    {
-        var targetBase = potentialBase.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-        var current = type.BaseType;
-        while (current != null)
-        {
-            if (current.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) == targetBase) return true;
-            current = current.BaseType;
-        }
-        return false;
-    }
-
-    private static string ToKebabCase(string name)
-    {
-        if (string.IsNullOrEmpty(name)) return name;
-        var sb = new StringBuilder();
-        for (int i = 0; i < name.Length; i++)
-        {
-            char c = name[i];
-            if (char.IsUpper(c))
-            {
-                if (i > 0) sb.Append('-');
-                sb.Append(char.ToLower(c));
-            }
-            else
-            {
-                sb.Append(c);
-            }
-        }
-        return sb.ToString();
     }
 
     private class HandlerInfo
@@ -582,7 +493,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
     {
         var messageTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
 
-        // Find all type references in the handler's syntax
         foreach (var syntaxRef in handler.DeclaringSyntaxReferences)
         {
             var model = compilation.GetSemanticModel(syntaxRef.SyntaxTree);
@@ -602,7 +512,6 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 }
                 else if (node is VariableDeclaratorSyntax declarator)
                 {
-                    // Handle var x = new MyEvent();
                     var variableSymbol = model.GetDeclaredSymbol(declarator) as ILocalSymbol;
                     symbol = variableSymbol?.Type;
                 }
@@ -698,41 +607,16 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             }
         }
 
-        // Search for concrete descendants in the current assembly for any identified message types
         var identifiedTypes = messageTypes.ToList();
         foreach (var type in identifiedTypes)
         {
             if (type.IsAbstract || type.TypeKind == TypeKind.Interface)
             {
-                AddConcreteDescendants(messageTypes, type, compilation.GlobalNamespace);
+                JsonSerializerContextEmitter.AddConcreteDescendants(messageTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
             }
         }
 
         return new HandlerInfo(messageTypes, handlerMethods);
-    }
-
-    private static void AddConcreteDescendants(HashSet<ITypeSymbol> types, ITypeSymbol baseType, INamespaceSymbol ns)
-    {
-        foreach (var type in ns.GetTypeMembers())
-        {
-            if (!type.IsAbstract && IsDescendantOf(type, baseType))
-            {
-                AddWithHierarchy(types, type);
-            }
-            // Also check nested types
-            foreach (var nested in type.GetTypeMembers())
-            {
-                if (!nested.IsAbstract && IsDescendantOf(nested, baseType))
-                {
-                    AddWithHierarchy(types, nested);
-                }
-            }
-        }
-
-        foreach (var childNs in ns.GetNamespaceMembers())
-        {
-            AddConcreteDescendants(types, baseType, childNs);
-        }
     }
 
     private static bool IsOrInheritsFromMessage(ITypeSymbol type)
