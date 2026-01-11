@@ -362,14 +362,20 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
 
                 var accessibility = serializerGroup.Any(m => m.Accessibility == "public") ? "public" : "internal";
 
-                sb.AppendLine("[global::System.Text.Json.Serialization.JsonSourceGenerationOptions(WriteIndented = false, PropertyNamingPolicy = global::System.Text.Json.Serialization.JsonKnownNamingPolicy.CamelCase, RespectNullableAnnotations = true, DefaultIgnoreCondition = global::System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault, UseStringEnumConverter = true)]");
+                sb.AppendLine("[global::System.Text.Json.Serialization.JsonSourceGenerationOptions(UseStringEnumConverter = true)]");
                 sb.AppendLine($"{accessibility} partial class {serializerGroup.Key} : JsonSerializerContext");
                 sb.AppendLine("{");
                 sb.AppendLine("    public static JsonSerializerOptions SerializerOptions => field ??= ConstructPolymorphism();");
                 sb.AppendLine();
                 sb.AppendLine("    private static JsonSerializerOptions ConstructPolymorphism()");
                 sb.AppendLine("    {");
-                sb.AppendLine("        var options = new JsonSerializerOptions();");
+                sb.AppendLine("        var options = new JsonSerializerOptions");
+                sb.AppendLine("        {");
+                sb.AppendLine("            WriteIndented = false,");
+                sb.AppendLine("            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,");
+                sb.AppendLine("            RespectNullableAnnotations = true,");
+                sb.AppendLine("            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,");
+                sb.AppendLine("        };");
                 sb.AppendLine("        options.TypeInfoResolver = JsonTypeInfoResolver.WithAddedModifier(Default, AddPolymorphism);");
                 sb.AppendLine("        Generated.Initialize(options);");
                 sb.AppendLine("        return options;");

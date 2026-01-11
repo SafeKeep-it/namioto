@@ -45,68 +45,13 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             .Where(static t => t is not null)
             .Select(static (t, _) => new Registration(t!, RegistrationType.Client));
 
-        var potentialHandlers = context.SyntaxProvider
-            .CreateSyntaxProvider(
-                predicate: static (s, _) => s is ClassDeclarationSyntax,
-                transform: static (ctx, _) => GetPotentialHandlerType(ctx))
-            .Where(static t => t is not null)
-            .Select(static (t, _) => new Registration(t!, RegistrationType.Handler));
-
-        var potentialClients = context.SyntaxProvider
-            .CreateSyntaxProvider(
-                predicate: static (s, _) => s is InterfaceDeclarationSyntax,
-                transform: static (ctx, _) => GetPotentialClientType(ctx))
-            .Where(static t => t is not null)
-            .Select(static (t, _) => new Registration(t!, RegistrationType.Client));
-
         var allRegistrations = handlerTypes.Collect()
-            .Combine(clientTypes.Collect())
-            .Combine(potentialHandlers.Collect())
-            .Combine(potentialClients.Collect());
+            .Combine(clientTypes.Collect());
 
         context.RegisterSourceOutput(allRegistrations.Combine(context.CompilationProvider),
             static (spc, source) => Execute(
-                source.Left.Left.Left.Left.AddRange(source.Left.Left.Left.Right)
-                    .AddRange(source.Left.Left.Right)
-                    .AddRange(source.Left.Right), 
+                source.Left.Left.AddRange(source.Left.Right), 
                 source.Right, spc));
-    }
-
-    private static ITypeSymbol? GetPotentialHandlerType(GeneratorSyntaxContext context)
-    {
-        if (context.Node.SyntaxTree.FilePath.EndsWith(".generated.cs")) return null;
-        var classDecl = (ClassDeclarationSyntax)context.Node;
-        var symbol = context.SemanticModel.GetDeclaredSymbol(classDecl);
-        if (symbol is null) return null;
-
-        if (symbol.GetMembers().OfType<IMethodSymbol>().Any(m => 
-                m.MethodKind == MethodKind.Ordinary && 
-                m.DeclaredAccessibility == Accessibility.Public && 
-                !m.IsStatic &&
-                m.Parameters.Length >= 1 && 
-                IsOrInheritsFromMessage(m.Parameters[0].Type)))
-        {
-            return symbol;
-        }
-
-        return null;
-    }
-
-    private static ITypeSymbol? GetPotentialClientType(GeneratorSyntaxContext context)
-    {
-        if (context.Node.SyntaxTree.FilePath.EndsWith(".generated.cs")) return null;
-        var interfaceDecl = (InterfaceDeclarationSyntax)context.Node;
-        var symbol = context.SemanticModel.GetDeclaredSymbol(interfaceDecl);
-        if (symbol is null) return null;
-
-        if (symbol.GetMembers().OfType<IMethodSymbol>().Any(m => 
-                m.Parameters.Length >= 1 && 
-                IsOrInheritsFromMessage(m.Parameters[0].Type)))
-        {
-            return symbol;
-        }
-
-        return null;
     }
 
     private static bool IsAddHandlerInvocation(SyntaxNode node)
@@ -242,6 +187,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 ? $"{type.Name}SpoolBusServerSerializer"
                 : $"{type.Name}SpoolBusClientSerializer";
 
+            sb.AppendLine("[global::System.Text.Json.Serialization.JsonSourceGenerationOptions(UseStringEnumConverter = true)]");
             sb.AppendLine($"internal partial class {contextClassName} : JsonSerializerContext");
             sb.AppendLine("{");
             sb.AppendLine("    public static global::System.Threading.Tasks.ValueTask<global::Comptatata.SpoolDrop.Messages.Message?> DeserializeAsync(global::System.IO.Stream stream, global::System.Threading.CancellationToken ct = default) =>");
@@ -260,7 +206,13 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             sb.AppendLine();
             sb.AppendLine("    private static JsonSerializerOptions ConstructPolymorphism()");
             sb.AppendLine("    {");
-            sb.AppendLine("        var options = new JsonSerializerOptions();");
+            sb.AppendLine("        var options = new JsonSerializerOptions");
+            sb.AppendLine("        {");
+            sb.AppendLine("            WriteIndented = false,");
+            sb.AppendLine("            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,");
+            sb.AppendLine("            RespectNullableAnnotations = true,");
+            sb.AppendLine("            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,");
+            sb.AppendLine("        };");
             sb.AppendLine("        options.TypeInfoResolver = JsonTypeInfoResolver.WithAddedModifier(Default, AddPolymorphism);");
             sb.AppendLine("        Generated.Initialize(options);");
             sb.AppendLine("        return options;");
@@ -403,8 +355,10 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine($"    public global::System.Threading.Tasks.ValueTask<bool> DispatchAsync(global::System.Func<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}> handlerFactory, global::System.IO.Stream stream, string directory, global::System.Threading.CancellationToken ct) => throw new global::System.NotSupportedException();");
                 sb.AppendLine();
 
+                var implementedMethods = new HashSet<IMethodSymbol>(SymbolEqualityComparer.Default);
                 foreach (var method in info.Methods)
                 {
+                    implementedMethods.Add(method.Method);
                     var paramName = method.Method.Parameters[0].Name;
                     var ctParam = method.HasCancellationToken ? ", global::System.Threading.CancellationToken ct" : "";
                     var ctArg = method.HasCancellationToken ? ", ct" : "";
@@ -434,6 +388,16 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                             {
                                 sb.AppendLine("        return global::System.Threading.Tasks.ValueTask.CompletedTask;");
                             }
+                            else if (method.Method.ReturnType is INamedTypeSymbol { IsGenericType: true } genericReturn && 
+                                     (genericReturn.Name == "Task" || genericReturn.Name == "ValueTask") &&
+                                     genericReturn.ContainingNamespace.ToDisplayString() == "System.Threading.Tasks")
+                            {
+                                var resultType = genericReturn.TypeArguments[0].ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                                if (genericReturn.Name == "Task")
+                                    sb.AppendLine($"        return global::System.Threading.Tasks.Task.FromResult<{resultType}>(default!);");
+                                else
+                                    sb.AppendLine($"        return new global::System.Threading.Tasks.ValueTask<{resultType}>(default!);");
+                            }
                         }
                     }
                     else
@@ -451,6 +415,23 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                     }
                     sb.AppendLine("    }");
                 }
+
+                foreach (var member in GetAllInterfaceMembers(type))
+                {
+                    if (member is IMethodSymbol m && !implementedMethods.Contains(m) && m.MethodKind == MethodKind.Ordinary)
+                    {
+                        var parameters = string.Join(", ", m.Parameters.Select(p => $"{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {p.Name}"));
+                        sb.AppendLine($"    public {m.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {m.Name}({parameters}) => throw new global::System.NotSupportedException();");
+                    }
+                    else if (member is IPropertySymbol p)
+                    {
+                        var accessors = "";
+                        if (p.GetMethod != null) accessors += "get => throw new global::System.NotSupportedException(); ";
+                        if (p.SetMethod != null) accessors += "set => throw new global::System.NotSupportedException(); ";
+                        sb.AppendLine($"    public {p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {p.Name} {{ {accessors} }}");
+                    }
+                }
+
                 sb.AppendLine("}");
                 sb.AppendLine();
 
@@ -637,6 +618,15 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         {
             types.Add(current);
             current = current.BaseType;
+        }
+    }
+
+    private static IEnumerable<ISymbol> GetAllInterfaceMembers(ITypeSymbol type)
+    {
+        foreach (var member in type.GetMembers()) yield return member;
+        foreach (var iface in type.AllInterfaces)
+        {
+            foreach (var member in iface.GetMembers()) yield return member;
         }
     }
 }
