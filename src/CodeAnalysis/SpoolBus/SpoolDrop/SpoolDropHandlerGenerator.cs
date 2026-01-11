@@ -15,10 +15,12 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
     {
         public ITypeSymbol Type { get; }
         public RegistrationType Kind { get; }
-        public Registration(ITypeSymbol type, RegistrationType kind)
+        public string SourceFilePath { get; }
+        public Registration(ITypeSymbol type, RegistrationType kind, string sourceFilePath)
         {
             Type = type;
             Kind = kind;
+            SourceFilePath = sourceFilePath;
         }
     }
 
@@ -34,16 +36,16 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         var handlerTypes = context.SyntaxProvider
             .CreateSyntaxProvider(
                 predicate: static (s, _) => IsAddHandlerInvocation(s),
-                transform: static (ctx, _) => GetHandlerType(ctx))
-            .Where(static t => t is not null)
-            .Select(static (t, _) => new Registration(t!, RegistrationType.Handler));
+                transform: static (ctx, _) => GetRegistration(ctx, RegistrationType.Handler))
+            .Where(static r => r is not null)
+            .Select(static (r, _) => r!);
 
         var clientTypes = context.SyntaxProvider
             .CreateSyntaxProvider(
                 predicate: static (s, _) => IsCreateClientInvocation(s),
-                transform: static (ctx, _) => GetClientType(ctx))
-            .Where(static t => t is not null)
-            .Select(static (t, _) => new Registration(t!, RegistrationType.Client));
+                transform: static (ctx, _) => GetRegistration(ctx, RegistrationType.Client))
+            .Where(static r => r is not null)
+            .Select(static (r, _) => r!);
 
         var allRegistrations = handlerTypes.Collect()
             .Combine(clientTypes.Collect());
@@ -52,6 +54,13 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             static (spc, source) => Execute(
                 source.Left.Left.AddRange(source.Left.Right), 
                 source.Right, spc));
+    }
+
+    private static Registration? GetRegistration(GeneratorSyntaxContext context, RegistrationType kind)
+    {
+        var type = kind == RegistrationType.Handler ? GetHandlerType(context) : GetClientType(context);
+        if (type == null) return null;
+        return new Registration(type, kind, context.Node.SyntaxTree.FilePath);
     }
 
     private static bool IsAddHandlerInvocation(SyntaxNode node)
@@ -120,11 +129,10 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
     {
         var distinctRegistrations = registrations.Distinct(RegistrationComparer.Instance);
 
-        var localGroups = distinctRegistrations
-            .Where(r => r.Type.DeclaringSyntaxReferences.Any())
-            .GroupBy(r => r.Type.DeclaringSyntaxReferences.First().SyntaxTree.FilePath);
+        var groups = distinctRegistrations
+            .GroupBy(r => r.Type.DeclaringSyntaxReferences.FirstOrDefault()?.SyntaxTree.FilePath ?? r.SourceFilePath);
 
-        foreach (var group in localGroups)
+        foreach (var group in groups)
         {
             GenerateFileForGroup(group.Key, group.ToList(), compilation, context);
         }
@@ -472,7 +480,8 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
     private static HandlerInfo GetHandlerInfo(INamedTypeSymbol handler, Compilation compilation)
     {
-        var messageTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+        var contractTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+        var allTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
 
         foreach (var syntaxRef in handler.DeclaringSyntaxReferences)
         {
@@ -499,7 +508,8 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
 
                 if (symbol != null && IsOrInheritsFromMessage(symbol))
                 {
-                    AddWithHierarchy(messageTypes, symbol);
+                    AddContractTypes(contractTypes, symbol);
+                    AddWithHierarchy(allTypes, symbol);
                 }
             }
         }
@@ -582,30 +592,32 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
                 handlerMethods.Add(new HandlerMethodInfo(method, paramType, messageResultType, isAsync, isOneWay, hasCancellationToken));
                 if (messageResultType != null)
                 {
-                    AddWithHierarchy(messageTypes, messageResultType);
+                    AddContractTypes(contractTypes, messageResultType);
+                    AddWithHierarchy(allTypes, messageResultType);
                 }
-                AddWithHierarchy(messageTypes, paramType);
+                AddContractTypes(contractTypes, paramType);
+                AddWithHierarchy(allTypes, paramType);
             }
         }
 
-        var identifiedTypes = messageTypes.ToList();
+        var identifiedTypes = contractTypes.ToList();
         foreach (var type in identifiedTypes)
         {
             if (!type.IsSealed || type.TypeKind == TypeKind.Interface)
             {
-                JsonSerializerContextEmitter.AddConcreteDescendants(messageTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
+                JsonSerializerContextEmitter.AddConcreteDescendants(allTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
             }
         }
 
-        if (messageTypes.Count > 0)
+        if (allTypes.Count > 0)
         {
             var messageBase = compilation.GetTypeByMetadataName("Comptatata.SpoolDrop.Messages.Message");
             var eventBase = compilation.GetTypeByMetadataName("Comptatata.SpoolDrop.Messages.Event");
-            if (messageBase != null) messageTypes.Add(messageBase);
-            if (eventBase != null) messageTypes.Add(eventBase);
+            if (messageBase != null) allTypes.Add(messageBase);
+            if (eventBase != null) allTypes.Add(eventBase);
         }
 
-        return new HandlerInfo(messageTypes, handlerMethods);
+        return new HandlerInfo(allTypes, handlerMethods);
     }
 
     private static bool IsOrInheritsFromMessage(ITypeSymbol type)
@@ -617,6 +629,23 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             current = current.BaseType;
         }
         return false;
+    }
+
+    private static void AddContractTypes(HashSet<ITypeSymbol> types, ITypeSymbol type)
+    {
+        if (type is IArrayTypeSymbol array)
+        {
+            AddContractTypes(types, array.ElementType);
+            return;
+        }
+
+        if (type is INamedTypeSymbol named && named.IsGenericType)
+        {
+            foreach (var arg in named.TypeArguments) AddContractTypes(types, arg);
+            // Don't return, we also want the generic type itself if it's a message
+        }
+
+        types.Add(type);
     }
 
     private static void AddWithHierarchy(HashSet<ITypeSymbol> types, ITypeSymbol type)

@@ -55,14 +55,22 @@ public static class JsonSerializerContextEmitter
         {
             if (!type.IsAbstract && type.TypeKind != TypeKind.Interface && IsDescendantOf(type, baseType))
             {
-                addWithHierarchy(types, type);
+                var isObsolete = type.GetAttributes().Any(a => a.AttributeClass?.Name == "ObsoleteAttribute");
+                if (!isObsolete || types.Contains(type))
+                {
+                    addWithHierarchy(types, type);
+                }
             }
             // Also check nested types
             foreach (var nested in type.GetTypeMembers())
             {
                 if (!nested.IsAbstract && nested.TypeKind != TypeKind.Interface && IsDescendantOf(nested, baseType))
                 {
-                    addWithHierarchy(types, nested);
+                    var isObsolete = nested.GetAttributes().Any(a => a.AttributeClass?.Name == "ObsoleteAttribute");
+                    if (!isObsolete || types.Contains(nested))
+                    {
+                        addWithHierarchy(types, nested);
+                    }
                 }
             }
         }

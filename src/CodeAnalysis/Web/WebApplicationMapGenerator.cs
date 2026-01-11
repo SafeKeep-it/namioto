@@ -20,15 +20,15 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         public string FilePath { get; }
         public string Namespace { get; }
         public string SerializerName { get; }
-        public ImmutableHashSet<ITypeSymbol> Types { get; }
+        public ImmutableHashSet<ITypeSymbol> ContractTypes { get; }
         public string Accessibility { get; }
 
-        public MapInfo(string filePath, string ns, string serializerName, ImmutableHashSet<ITypeSymbol> types, string accessibility)
+        public MapInfo(string filePath, string ns, string serializerName, ImmutableHashSet<ITypeSymbol> contractTypes, string accessibility)
         {
             FilePath = filePath;
             Namespace = ns;
             SerializerName = serializerName;
-            Types = types;
+            ContractTypes = contractTypes;
             Accessibility = accessibility;
         }
     }
@@ -98,10 +98,10 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
                 accessibility = "public";
         }
 
-        var types = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
-        ExtractTypes(invocation, context.SemanticModel, types, ct);
+        var contractTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+        ExtractTypes(invocation, context.SemanticModel, contractTypes, ct);
 
-        return new MapInfo(invocation.SyntaxTree.FilePath, ns, serializerName, types.ToImmutableHashSet<ITypeSymbol>(SymbolEqualityComparer.Default), accessibility);
+        return new MapInfo(invocation.SyntaxTree.FilePath, ns, serializerName, contractTypes.ToImmutableHashSet<ITypeSymbol>(SymbolEqualityComparer.Default), accessibility);
     }
 
     private static string GetNamespace(SyntaxNode node)
@@ -118,14 +118,13 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         return containingType == "Microsoft.AspNetCore.Builder.EndpointRouteBuilderExtensions";
     }
 
-    private static void ExtractTypes(InvocationExpressionSyntax invocation, SemanticModel model, HashSet<ITypeSymbol> types, CancellationToken ct)
+    private static void ExtractTypes(InvocationExpressionSyntax invocation, SemanticModel model, HashSet<ITypeSymbol> contractTypes, CancellationToken ct)
     {
         if (invocation.ArgumentList.Arguments.Count < 2) return;
         
-        var handlerArg = invocation.ArgumentList.Arguments.Count >= 2 ? invocation.ArgumentList.Arguments[1].Expression : null;
-        if (handlerArg == null) return;
-
+        var handlerArg = invocation.ArgumentList.Arguments[1].Expression;
         var handlerSymbol = model.GetSymbolInfo(handlerArg, ct).Symbol as IMethodSymbol;
+        
         if (handlerSymbol == null)
         {
             var typeInfo = model.GetTypeInfo(handlerArg, ct);
@@ -139,13 +138,55 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         {
             foreach (var param in handlerSymbol.Parameters)
             {
-                AddWithHierarchy(types, param.Type);
+                if (IsBodyParameter(param))
+                {
+                    AddContractTypes(contractTypes, param.Type);
+                }
             }
-            AddWithHierarchy(types, handlerSymbol.ReturnType);
+            AddContractTypes(contractTypes, handlerSymbol.ReturnType);
+        }
+    }
+
+    private static void AddContractTypes(HashSet<ITypeSymbol> types, ITypeSymbol? type)
+    {
+        if (type == null || type.SpecialType == SpecialType.System_Object) return;
+
+        if (type is IArrayTypeSymbol array)
+        {
+            AddContractTypes(types, array.ElementType);
         }
 
-        var walker = new BodyTypeWalker(model, types, ct);
-        walker.Visit(handlerArg);
+        if (type is INamedTypeSymbol named && named.IsGenericType)
+        {
+            foreach (var arg in named.TypeArguments) AddContractTypes(types, arg);
+        }
+
+        if (IsRelevantType(type))
+        {
+            types.Add(type);
+        }
+    }
+
+    private static bool IsBodyParameter(IParameterSymbol param)
+    {
+        var type = param.Type;
+        
+        // Exclude special types
+        var ns = type.ContainingNamespace?.ToDisplayString() ?? "";
+        if (ns == "Microsoft.AspNetCore.Http" || ns == "Microsoft.AspNetCore.Mvc" || ns == "Microsoft.AspNetCore.Builder") return false;
+        if (ns == "System.Threading" && type.Name == "CancellationToken") return false;
+        if (ns == "System.Security.Claims" && type.Name == "ClaimsPrincipal") return false;
+        if (ns == "System" && type.Name == "IServiceProvider") return false;
+
+        // Exclude parameters with attributes that indicate they are NOT from the body
+        foreach (var attr in param.GetAttributes())
+        {
+            var attrName = attr.AttributeClass?.Name;
+            if (attrName is "FromServicesAttribute" or "FromRouteAttribute" or "FromQueryAttribute" or "FromHeaderAttribute" or "AsParametersAttribute")
+                return false;
+        }
+
+        return true;
     }
 
     private static bool IsRelevantType(ITypeSymbol type)
@@ -180,6 +221,8 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         if (ns.StartsWith("System.Reflection")) return false;
         if (ns.StartsWith("System.Runtime")) return false;
         if (ns.StartsWith("JetBrains.Annotations")) return false;
+        if (ns.StartsWith("OpenAI")) return false;
+        if (ns.StartsWith("System.ClientModel")) return false;
 
         if (ns == "System")
         {
@@ -214,76 +257,6 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         }
     }
 
-    private class BodyTypeWalker : CSharpSyntaxWalker
-    {
-        private readonly SemanticModel _model;
-        private readonly HashSet<ITypeSymbol> _types;
-        private readonly CancellationToken _ct;
-
-        public BodyTypeWalker(SemanticModel model, HashSet<ITypeSymbol> types, CancellationToken ct)
-        {
-            _model = model;
-            _types = types;
-            _ct = ct;
-        }
-
-        public override void VisitInvocationExpression(InvocationExpressionSyntax node)
-        {
-            var symbol = _model.GetSymbolInfo(node, _ct).Symbol as IMethodSymbol;
-            if (symbol != null && (symbol.ContainingType?.ToDisplayString() is "Microsoft.AspNetCore.Http.TypedResults" or "Microsoft.AspNetCore.Http.Results"))
-            {
-                if (symbol.IsGenericMethod)
-                {
-                    foreach (var arg in symbol.TypeArguments) AddWithHierarchy(_types, arg);
-                }
-                else if (node.ArgumentList.Arguments.Count > 0)
-                {
-                    var argType = _model.GetTypeInfo(node.ArgumentList.Arguments[0].Expression, _ct).Type;
-                    AddWithHierarchy(_types, argType);
-                }
-            }
-            base.VisitInvocationExpression(node);
-        }
-
-        public override void VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
-        {
-            var typeInfo = _model.GetTypeInfo(node, _ct).Type;
-            AddWithHierarchy(_types, typeInfo);
-            base.VisitObjectCreationExpression(node);
-        }
-
-        public override void VisitDeclarationPattern(DeclarationPatternSyntax node)
-        {
-            var typeInfo = _model.GetTypeInfo(node.Type, _ct).Type;
-            AddWithHierarchy(_types, typeInfo);
-            base.VisitDeclarationPattern(node);
-        }
-
-        public override void VisitTypePattern(TypePatternSyntax node)
-        {
-            var typeInfo = _model.GetTypeInfo(node.Type, _ct).Type;
-            AddWithHierarchy(_types, typeInfo);
-            base.VisitTypePattern(node);
-        }
-
-        public override void VisitRecursivePattern(RecursivePatternSyntax node)
-        {
-            if (node.Type != null)
-            {
-                var typeInfo = _model.GetTypeInfo(node.Type, _ct).Type;
-                AddWithHierarchy(_types, typeInfo);
-            }
-            base.VisitRecursivePattern(node);
-        }
-        
-        public override void VisitCastExpression(CastExpressionSyntax node)
-        {
-            var typeInfo = _model.GetTypeInfo(node.Type, _ct).Type;
-            AddWithHierarchy(_types, typeInfo);
-            base.VisitCastExpression(node);
-        }
-    }
-
     private static void Execute(Compilation compilation, ImmutableArray<MapInfo> maps, SourceProductionContext context)
     {
         if (maps.IsDefaultOrEmpty) return;
@@ -313,17 +286,21 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
             foreach (var serializerGroup in serializersInFile)
             {
                 var allTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+                var contractTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
                 foreach (var m in serializerGroup)
                 {
-                    foreach (var t in m.Types) allTypes.Add(t);
+                    foreach (var t in m.ContractTypes) 
+                    {
+                        contractTypes.Add(t);
+                        AddWithHierarchy(allTypes, t);
+                    }
                 }
 
                 if (allTypes.Count == 0) continue;
                 anySerializerAdded = true;
 
-                // Search for concrete descendants in the current assembly for any identified message types
-                var identifiedTypes = allTypes.ToList();
-                foreach (var type in identifiedTypes)
+                // Search for concrete descendants ONLY for contract types
+                foreach (var type in contractTypes)
                 {
                     if (!type.IsSealed || type.TypeKind == TypeKind.Interface)
                     {
