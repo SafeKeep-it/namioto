@@ -307,6 +307,13 @@ public class HttpClientGenerator : IIncrementalGenerator
         if (string.IsNullOrEmpty(methodName) || methodName == "Async") return "/";
 
         var sb = new StringBuilder();
+        if (methodName.StartsWith("WellKnown", StringComparison.Ordinal))
+        {
+            sb.Append("/.well-known");
+            methodName = methodName.Substring(9);
+            if (string.IsNullOrEmpty(methodName)) return sb.ToString();
+        }
+
         if (methodName.Length > 0 && char.IsUpper(methodName[0]))
         {
             sb.Append('/');
