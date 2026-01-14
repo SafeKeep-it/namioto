@@ -272,16 +272,17 @@ public class HttpClientGenerator : IIncrementalGenerator
 
             sb.AppendLine("        if (statusCode is >= 400 and < 600)");
             sb.AppendLine("        {");
-            sb.AppendLine($"            var problemDetails = await global::Comptatata.Http.HttpProblemDetails.ReadOrDefaultAsync<{targetTypeStr}>(response, {serializerClassName}.Generated.ProblemDetails, {targetTypeInfo}).ConfigureAwait(false);");
+            sb.AppendLine($"            var problemDetails = await global::Comptatata.Http.HttpProblemDetails.ReadAsync<{targetTypeStr}>(response, {serializerClassName}.Generated.ProblemDetails, {targetTypeInfo}).ConfigureAwait(false);");
             if (isRawResponse)
             {
                 sb.AppendLine($"            {rawEntityTypeStr}? parsedEntity = default;");
-                sb.AppendLine($"            if (problemDetails.Extensions?.TryGetValue(\"data\", out var data) == true && data is {rawEntityTypeStr} t) parsedEntity = t;");
+                sb.AppendLine($"            if (problemDetails?.Extensions?.TryGetValue(\"data\", out var data) == true && data is {rawEntityTypeStr} t) parsedEntity = t;");
                 sb.AppendLine($"            return new global::Comptatata.Http.HttpResponse<{rawEntityTypeStr}>(request.RequestUri!, parsedEntity, standardStatusCode, problemDetails);");
             }
             else
             {
-                sb.AppendLine("            throw new global::Comptatata.Http.HttpRequestDetailedException(request.RequestUri!, standardMethod, standardStatusCode, problemDetails);");
+                sb.AppendLine("            var finalProblem = problemDetails ?? global::Comptatata.Http.ProblemDetailsDefaults.Apply(new global::Comptatata.Http.ProblemDetails(), statusCode);");
+                sb.AppendLine("            throw new global::Comptatata.Http.HttpRequestDetailedException(request.RequestUri!, standardMethod, standardStatusCode, finalProblem);");
             }
             sb.AppendLine("        }");
 
