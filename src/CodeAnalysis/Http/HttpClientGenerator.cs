@@ -233,8 +233,8 @@ public class HttpClientGenerator : IIncrementalGenerator
 
             if (method.ParameterType != null)
             {
-                var paramName = method.Method.Parameters[0].Name;
-                var paramTypeStr = method.Method.Parameters[0].Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                var paramName = method.ParameterName;
+                var paramTypeStr = method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                 sb.AppendLine($"        var content = JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{GetPropertyName(method.ParameterType)});");
                 sb.AppendLine($"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\") {{ Content = content }};");
             }
@@ -243,7 +243,8 @@ public class HttpClientGenerator : IIncrementalGenerator
                 sb.AppendLine($"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\");");
             }
 
-            sb.AppendLine("        using var response = await _client.SendAsync(request).ConfigureAwait(false);");
+            var ctPart = method.CancellationTokenParameterName != null ? $", {method.CancellationTokenParameterName}" : "";
+            sb.AppendLine($"        using var response = await _client.SendAsync(request{ctPart}).ConfigureAwait(false);");
             sb.AppendLine("        if (!response.IsSuccessStatusCode)");
             sb.AppendLine("        {");
             sb.AppendLine("            var errorBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);");
@@ -358,11 +359,15 @@ public class HttpClientGenerator : IIncrementalGenerator
     {
         public IMethodSymbol Method { get; }
         public ITypeSymbol? ParameterType { get; }
+        public string? ParameterName { get; }
+        public string? CancellationTokenParameterName { get; }
         public bool IsAsync { get; }
-        public MethodInfo(IMethodSymbol method, ITypeSymbol? parameterType, bool isAsync)
+        public MethodInfo(IMethodSymbol method, ITypeSymbol? parameterType, string? parameterName, string? cancellationTokenParameterName, bool isAsync)
         {
             Method = method;
             ParameterType = parameterType;
+            ParameterName = parameterName;
+            CancellationTokenParameterName = cancellationTokenParameterName;
             IsAsync = isAsync;
         }
     }
@@ -381,6 +386,12 @@ public class HttpClientGenerator : IIncrementalGenerator
                SymbolEqualityComparer.Default.Equals(original, genericValueTaskType);
     }
 
+    private static bool IsCancellationToken(ITypeSymbol type, Compilation compilation)
+    {
+        var ctType = compilation.GetTypeByMetadataName("System.Threading.CancellationToken");
+        return SymbolEqualityComparer.Default.Equals(type, ctType);
+    }
+
     private static InterfaceInfo GetInterfaceInfo(INamedTypeSymbol interfaceType, Compilation compilation)
     {
         var allTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
@@ -391,10 +402,26 @@ public class HttpClientGenerator : IIncrementalGenerator
         {
             if (member.MethodKind != MethodKind.Ordinary) continue;
 
-            ITypeSymbol? paramType = member.Parameters.Length > 0 ? member.Parameters[0].Type : null;
+            ITypeSymbol? paramType = null;
+            string? paramName = null;
+            string? ctName = null;
+
+            foreach (var p in member.Parameters)
+            {
+                if (IsCancellationToken(p.Type, compilation))
+                {
+                    ctName = p.Name;
+                }
+                else if (paramType == null)
+                {
+                    paramType = p.Type;
+                    paramName = p.Name;
+                }
+            }
+
             bool isAsync = IsTask(member.ReturnType, compilation);
 
-            methods.Add(new MethodInfo(member, paramType, isAsync));
+            methods.Add(new MethodInfo(member, paramType, paramName, ctName, isAsync));
 
             if (paramType != null) AddContractTypes(contractTypes, allTypes, paramType, compilation);
             
