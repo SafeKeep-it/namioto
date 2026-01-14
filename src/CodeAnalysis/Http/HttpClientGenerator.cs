@@ -249,7 +249,7 @@ public class HttpClientGenerator : IIncrementalGenerator
             }
 
             var ctPart = method.CancellationTokenParameterName != null ? $", {method.CancellationTokenParameterName}" : "";
-            sb.AppendLine($"        using var response = await _client.SendAsync(request{ctPart}).ConfigureAwait(false);");
+            sb.AppendLine($"        using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead{ctPart}).ConfigureAwait(false);");
 
             sb.AppendLine("        var statusCode = (int)response.StatusCode;");
             sb.AppendLine("        var standardStatusCode = (global::Comptatata.Http.HttpStatusCode)statusCode;");
