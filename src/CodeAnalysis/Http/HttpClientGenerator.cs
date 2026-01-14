@@ -191,7 +191,11 @@ public class HttpClientGenerator : IIncrementalGenerator
         sb.AppendLine("    }");
         sb.AppendLine();
         
-        JsonSerializerContextEmitter.EmitAddPolymorphism(sb, info.MessageTypes);
+        var polymorphismTypes = info.MessageTypes
+            .Where(t => t.Name != "ProblemDetails" && t.Name != "ValidationProblemDetails" && t.BaseType?.Name != "ProblemDetails" && t.BaseType?.Name != "ValidationProblemDetails")
+            .ToList();
+        
+        JsonSerializerContextEmitter.EmitAddPolymorphism(sb, polymorphismTypes);
         sb.AppendLine();
         JsonSerializerContextEmitter.EmitGeneratedClass(sb, info.MessageTypes);
         sb.AppendLine("}");
@@ -533,6 +537,7 @@ public class HttpClientGenerator : IIncrementalGenerator
         if (ns.StartsWith("System.Runtime")) return false;
         if (ns.StartsWith("System.Net.Http")) return false;
         if (ns.StartsWith("JetBrains.Annotations")) return false;
+        if (ns.StartsWith("System.Collections")) return false;
 
         if (ns == "System")
         {
