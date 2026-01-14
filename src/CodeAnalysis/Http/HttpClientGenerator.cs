@@ -255,7 +255,7 @@ public class HttpClientGenerator : IIncrementalGenerator
             sb.AppendLine("        var standardStatusCode = (global::Comptatata.Http.HttpStatusCode)statusCode;");
             sb.AppendLine($"        var standardMethod = global::Comptatata.Http.HttpMethod.{httpMethod};");
             sb.AppendLine("        var hasNoBody = statusCode is >= 100 and < 200 or 204 or 205 or 304 || standardMethod == global::Comptatata.Http.HttpMethod.Head;");
-            sb.AppendLine("        if (hasNoBody && standardMethod != global::Comptatata.Http.HttpMethod.Head && response.Content is not null && (response.Content.Headers.ContentLength is null || response.Content.Headers.ContentLength > 0))");
+            sb.AppendLine("        if (hasNoBody && standardMethod != global::Comptatata.Http.HttpMethod.Head && response.Content is not null && response.Content.Headers.ContentLength > 0)");
             sb.AppendLine("        {");
             sb.AppendLine("            await response.DrainBodyAsync().ConfigureAwait(false);");
             sb.AppendLine("            throw new global::Comptatata.Http.InvalidResponseException(request.RequestUri!, standardMethod, standardStatusCode, \"Response has a body when none was expected.\");");
