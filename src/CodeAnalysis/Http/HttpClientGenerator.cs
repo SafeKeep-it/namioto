@@ -249,6 +249,20 @@ public class HttpClientGenerator : IIncrementalGenerator
 
             var ctPart = method.CancellationTokenParameterName != null ? $", {method.CancellationTokenParameterName}" : "";
             sb.AppendLine($"        using var response = await _client.SendAsync(request{ctPart}).ConfigureAwait(false);");
+
+            sb.AppendLine("        var statusCode = (int)response.StatusCode;");
+            sb.AppendLine("        if (statusCode is >= 400 and < 600)");
+            sb.AppendLine("        {");
+            sb.AppendLine($"            var problemDetails = await global::Comptatata.Http.HttpProblemDetails.ReadOrDefaultAsync(response, {serializerClassName}.Generated.ProblemDetails).ConfigureAwait(false);");
+            sb.AppendLine("            throw new global::Comptatata.Http.HttpRequestDetailedException(request.RequestUri, response.StatusCode, problemDetails);");
+            sb.AppendLine("        }");
+
+            sb.AppendLine("        if (statusCode is >= 300 and < 400)");
+            sb.AppendLine("        {");
+            sb.AppendLine("            var location = response.Headers.Location;");
+            sb.AppendLine("            throw new HttpRequestException($\"Request to {request.RequestUri} returned redirect status {(int)response.StatusCode} ({response.StatusCode}). Location: {location}\", null, response.StatusCode);");
+            sb.AppendLine("        }");
+
             sb.AppendLine("        if (!response.IsSuccessStatusCode)");
             sb.AppendLine("        {");
             sb.AppendLine("            var errorBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);");
@@ -259,7 +273,16 @@ public class HttpClientGenerator : IIncrementalGenerator
             {
                 var resultType = returnType.TypeArguments[0];
                 var resultTypeStr = resultType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                sb.AppendLine($"        return (await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false))!;");
+
+                if (resultTypeStr is "global::Comptatata.Http.ProblemDetails" or "global::Comptatata.Http.ValidationProblemDetails")
+                {
+                    sb.AppendLine($"        var result = (await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false))!;");
+                    sb.AppendLine("        return global::Comptatata.Http.ProblemDetailsDefaults.Apply(result, (int)response.StatusCode);");
+                }
+                else
+                {
+                    sb.AppendLine($"        return (await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false))!;");
+                }
             }
 
             sb.AppendLine("    }");
@@ -442,6 +465,12 @@ public class HttpClientGenerator : IIncrementalGenerator
                 AddContractTypes(contractTypes, allTypes, unwrappedReturn, compilation);
             }
         }
+
+        var problemDetails = compilation.GetTypeByMetadataName("Comptatata.Http.ProblemDetails");
+        if (problemDetails != null) AddContractTypes(contractTypes, allTypes, problemDetails, compilation);
+
+        var validationProblemDetails = compilation.GetTypeByMetadataName("Comptatata.Http.ValidationProblemDetails");
+        if (validationProblemDetails != null) AddContractTypes(contractTypes, allTypes, validationProblemDetails, compilation);
 
         if (allTypes.Count > 0)
         {
