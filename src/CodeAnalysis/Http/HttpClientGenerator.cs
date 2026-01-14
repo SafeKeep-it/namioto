@@ -251,22 +251,24 @@ public class HttpClientGenerator : IIncrementalGenerator
             sb.AppendLine($"        using var response = await _client.SendAsync(request{ctPart}).ConfigureAwait(false);");
 
             sb.AppendLine("        var statusCode = (int)response.StatusCode;");
+            sb.AppendLine("        var standardStatusCode = (global::Comptatata.Http.HttpStatusCode)statusCode;");
+            sb.AppendLine($"        var standardMethod = global::Comptatata.Http.HttpMethod.{httpMethod};");
             sb.AppendLine("        if (statusCode is >= 400 and < 600)");
             sb.AppendLine("        {");
             sb.AppendLine($"            var problemDetails = await global::Comptatata.Http.HttpProblemDetails.ReadOrDefaultAsync(response, {serializerClassName}.Generated.ProblemDetails).ConfigureAwait(false);");
-            sb.AppendLine("            throw new global::Comptatata.Http.HttpRequestDetailedException(request.RequestUri, response.StatusCode, problemDetails);");
+            sb.AppendLine("            throw new global::Comptatata.Http.HttpRequestDetailedException(request.RequestUri!, standardMethod, standardStatusCode, problemDetails);");
             sb.AppendLine("        }");
 
             sb.AppendLine("        if (statusCode is >= 300 and < 400)");
             sb.AppendLine("        {");
             sb.AppendLine("            var location = response.Headers.Location;");
-            sb.AppendLine("            throw new HttpRequestException($\"Request to {request.RequestUri} returned redirect status {(int)response.StatusCode} ({response.StatusCode}). Location: {location}\", null, response.StatusCode);");
+            sb.AppendLine("            throw new HttpRequestException($\"Request to {request.RequestUri} returned redirect status {statusCode} ({standardStatusCode}). Location: {location}\", null, (global::System.Net.HttpStatusCode)statusCode);");
             sb.AppendLine("        }");
 
             sb.AppendLine("        if (!response.IsSuccessStatusCode)");
             sb.AppendLine("        {");
             sb.AppendLine("            var errorBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);");
-            sb.AppendLine($"            throw new HttpRequestException($\"Request to {{request.RequestUri}} failed with status {{(int)response.StatusCode}} ({{response.StatusCode}}). Body: {{errorBody}}\", null, response.StatusCode);");
+            sb.AppendLine($"            throw new HttpRequestException($\"Request to {{request.RequestUri}} failed with status {{statusCode}} ({{standardStatusCode}}). Body: {{errorBody}}\", null, (global::System.Net.HttpStatusCode)statusCode);");
             sb.AppendLine("        }");
 
             if (method.Method.ReturnType is INamedTypeSymbol returnType && returnType.IsGenericType && IsTask(returnType, compilation))
@@ -277,7 +279,7 @@ public class HttpClientGenerator : IIncrementalGenerator
                 if (resultTypeStr is "global::Comptatata.Http.ProblemDetails" or "global::Comptatata.Http.ValidationProblemDetails")
                 {
                     sb.AppendLine($"        var result = (await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false))!;");
-                    sb.AppendLine("        return global::Comptatata.Http.ProblemDetailsDefaults.Apply(result, (int)response.StatusCode);");
+                    sb.AppendLine("        return global::Comptatata.Http.ProblemDetailsDefaults.Apply(result, statusCode);");
                 }
                 else
                 {
