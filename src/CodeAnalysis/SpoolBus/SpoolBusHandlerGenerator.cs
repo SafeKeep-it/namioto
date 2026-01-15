@@ -1,14 +1,14 @@
 using System.Collections.Immutable;
 using System.Text;
+using Comptatata.CodeAnalysis.Common;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Comptatata.CodeAnalysis.Common;
 
-namespace Comptatata.CodeAnalysis.JsonPolymorphic.SpoolDrop;
+namespace Comptatata.CodeAnalysis.SpoolBus;
 
 [Generator(LanguageNames.CSharp)]
-public class SpoolDropHandlerGenerator : IIncrementalGenerator
+public class SpoolBusHandlerGenerator : IIncrementalGenerator
 {
     private enum RegistrationType { Handler, Client }
     private class Registration
@@ -139,10 +139,10 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         var firstSourcePath = distinctRegistrations
             .Select(r => r.SourceFilePath)
             .FirstOrDefault(p => !string.IsNullOrEmpty(p));
-        
+    
         var projectDirectory = firstSourcePath != null ? Path.GetDirectoryName(firstSourcePath) : null;
         if (projectDirectory == null) return;
-        
+    
         // Normalize project directory
         projectDirectory = Path.GetFullPath(projectDirectory);
 
@@ -155,10 +155,10 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         foreach (var group in groups)
         {
             var sourcePath = group.Key;
-            
+        
             var directory = Path.GetDirectoryName(sourcePath);
             if (directory == null) continue;
-            
+        
             // Check if output is within project directory
             var fullDirectory = Path.GetFullPath(directory);
             if (!fullDirectory.StartsWith(projectDirectory, StringComparison.OrdinalIgnoreCase))
@@ -280,13 +280,13 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
             sb.AppendLine("        return options;");
             sb.AppendLine("    }");
             sb.AppendLine();
-            
+        
             JsonSerializerContextEmitter.EmitAddPolymorphism(sb, info.MessageTypes);
-            
+        
             sb.AppendLine();
-            
+        
             JsonSerializerContextEmitter.EmitGeneratedClass(sb, info.MessageTypes);
-            
+        
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -518,7 +518,7 @@ public class SpoolDropHandlerGenerator : IIncrementalGenerator
         {
             File.WriteAllText(outputPath, newContent);
         }
-        
+    
         return symbolNames;
     }
 
