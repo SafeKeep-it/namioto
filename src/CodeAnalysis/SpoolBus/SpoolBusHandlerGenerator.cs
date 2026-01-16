@@ -75,7 +75,6 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         if (context.Node.SyntaxTree.FilePath.EndsWith(".generated.cs")) return null;
         var invocation = (InvocationExpressionSyntax)context.Node;
         var symbol = context.SemanticModel.GetSymbolInfo(invocation).Symbol as IMethodSymbol;
-
         if (symbol is null || symbol.Name != "AddHandler") return null;
 
         var containingType = symbol.ContainingType?.ToDisplayString();
@@ -96,7 +95,6 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         if (context.Node.SyntaxTree.FilePath.EndsWith(".generated.cs")) return null;
         var invocation = (InvocationExpressionSyntax)context.Node;
         var symbol = context.SemanticModel.GetSymbolInfo(invocation).Symbol as IMethodSymbol;
-
         if (symbol is null || symbol.Name != "CreateClient") return null;
 
         var containingType = symbol.ContainingType?.ToDisplayString();
@@ -518,7 +516,7 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         {
             File.WriteAllText(outputPath, newContent);
         }
-    
+
         return symbolNames;
     }
 
