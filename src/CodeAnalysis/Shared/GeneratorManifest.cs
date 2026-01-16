@@ -21,9 +21,9 @@ public sealed class GeneratorManifest
     /// <summary>
     /// Loads or creates a manifest for the given generator in the project's obj directory.
     /// </summary>
-    public static GeneratorManifest LoadOrCreate(string generatorName, string projectDirectory, string headerSignature)
+    public static GeneratorManifest LoadOrCreate(string generatorName, string projectDirectory, string headerSignature, string? projectName = null)
     {
-        var manifestPath = GetManifestPath(generatorName, projectDirectory);
+        var manifestPath = GetManifestPath(generatorName, projectDirectory, projectName);
         var manifest = new GeneratorManifest();
         
         if (File.Exists(manifestPath))
@@ -56,9 +56,9 @@ public sealed class GeneratorManifest
     /// <summary>
     /// Saves the manifest to the project's obj directory.
     /// </summary>
-    public void Save(string generatorName, string projectDirectory)
+    public void Save(string generatorName, string projectDirectory, string? projectName = null)
     {
-        var manifestPath = GetManifestPath(generatorName, projectDirectory);
+        var manifestPath = GetManifestPath(generatorName, projectDirectory, projectName);
         var directory = Path.GetDirectoryName(manifestPath);
         
         if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
@@ -129,16 +129,16 @@ public sealed class GeneratorManifest
         }
     }
 
-    private static string GetManifestPath(string generatorName, string projectDirectory)
+    private static string GetManifestPath(string generatorName, string projectDirectory, string? projectName = null)
     {
         var artifactsRoot = FindArtifactsRoot(projectDirectory);
+        var manifestFileName = (projectName ?? Path.GetFileName(projectDirectory)) + "." + ManifestFileName;
         if (artifactsRoot != null)
         {
-            var projectName = Path.GetFileName(projectDirectory);
-            return Path.Combine(artifactsRoot, "obj", "generators", generatorName, $"{projectName}.{ManifestFileName}");
+            return Path.Combine(artifactsRoot, "obj", "generators", generatorName, manifestFileName);
         }
         
-        return Path.Combine(projectDirectory, "obj", $"{generatorName}.{ManifestFileName}");
+        return Path.Combine(projectDirectory, "obj", manifestFileName);
     }
 
     private static string? FindArtifactsRoot(string projectDirectory)
@@ -150,6 +150,21 @@ public sealed class GeneratorManifest
             if (Directory.Exists(artifactsPath))
             {
                 return artifactsPath;
+            }
+            current = Path.GetDirectoryName(current);
+        }
+        return null;
+    }
+
+    public static string? FindProjectRoot(string? filePath)
+    {
+        if (string.IsNullOrEmpty(filePath)) return null;
+        var current = Path.GetDirectoryName(filePath);
+        while (!string.IsNullOrEmpty(current))
+        {
+            if (Directory.GetFiles(current, "*.csproj").Any())
+            {
+                return current;
             }
             current = Path.GetDirectoryName(current);
         }
