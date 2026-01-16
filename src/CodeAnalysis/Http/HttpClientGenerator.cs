@@ -324,8 +324,8 @@ public class HttpClientGenerator : IIncrementalGenerator
             sb.AppendLine("        var statusCode = (int)response.StatusCode;");
             sb.AppendLine("        var standardStatusCode = (global::Comptatata.Http.HttpStatusCode)statusCode;");
             sb.AppendLine($"        var standardMethod = global::Comptatata.Http.HttpMethod.{httpMethod};");
-            sb.AppendLine("        var hasNoBody = statusCode is >= 100 and < 200 or 204 or 205 or 304 || standardMethod == global::Comptatata.Http.HttpMethod.Head;");
-            sb.AppendLine("        if (hasNoBody && standardMethod != global::Comptatata.Http.HttpMethod.Head && response.Content is not null && response.Content.Headers.ContentLength > 0)");
+            sb.AppendLine("        var mustNotHaveBody = statusCode is >= 100 and < 200 or 204 or 205 or 304 || standardMethod == global::Comptatata.Http.HttpMethod.Head;");
+            sb.AppendLine("        if (mustNotHaveBody && standardMethod != global::Comptatata.Http.HttpMethod.Head && response.Content is not null && response.Content.Headers.ContentLength > 0)");
             sb.AppendLine("        {");
             sb.AppendLine("            await response.DrainBodyAsync().ConfigureAwait(false);");
             sb.AppendLine("            throw new global::Comptatata.Http.InvalidResponseException(request.RequestUri!, standardMethod, standardStatusCode, \"Response has a body when none was expected.\");");
@@ -377,7 +377,7 @@ public class HttpClientGenerator : IIncrementalGenerator
             }
             else
             {
-                sb.AppendLine("            var errorBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);");
+                sb.AppendLine("            var errorBody = response.Content is not null ? await response.Content.ReadAsStringAsync().ConfigureAwait(false) : string.Empty;");
                 sb.AppendLine($"            throw new HttpRequestException($\"Request to {{request.RequestUri}} failed with status {{statusCode}} ({{standardStatusCode}}). Body: {{errorBody}}\", null, (global::System.Net.HttpStatusCode)statusCode);");
             }
             sb.AppendLine("        }");
@@ -391,7 +391,7 @@ public class HttpClientGenerator : IIncrementalGenerator
                 {
                     var entityPropertyName = GetPropertyName(rawEntityType!);
                     sb.AppendLine($"        {rawEntityTypeStr}? entity = default;");
-                    sb.AppendLine("        if (!hasNoBody && response.Content is not null && (response.Content.Headers.ContentLength is null || response.Content.Headers.ContentLength > 0))");
+                    sb.AppendLine("        if (!mustNotHaveBody && response.Content is not null && (response.Content.Headers.ContentLength is null || response.Content.Headers.ContentLength > 0))");
                     sb.AppendLine("        {");
                     sb.AppendLine($"            entity = await response.Content.ReadFromJsonAsync<{rawEntityTypeStr}>({serializerClassName}.Generated.{entityPropertyName}).ConfigureAwait(false);");
                     sb.AppendLine("        }");
@@ -399,19 +399,19 @@ public class HttpClientGenerator : IIncrementalGenerator
                 }
                 else
                 {
-                    sb.AppendLine("        if (hasNoBody)");
+                    sb.AppendLine("        if (mustNotHaveBody)");
                     sb.AppendLine("        {");
                     sb.AppendLine("            throw new global::Comptatata.Http.InvalidResponseException(request.RequestUri!, standardMethod, standardStatusCode, \"Response has no body when one was expected.\");");
                     sb.AppendLine("        }");
 
                     if (resultTypeStr is "global::Comptatata.Http.ProblemDetails" or "global::Comptatata.Http.ValidationProblemDetails")
                     {
-                        sb.AppendLine($"        var result = (await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false))!;");
+                        sb.AppendLine($"        var result = (response.Content is not null ? await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false) : default)!;");
                         sb.AppendLine("        return global::Comptatata.Http.ProblemDetailsDefaults.Apply(result, statusCode);");
                     }
                     else
                     {
-                        sb.AppendLine($"        return (await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false))!;");
+                        sb.AppendLine($"        return (response.Content is not null ? await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false) : default)!;");
                     }
                 }
             }
