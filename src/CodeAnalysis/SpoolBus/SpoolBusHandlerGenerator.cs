@@ -575,7 +575,6 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 if (symbol != null && IsOrInheritsFromMessage(symbol))
                 {
                     AddContractTypes(contractTypes, symbol);
-                    AddWithHierarchy(allTypes, symbol);
                 }
             }
         }
@@ -659,28 +658,23 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 if (messageResultType != null)
                 {
                     AddContractTypes(contractTypes, messageResultType);
-                    AddWithHierarchy(allTypes, messageResultType);
                 }
                 AddContractTypes(contractTypes, paramType);
-                AddWithHierarchy(allTypes, paramType);
             }
         }
 
         var identifiedTypes = contractTypes.ToList();
         foreach (var type in identifiedTypes)
         {
-            if (!type.IsSealed || type.TypeKind == TypeKind.Interface)
-            {
-                JsonSerializerContextEmitter.AddConcreteDescendants(allTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
-            }
+            JsonSerializerContextEmitter.AddPolymorphicBranch(allTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
         }
 
         if (allTypes.Count > 0)
         {
             var messageBase = compilation.GetTypeByMetadataName("Comptatata.SpoolDrop.Messages.Message");
             var eventBase = compilation.GetTypeByMetadataName("Comptatata.SpoolDrop.Messages.Event");
-            if (messageBase != null) allTypes.Add(messageBase);
-            if (eventBase != null) allTypes.Add(eventBase);
+            if (messageBase != null) JsonSerializerContextEmitter.AddPolymorphicBranch(allTypes, messageBase, compilation.GlobalNamespace, AddWithHierarchy);
+            if (eventBase != null) JsonSerializerContextEmitter.AddPolymorphicBranch(allTypes, eventBase, compilation.GlobalNamespace, AddWithHierarchy);
         }
 
         return new HandlerInfo(allTypes, handlerMethods);

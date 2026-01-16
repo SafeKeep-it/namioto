@@ -566,40 +566,32 @@ public class HttpClientGenerator : IIncrementalGenerator
 
             methods.Add(new MethodInfo(member, paramType, paramName, ctName, isAsync));
 
-            if (paramType != null) AddContractTypes(contractTypes, allTypes, paramType, compilation);
+            if (paramType != null) AddContractTypes(contractTypes, paramType, compilation);
             
             var unwrappedReturn = UnwrapTask(member.ReturnType, compilation);
             if (unwrappedReturn != null && IsRelevantType(unwrappedReturn))
             {
-                AddContractTypes(contractTypes, allTypes, unwrappedReturn, compilation);
+                AddContractTypes(contractTypes, unwrappedReturn, compilation);
             }
         }
 
         var problemDetails = compilation.GetTypeByMetadataName("Comptatata.Http.ProblemDetails");
-        if (problemDetails != null) AddContractTypes(contractTypes, allTypes, problemDetails, compilation);
+        if (problemDetails != null) AddContractTypes(contractTypes, problemDetails, compilation);
 
         var validationProblemDetails = compilation.GetTypeByMetadataName("Comptatata.Http.ValidationProblemDetails");
-        if (validationProblemDetails != null) AddContractTypes(contractTypes, allTypes, validationProblemDetails, compilation);
+        if (validationProblemDetails != null) AddContractTypes(contractTypes, validationProblemDetails, compilation);
+
+        foreach (var type in contractTypes)
+        {
+            JsonSerializerContextEmitter.AddPolymorphicBranch(allTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
+        }
 
         if (allTypes.Count > 0)
         {
             var messageBase = compilation.GetTypeByMetadataName("Comptatata.SpoolDrop.Messages.Message");
             var eventBase = compilation.GetTypeByMetadataName("Comptatata.SpoolDrop.Messages.Event");
-            if (messageBase != null) AddWithHierarchy(allTypes, messageBase);
-            if (eventBase != null) AddWithHierarchy(allTypes, eventBase);
-        }
-
-        // Search for concrete descendants for all types in the hierarchy
-        foreach (var type in allTypes.ToList())
-        {
-            if (type.IsAbstract || type.TypeKind == TypeKind.Interface || (type is INamedTypeSymbol classSymbol && !classSymbol.IsSealed && classSymbol.TypeKind == TypeKind.Class))
-            {
-                try
-                {
-                    JsonSerializerContextEmitter.AddConcreteDescendants(allTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
-                }
-                catch (Exception) { }
-            }
+            if (messageBase != null) JsonSerializerContextEmitter.AddPolymorphicBranch(allTypes, messageBase, compilation.GlobalNamespace, AddWithHierarchy);
+            if (eventBase != null) JsonSerializerContextEmitter.AddPolymorphicBranch(allTypes, eventBase, compilation.GlobalNamespace, AddWithHierarchy);
         }
 
         return new InterfaceInfo(allTypes, methods);
@@ -614,18 +606,17 @@ public class HttpClientGenerator : IIncrementalGenerator
         return type;
     }
 
-    private static void AddContractTypes(HashSet<ITypeSymbol> contractTypes, HashSet<ITypeSymbol> allTypes, ITypeSymbol type, Compilation compilation)
+    private static void AddContractTypes(HashSet<ITypeSymbol> contractTypes, ITypeSymbol type, Compilation compilation)
     {
-        if (type is IArrayTypeSymbol array) { AddContractTypes(contractTypes, allTypes, array.ElementType, compilation); return; }
+        if (type is IArrayTypeSymbol array) { AddContractTypes(contractTypes, array.ElementType, compilation); return; }
         if (type is INamedTypeSymbol named && named.IsGenericType)
         {
-            foreach (var arg in named.TypeArguments) AddContractTypes(contractTypes, allTypes, arg, compilation);
+            foreach (var arg in named.TypeArguments) AddContractTypes(contractTypes, arg, compilation);
         }
         
         if (IsRelevantType(type))
         {
             contractTypes.Add(type);
-            AddWithHierarchy(allTypes, type);
         }
     }
 

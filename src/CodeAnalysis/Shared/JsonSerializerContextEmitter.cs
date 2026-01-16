@@ -49,6 +49,50 @@ public static class JsonSerializerContextEmitter
         return false;
     }
 
+    public static ITypeSymbol? GetPolymorphicRoot(ITypeSymbol type)
+    {
+        ITypeSymbol? root = null;
+        var current = type;
+        while (current != null && current.SpecialType != SpecialType.System_Object)
+        {
+            if (current.GetAttributes().Any(a => a.AttributeClass?.Name is "JsonPolymorphicAttribute" or "JsonPolymorphic"))
+            {
+                root = current;
+            }
+            current = current.BaseType;
+        }
+
+        foreach (var iface in type.AllInterfaces)
+        {
+            if (iface.GetAttributes().Any(a => a.AttributeClass?.Name is "JsonPolymorphicAttribute" or "JsonPolymorphic"))
+            {
+                if (root == null) root = iface;
+            }
+        }
+
+        return root;
+    }
+
+    public static void AddPolymorphicBranch(HashSet<ITypeSymbol> allTypes, ITypeSymbol seedType, INamespaceSymbol globalNamespace, Action<HashSet<ITypeSymbol>, ITypeSymbol> addWithHierarchy)
+    {
+        var root = GetPolymorphicRoot(seedType);
+        if (root != null)
+        {
+            // Add path from root up to seed (and potentially beyond if addWithHierarchy does that)
+            addWithHierarchy(allTypes, seedType);
+            
+            // Add descendants of seed
+            if (!seedType.IsSealed || seedType.TypeKind == TypeKind.Interface)
+            {
+                AddConcreteDescendants(allTypes, seedType, globalNamespace, addWithHierarchy);
+            }
+        }
+        else
+        {
+            allTypes.Add(seedType);
+        }
+    }
+
     public static void AddConcreteDescendants(HashSet<ITypeSymbol> types, ITypeSymbol baseType, INamespaceSymbol ns, Action<HashSet<ITypeSymbol>, ITypeSymbol> addWithHierarchy)
     {
         foreach (var type in ns.GetTypeMembers())

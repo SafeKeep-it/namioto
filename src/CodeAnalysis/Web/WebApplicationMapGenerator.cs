@@ -473,20 +473,15 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
                     foreach (var t in m.ContractTypes) 
                     {
                         contractTypes.Add(t);
-                        AddWithHierarchy(allTypes, t);
                     }
                 }
 
-                if (allTypes.Count == 0) continue;
+                if (contractTypes.Count == 0) continue;
                 anySerializerAdded = true;
 
-                // Search for concrete descendants ONLY for contract types
                 foreach (var type in contractTypes)
                 {
-                    if (!type.IsSealed || type.TypeKind == TypeKind.Interface)
-                    {
-                        JsonSerializerContextEmitter.AddConcreteDescendants(allTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
-                    }
+                    JsonSerializerContextEmitter.AddPolymorphicBranch(allTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
                 }
 
                 foreach (var type in allTypes.OrderBy(t => t.ToDisplayString()))
