@@ -301,37 +301,75 @@ public class HttpClientGenerator : IIncrementalGenerator
             sb.AppendLine($"    public {asyncKeyword}{method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {method.Method.Name}({parameters})");
             sb.AppendLine("    {");
 
+            var unwrappedReturn = UnwrapTask(method.Method.ReturnType, compilation);
+            var isHttpResponseMessage = unwrappedReturn is not null && IsHttpResponseMessage(unwrappedReturn, compilation);
             var urlPath = GetUrlPath(method.Method.Name, out var httpMethod);
             var requestMethod = CommonMethods.Contains(httpMethod) 
                 ? $"global::System.Net.Http.HttpMethod.{httpMethod}" 
                 : $"global::System.Net.Http.HttpMethod.Parse(\"{httpMethod.ToUpperInvariant()}\")";
+            var ctPart = method.CancellationTokenParameterName != null ? $", {method.CancellationTokenParameterName}" : "";
 
+            if (isHttpResponseMessage)
+            {
+                if (method.ParameterType != null)
+                {
+                    var paramName = method.ParameterName;
+                    var paramTypeStr = method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    sb.AppendLine($"        var content = JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{GetPropertyName(method.ParameterType)});");
+                    sb.AppendLine($"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\") {{ Content = content }};");
+                }
+                else
+                {
+                    sb.AppendLine($"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\");");
+                }
+                sb.AppendLine($"        return await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead{ctPart}).ConfigureAwait(false);");
+                sb.AppendLine("    }");
+                continue;
+            }
+
+            sb.AppendLine($"        var currentUri = new global::System.Uri(\"{urlPath}\", global::System.UriKind.RelativeOrAbsolute);");
+            sb.AppendLine($"        var currentMethod = {requestMethod};");
+            sb.AppendLine(method.ParameterType != null ? "        var hasContent = true;" : "        var hasContent = false;");
+            sb.AppendLine("        for (int redirectCount = 0; redirectCount < 10; redirectCount++)");
+            sb.AppendLine("        {");
             if (method.ParameterType != null)
             {
                 var paramName = method.ParameterName;
                 var paramTypeStr = method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                sb.AppendLine($"        var content = JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{GetPropertyName(method.ParameterType)});");
-                sb.AppendLine($"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\") {{ Content = content }};");
+                sb.AppendLine($"            var content = hasContent ? JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{GetPropertyName(method.ParameterType)}) : null;");
+                sb.AppendLine("            using var request = new HttpRequestMessage(currentMethod, currentUri) { Content = content };");
             }
             else
             {
-                sb.AppendLine($"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\");");
+                sb.AppendLine("            using var request = new HttpRequestMessage(currentMethod, currentUri);");
             }
+            sb.AppendLine($"            using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead{ctPart}).ConfigureAwait(false);");
 
-            var ctPart = method.CancellationTokenParameterName != null ? $", {method.CancellationTokenParameterName}" : "";
-            sb.AppendLine($"        using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead{ctPart}).ConfigureAwait(false);");
+            sb.AppendLine("            var statusCode = (int)response.StatusCode;");
+            sb.AppendLine("            var standardStatusCode = (global::Comptatata.Http.HttpStatusCode)statusCode;");
+            sb.AppendLine("            var standardMethod = currentMethod.Method switch { \"GET\" => global::Comptatata.Http.HttpMethod.Get, \"POST\" => global::Comptatata.Http.HttpMethod.Post, \"PUT\" => global::Comptatata.Http.HttpMethod.Put, \"DELETE\" => global::Comptatata.Http.HttpMethod.Delete, \"PATCH\" => global::Comptatata.Http.HttpMethod.Patch, \"HEAD\" => global::Comptatata.Http.HttpMethod.Head, \"OPTIONS\" => global::Comptatata.Http.HttpMethod.Options, \"TRACE\" => global::Comptatata.Http.HttpMethod.Trace, _ => global::Comptatata.Http.HttpMethod.Get };");
+            sb.AppendLine("            var mustNotHaveBody = statusCode is >= 100 and < 200 or 204 or 205 or 304 || standardMethod == global::Comptatata.Http.HttpMethod.Head;");
+            sb.AppendLine("            if (mustNotHaveBody && standardMethod != global::Comptatata.Http.HttpMethod.Head && response.Content is not null && response.Content.Headers.ContentLength > 0)");
+            sb.AppendLine("            {");
+            sb.AppendLine("                await response.DrainBodyAsync().ConfigureAwait(false);");
+            sb.AppendLine("                throw new global::Comptatata.Http.InvalidResponseException(request.RequestUri!, standardMethod, standardStatusCode, \"Response has a body when none was expected.\");");
+            sb.AppendLine("            }");
+            sb.AppendLine("            if (statusCode is 301 or 302 or 303 or 307 or 308)");
+            sb.AppendLine("            {");
+            sb.AppendLine("                var location = response.Headers.Location;");
+            sb.AppendLine("                if (location is not null)");
+            sb.AppendLine("                {");
+            sb.AppendLine("                    if (!location.IsAbsoluteUri) location = new global::System.Uri(request.RequestUri!, location);");
+            sb.AppendLine("                    currentUri = location;");
+            sb.AppendLine("                    if (statusCode is 301 or 302 or 303)");
+            sb.AppendLine("                    {");
+            sb.AppendLine("                        currentMethod = global::System.Net.Http.HttpMethod.Get;");
+            sb.AppendLine("                        hasContent = false;");
+            sb.AppendLine("                    }");
+            sb.AppendLine("                    continue;");
+            sb.AppendLine("                }");
+            sb.AppendLine("            }");
 
-            sb.AppendLine("        var statusCode = (int)response.StatusCode;");
-            sb.AppendLine("        var standardStatusCode = (global::Comptatata.Http.HttpStatusCode)statusCode;");
-            sb.AppendLine($"        var standardMethod = global::Comptatata.Http.HttpMethod.{httpMethod};");
-            sb.AppendLine("        var mustNotHaveBody = statusCode is >= 100 and < 200 or 204 or 205 or 304 || standardMethod == global::Comptatata.Http.HttpMethod.Head;");
-            sb.AppendLine("        if (mustNotHaveBody && standardMethod != global::Comptatata.Http.HttpMethod.Head && response.Content is not null && response.Content.Headers.ContentLength > 0)");
-            sb.AppendLine("        {");
-            sb.AppendLine("            await response.DrainBodyAsync().ConfigureAwait(false);");
-            sb.AppendLine("            throw new global::Comptatata.Http.InvalidResponseException(request.RequestUri!, standardMethod, standardStatusCode, \"Response has a body when none was expected.\");");
-            sb.AppendLine("        }");
-
-            var unwrappedReturn = UnwrapTask(method.Method.ReturnType, compilation);
             ITypeSymbol? rawEntityType = null;
             var isRawResponse = unwrappedReturn is not null && TryGetHttpResponseEntityType(unwrappedReturn, compilation, out rawEntityType);
             var rawEntityTypeStr = rawEntityType?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
@@ -340,47 +378,34 @@ public class HttpClientGenerator : IIncrementalGenerator
             var targetTypeStr = targetType?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) ?? "object";
             var targetTypeInfo = targetType != null ? $"{serializerClassName}.Generated.{GetPropertyName(targetType)}" : "null";
 
-            sb.AppendLine("        if (statusCode is >= 400 and < 600)");
-            sb.AppendLine("        {");
-            sb.AppendLine($"            var problemDetails = await global::Comptatata.Http.HttpProblemDetails.ReadAsync<{targetTypeStr}>(response, {serializerClassName}.Generated.ProblemDetails, {targetTypeInfo}).ConfigureAwait(false);");
+            sb.AppendLine("            if (statusCode is >= 400 and < 600)");
+            sb.AppendLine("            {");
+            sb.AppendLine($"                var problemDetails = await global::Comptatata.Http.HttpProblemDetails.ReadAsync<{targetTypeStr}>(response, {serializerClassName}.Generated.ProblemDetails, {targetTypeInfo}).ConfigureAwait(false);");
             if (isRawResponse)
             {
-                sb.AppendLine($"            {rawEntityTypeStr}? parsedEntity = default;");
-                sb.AppendLine($"            if (problemDetails?.Extensions?.TryGetValue(\"data\", out var data) == true && data is {rawEntityTypeStr} t) parsedEntity = t;");
-                sb.AppendLine($"            return new global::Comptatata.Http.HttpResponse<{rawEntityTypeStr}>(request.RequestUri!, parsedEntity, standardStatusCode, problemDetails);");
+                sb.AppendLine($"                {rawEntityTypeStr}? parsedEntity = default;");
+                sb.AppendLine($"                if (problemDetails?.Extensions?.TryGetValue(\"data\", out var data) == true && data is {rawEntityTypeStr} t) parsedEntity = t;");
+                sb.AppendLine($"                return new global::Comptatata.Http.HttpResponse<{rawEntityTypeStr}>(request.RequestUri!, parsedEntity, standardStatusCode, problemDetails);");
             }
             else
             {
-                sb.AppendLine("            var finalProblem = problemDetails ?? global::Comptatata.Http.ProblemDetailsDefaults.Apply(new global::Comptatata.Http.ProblemDetails(), statusCode);");
-                sb.AppendLine("            throw new global::Comptatata.Http.HttpRequestDetailedException(request.RequestUri!, standardMethod, standardStatusCode, finalProblem);");
+                sb.AppendLine("                var finalProblem = problemDetails ?? global::Comptatata.Http.ProblemDetailsDefaults.Apply(new global::Comptatata.Http.ProblemDetails(), statusCode);");
+                sb.AppendLine("                throw new global::Comptatata.Http.HttpRequestDetailedException(request.RequestUri!, standardMethod, standardStatusCode, finalProblem);");
             }
-            sb.AppendLine("        }");
+            sb.AppendLine("            }");
 
-            sb.AppendLine("        if (statusCode is >= 300 and < 400)");
-            sb.AppendLine("        {");
+            sb.AppendLine("            if (!response.IsSuccessStatusCode)");
+            sb.AppendLine("            {");
             if (isRawResponse)
             {
-                sb.AppendLine($"            return new global::Comptatata.Http.HttpResponse<{rawEntityTypeStr}>(request.RequestUri!, default, standardStatusCode);");
+                sb.AppendLine($"                return new global::Comptatata.Http.HttpResponse<{rawEntityTypeStr}>(request.RequestUri!, default, standardStatusCode);");
             }
             else
             {
-                sb.AppendLine("            var location = response.Headers.Location;");
-                sb.AppendLine("            throw new HttpRequestException($\"Request to {request.RequestUri} returned redirect status {statusCode} ({standardStatusCode}). Location: {location}\", null, (global::System.Net.HttpStatusCode)statusCode);");
+                sb.AppendLine("                var errorBody = response.Content is not null ? await response.Content.ReadAsStringAsync().ConfigureAwait(false) : string.Empty;");
+                sb.AppendLine($"                throw new HttpRequestException($\"Request to {{request.RequestUri}} failed with status {{statusCode}} ({{standardStatusCode}}). Body: {{errorBody}}\", null, (global::System.Net.HttpStatusCode)statusCode);");
             }
-            sb.AppendLine("        }");
-
-            sb.AppendLine("        if (!response.IsSuccessStatusCode)");
-            sb.AppendLine("        {");
-            if (isRawResponse)
-            {
-                sb.AppendLine($"            return new global::Comptatata.Http.HttpResponse<{rawEntityTypeStr}>(request.RequestUri!, default, standardStatusCode);");
-            }
-            else
-            {
-                sb.AppendLine("            var errorBody = response.Content is not null ? await response.Content.ReadAsStringAsync().ConfigureAwait(false) : string.Empty;");
-                sb.AppendLine($"            throw new HttpRequestException($\"Request to {{request.RequestUri}} failed with status {{statusCode}} ({{standardStatusCode}}). Body: {{errorBody}}\", null, (global::System.Net.HttpStatusCode)statusCode);");
-            }
-            sb.AppendLine("        }");
+            sb.AppendLine("            }");
 
             if (method.Method.ReturnType is INamedTypeSymbol returnType && returnType.IsGenericType && IsTask(returnType, compilation))
             {
@@ -390,32 +415,37 @@ public class HttpClientGenerator : IIncrementalGenerator
                 if (isRawResponse)
                 {
                     var entityPropertyName = GetPropertyName(rawEntityType!);
-                    sb.AppendLine($"        {rawEntityTypeStr}? entity = default;");
-                    sb.AppendLine("        if (!mustNotHaveBody && response.Content is not null && (response.Content.Headers.ContentLength is null || response.Content.Headers.ContentLength > 0))");
-                    sb.AppendLine("        {");
-                    sb.AppendLine($"            entity = await response.Content.ReadFromJsonAsync<{rawEntityTypeStr}>({serializerClassName}.Generated.{entityPropertyName}).ConfigureAwait(false);");
-                    sb.AppendLine("        }");
-                    sb.AppendLine($"        return new global::Comptatata.Http.HttpResponse<{rawEntityTypeStr}>(request.RequestUri!, entity, standardStatusCode);");
+                    sb.AppendLine($"            {rawEntityTypeStr}? entity = default;");
+                    sb.AppendLine("            if (!mustNotHaveBody && response.Content is not null && (response.Content.Headers.ContentLength is null || response.Content.Headers.ContentLength > 0))");
+                    sb.AppendLine("            {");
+                    sb.AppendLine($"                entity = await response.Content.ReadFromJsonAsync<{rawEntityTypeStr}>({serializerClassName}.Generated.{entityPropertyName}).ConfigureAwait(false);");
+                    sb.AppendLine("            }");
+                    sb.AppendLine($"            return new global::Comptatata.Http.HttpResponse<{rawEntityTypeStr}>(request.RequestUri!, entity, standardStatusCode);");
                 }
                 else
                 {
-                    sb.AppendLine("        if (mustNotHaveBody)");
-                    sb.AppendLine("        {");
-                    sb.AppendLine("            throw new global::Comptatata.Http.InvalidResponseException(request.RequestUri!, standardMethod, standardStatusCode, \"Response has no body when one was expected.\");");
-                    sb.AppendLine("        }");
+                    sb.AppendLine("            if (mustNotHaveBody)");
+                    sb.AppendLine("            {");
+                    sb.AppendLine("                throw new global::Comptatata.Http.InvalidResponseException(request.RequestUri!, standardMethod, standardStatusCode, \"Response has no body when one was expected.\");");
+                    sb.AppendLine("            }");
 
                     if (resultTypeStr is "global::Comptatata.Http.ProblemDetails" or "global::Comptatata.Http.ValidationProblemDetails")
                     {
-                        sb.AppendLine($"        var result = (response.Content is not null ? await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false) : default)!;");
-                        sb.AppendLine("        return global::Comptatata.Http.ProblemDetailsDefaults.Apply(result, statusCode);");
+                        sb.AppendLine($"            var result = (response.Content is not null ? await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false) : default)!;");
+                        sb.AppendLine("            return global::Comptatata.Http.ProblemDetailsDefaults.Apply(result, statusCode);");
                     }
                     else
                     {
-                        sb.AppendLine($"        return (response.Content is not null ? await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false) : default)!;");
+                        sb.AppendLine($"            return (response.Content is not null ? await response.Content.ReadFromJsonAsync<{resultTypeStr}>({serializerClassName}.Generated.{GetPropertyName(resultType)}).ConfigureAwait(false) : default)!;");
                     }
                 }
             }
-
+            else
+            {
+                sb.AppendLine("            return;");
+            }
+            sb.AppendLine("        }");
+            sb.AppendLine("        throw new global::System.Exception(\"Too many redirects\");");
             sb.AppendLine("    }");
         }
         sb.AppendLine("}");
@@ -727,5 +757,11 @@ public class HttpClientGenerator : IIncrementalGenerator
         }
 
         return true;
+    }
+
+    private static bool IsHttpResponseMessage(ITypeSymbol type, Compilation compilation)
+    {
+        var httpResponseMessageType = compilation.GetTypeByMetadataName("System.Net.Http.HttpResponseMessage");
+        return SymbolEqualityComparer.Default.Equals(type, httpResponseMessageType);
     }
 }
