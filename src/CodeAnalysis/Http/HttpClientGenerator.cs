@@ -233,6 +233,21 @@ public class HttpClientGenerator : IIncrementalGenerator
 
         var ns = interfaceType.ContainingNamespace.IsGlobalNamespace ? "" : interfaceType.ContainingNamespace.ToDisplayString();
 
+        var syntaxTree = compilation.SyntaxTrees.FirstOrDefault(t => t.FilePath == sourcePath);
+        if (syntaxTree != null)
+        {
+            var root = syntaxTree.GetRoot();
+            var namespaceDecl = root.DescendantNodes().OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
+            if (namespaceDecl != null)
+            {
+                ns = namespaceDecl.Name.ToString();
+            }
+            else
+            {
+                ns = "";
+            }
+        }
+
         if (!string.IsNullOrEmpty(ns))
         {
             sb.AppendLine($"namespace {ns};");

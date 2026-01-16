@@ -237,6 +237,21 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         var firstReg = registrations.First();
         var ns = firstReg.Type.ContainingNamespace.IsGlobalNamespace ? "" : firstReg.Type.ContainingNamespace.ToDisplayString();
 
+        var syntaxTree = compilation.SyntaxTrees.FirstOrDefault(t => t.FilePath == sourcePath);
+        if (syntaxTree != null)
+        {
+            var root = syntaxTree.GetRoot();
+            var namespaceDecl = root.DescendantNodes().OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
+            if (namespaceDecl != null)
+            {
+                ns = namespaceDecl.Name.ToString();
+            }
+            else
+            {
+                ns = "";
+            }
+        }
+
         if (!string.IsNullOrEmpty(ns))
         {
             sb.AppendLine($"namespace {ns};");
@@ -291,6 +306,42 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
             sb.AppendLine("    }");
             sb.AppendLine();
         
+            var polymorphicRoots = info.MessageTypes
+                .Select(t => JsonSerializerContextEmitter.GetPolymorphicRoot(t))
+                .Where(r => r != null)
+                .Distinct(SymbolEqualityComparer.Default)
+                .Cast<ITypeSymbol>()
+                .OrderBy(r => r.ToDisplayString())
+                .ToList();
+
+            string GetDiscriminatorMethodName(ITypeSymbol? root)
+            {
+                if (root == null) return "GetDiscriminator";
+                var parts = root.ToDisplayString().Split('.');
+                var name = string.Join("_", parts.Select(p => p.Replace("global::", "")));
+                return $"GetDiscriminator_{name}";
+            }
+
+            foreach (var root in polymorphicRoots)
+            {
+                var methodName = GetDiscriminatorMethodName(root);
+                var rootType = root.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                sb.AppendLine($"    public static string {methodName}({rootType} value) => value switch");
+                sb.AppendLine("    {");
+                foreach (var t in info.MessageTypes.Where(t => !t.IsAbstract && JsonSerializerContextEmitter.IsDescendantOf(t, root)).OrderBy(t => t.Name))
+                {
+                    sb.AppendLine($"        {t.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{JsonSerializerContextEmitter.ToKebabCase(t.Name)}\",");
+                }
+                sb.AppendLine("        _ => \"unknown\"");
+                sb.AppendLine("    };");
+            }
+            if (polymorphicRoots.Count == 0)
+            {
+                sb.AppendLine("    public static string GetDiscriminator(object value) => \"unknown\";");
+            }
+        
+            sb.AppendLine();
+        
             JsonSerializerContextEmitter.EmitAddPolymorphism(sb, info.MessageTypes);
         
             sb.AppendLine();
@@ -327,7 +378,10 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine($"    public global::Comptatata.SpoolDrop.Messages.Message? Deserialize(global::System.IO.Stream stream) => {contextClassName}.Deserialize(stream);");
                 sb.AppendLine($"    public global::System.Threading.Tasks.Task SerializeAsync(global::System.IO.Stream stream, global::Comptatata.SpoolDrop.Messages.Message message, global::System.Threading.CancellationToken ct = default) => {contextClassName}.SerializeAsync(stream, message, ct);");
                 sb.AppendLine($"    public void Serialize(global::System.IO.Stream stream, global::Comptatata.SpoolDrop.Messages.Message message) => {contextClassName}.Serialize(stream, message);");
-                sb.AppendLine($"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {type.Name}SpoolBusDispatcher.GetDiscriminator(message);");
+                var messageRoot = JsonSerializerContextEmitter.GetPolymorphicRoot(info.MessageTypes.First(t => t.Name == "Message"));
+                var discriminatorExpr = $"{contextClassName}.{GetDiscriminatorMethodName(messageRoot)}(message)";
+
+                sb.AppendLine($"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {discriminatorExpr};");
                 sb.AppendLine();
                 sb.AppendLine($"    public {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} CreateClient(global::Comptatata.SpoolBus.SpoolBusClientFactory factory) => throw new global::System.NotSupportedException();");
                 sb.AppendLine();
@@ -387,7 +441,7 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     sb.AppendLine("                {");
                     sb.AppendLine("                    response = e with { ReplyTo = request?.Id };");
                     sb.AppendLine("                }");
-                    sb.AppendLine($"                await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync(response, {contextClassName}.SerializeAsync, GetDiscriminator, directory, ct).ConfigureAwait(false);");
+                    sb.AppendLine($"                await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync(response, {contextClassName}.SerializeAsync, {contextClassName}.{GetDiscriminatorMethodName(messageRoot)}, directory, ct).ConfigureAwait(false);");
                     sb.AppendLine("            }");
                     sb.AppendLine("            handled = true;");
                     sb.AppendLine("        }");
@@ -396,15 +450,6 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("        return handled;");
                 sb.AppendLine("        #pragma warning restore CS1998");
                 sb.AppendLine("    }");
-                sb.AppendLine();
-                sb.AppendLine("    public static string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => message switch");
-                sb.AppendLine("    {");
-                foreach (var t in info.MessageTypes.Where(t => !t.IsAbstract).OrderBy(t => t.Name))
-                {
-                    sb.AppendLine($"        {t.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{JsonSerializerContextEmitter.ToKebabCase(t.Name)}\",");
-                }
-                sb.AppendLine("        _ => \"unknown-message\"");
-                sb.AppendLine("    };");
                 sb.AppendLine("}");
                 sb.AppendLine();
             }
@@ -420,7 +465,10 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine($"    public global::Comptatata.SpoolDrop.Messages.Message? Deserialize(global::System.IO.Stream stream) => {contextClassName}.Deserialize(stream);");
                 sb.AppendLine($"    public global::System.Threading.Tasks.Task SerializeAsync(global::System.IO.Stream stream, global::Comptatata.SpoolDrop.Messages.Message message, global::System.Threading.CancellationToken ct = default) => {contextClassName}.SerializeAsync(stream, message, ct);");
                 sb.AppendLine($"    public void Serialize(global::System.IO.Stream stream, global::Comptatata.SpoolDrop.Messages.Message message) => {contextClassName}.Serialize(stream, message);");
-                sb.AppendLine($"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {type.Name}SpoolBusClientHelper.GetDiscriminator(message);");
+                var messageRoot = JsonSerializerContextEmitter.GetPolymorphicRoot(info.MessageTypes.First(t => t.Name == "Message"));
+                var discriminatorExpr = $"{contextClassName}.{GetDiscriminatorMethodName(messageRoot)}(message)";
+
+                sb.AppendLine($"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {discriminatorExpr};");
                 sb.AppendLine();
                 sb.AppendLine($"    public {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} CreateClient(global::Comptatata.SpoolBus.SpoolBusClientFactory factory) => new {type.Name}SpoolBusClient(factory);");
                 sb.AppendLine();
@@ -504,20 +552,6 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     }
                 }
 
-                sb.AppendLine("}");
-                sb.AppendLine();
-
-                sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
-                sb.AppendLine($"file static class {type.Name}SpoolBusClientHelper");
-                sb.AppendLine("{");
-                sb.AppendLine("    public static string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => message switch");
-                sb.AppendLine("    {");
-                foreach (var t in info.MessageTypes.Where(t => !t.IsAbstract).OrderBy(t => t.Name))
-                {
-                    sb.AppendLine($"        {t.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{JsonSerializerContextEmitter.ToKebabCase(t.Name)}\",");
-                }
-                sb.AppendLine("        _ => \"unknown-message\"");
-                sb.AppendLine("    };");
                 sb.AppendLine("}");
                 sb.AppendLine();
             }
