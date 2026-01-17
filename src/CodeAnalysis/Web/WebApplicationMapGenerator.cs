@@ -8,7 +8,7 @@ using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Comptatata.CodeAnalysis;
+using Comptatata.CodeAnalysis.Common;
 
 namespace Comptatata.CodeAnalysis.Web;
 
@@ -49,23 +49,6 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         }
     }
 
-    private class MapInfo
-    {
-        public string FilePath { get; }
-        public string Namespace { get; }
-        public string SerializerName { get; }
-        public ImmutableHashSet<ITypeSymbol> ContractTypes { get; }
-        public string Accessibility { get; }
-
-        public MapInfo(string filePath, string ns, string serializerName, ImmutableHashSet<ITypeSymbol> contractTypes, string accessibility)
-        {
-            FilePath = filePath;
-            Namespace = ns;
-            SerializerName = serializerName;
-            ContractTypes = contractTypes;
-            Accessibility = accessibility;
-        }
-    }
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -82,12 +65,11 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
             .Where(static m => m is not null)
             .Select(static (m, _) => m!);
 
-        var refinedMaps = maps.Combine(services.Collect())
-            .Select(static (pair, _) => RefineMapInfo(pair.Left, pair.Right));
+        var compilationAndMaps = context.CompilationProvider
+            .Combine(maps.Collect())
+            .Combine(services.Collect());
 
-        var compilationAndMaps = context.CompilationProvider.Combine(refinedMaps.Collect());
-
-        context.RegisterSourceOutput(compilationAndMaps, static (spc, source) => Execute(source.Left, source.Right, spc));
+        context.RegisterSourceOutput(compilationAndMaps, static (spc, source) => Execute(source.Left.Left, source.Left.Right, source.Right, spc));
     }
 
     private static bool IsServiceRegistration(SyntaxNode node)
@@ -188,8 +170,8 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         if (handlerSymbol == null) return null;
 
         var returnType = handlerSymbol.ReturnType;
-        var unwrapped = UnwrapTask(returnType);
-        if (ImplementsIResult(unwrapped))
+        var unwrapped = JsonSerializerContextEmitter.UnwrapEnvelope(returnType);
+        if (unwrapped != null && ImplementsIResult(unwrapped))
         {
             returnType = null;
         }
@@ -213,37 +195,6 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         return new RawMapInfo(invocation.SyntaxTree.FilePath, ns, serializerName, accessibility, returnType, parameters);
     }
 
-    private static MapInfo RefineMapInfo(RawMapInfo raw, ImmutableArray<ITypeSymbol> services)
-    {
-        var serviceTypes = new HashSet<ITypeSymbol>(services, SymbolEqualityComparer.Default);
-        var contractTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
-
-        if (raw.ReturnType != null && !ImplementsIResult(raw.ReturnType))
-        {
-            AddContractTypes(contractTypes, raw.ReturnType);
-        }
-
-        ITypeSymbol? bodyParam = null;
-        foreach (var p in raw.Parameters)
-        {
-            if (p.IsExplicitBody)
-            {
-                bodyParam = p.Type;
-                break;
-            }
-            if (bodyParam == null && p.IsCandidateBody && !serviceTypes.Contains(p.Type))
-            {
-                bodyParam = p.Type;
-            }
-        }
-
-        if (bodyParam != null)
-        {
-            AddContractTypes(contractTypes, bodyParam);
-        }
-
-        return new MapInfo(raw.FilePath, raw.Namespace, raw.SerializerName, contractTypes.ToImmutableHashSet<ITypeSymbol>(SymbolEqualityComparer.Default), raw.Accessibility);
-    }
 
     private static bool IsMapInvocation(SyntaxNode node)
     {
@@ -315,135 +266,27 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         return type.AllInterfaces.Any(i => i.Name == "IResult" && i.ContainingNamespace?.ToDisplayString() == "Microsoft.AspNetCore.Http");
     }
 
-    private static bool IsTask(ITypeSymbol type)
-    {
-        return type is INamedTypeSymbol named && 
-               (named.Name == "Task" || named.Name == "ValueTask") && 
-               named.ContainingNamespace?.ToDisplayString() == "System.Threading.Tasks";
-    }
 
-    private static ITypeSymbol UnwrapTask(ITypeSymbol type)
-    {
-        if (type is INamedTypeSymbol named && named.IsGenericType && IsTask(named))
-        {
-            return named.TypeArguments[0];
-        }
-        return type;
-    }
-
-    private static void AddContractTypes(HashSet<ITypeSymbol> types, ITypeSymbol? type)
-    {
-        if (type == null || type.SpecialType == SpecialType.System_Object) return;
-
-        type = UnwrapTask(type);
-
-        if (ImplementsIResult(type)) return;
-
-        if (type is IArrayTypeSymbol array)
-        {
-            AddContractTypes(types, array.ElementType);
-        }
-
-        if (type is INamedTypeSymbol named && named.IsGenericType)
-        {
-            var fullName = named.ToDisplayString();
-            if (fullName.StartsWith("System.Func<") || fullName.StartsWith("System.Action<") ||
-                named.Name is "Func" or "Action" || named.Name.StartsWith("Func`") || named.Name.StartsWith("Action`"))
-            {
-                // Never include delegates or their generic arguments as contract types
-                return;
-            }
-            foreach (var arg in named.TypeArguments) AddContractTypes(types, arg);
-        }
-
-        if (IsRelevantType(type))
-        {
-            types.Add(type);
-        }
-    }
 
     private static bool IsRelevantType(ITypeSymbol type)
     {
-        if (type == null || type.TypeKind == TypeKind.Error || type.SpecialType == SpecialType.System_Void) return false;
-        if (type.SpecialType == SpecialType.System_Object) return false;
-
-        // Exclude primitives and string
-        if (type.SpecialType is >= SpecialType.System_Boolean and <= SpecialType.System_String) return false;
-        if (type.SpecialType is SpecialType.System_DateTime) return false;
-
-        // Exclude delegates
-        if (type.TypeKind == TypeKind.Delegate) return false;
-        if (type.BaseType?.Name == "MulticastDelegate" || type.BaseType?.Name == "Delegate") return false;
-
+        if (!JsonSerializerContextEmitter.IsRelevantType(type)) return false;
         if (ImplementsIResult(type)) return false;
 
-        // Exclude compiler-generated types and open generics
-        if (type.Name.Contains("<") || type.Name.Contains("__")) return false;
-        if (type is INamedTypeSymbol named && named.IsGenericType && named.TypeArguments.Any(t => t.TypeKind == TypeKind.TypeParameter)) return false;
-
-        // Don't register serializer contexts themselves
-        var current = type;
-        while (current != null)
-        {
-            if (current.Name == "JsonSerializerContext" && current.ContainingNamespace?.ToDisplayString() == "System.Text.Json.Serialization")
-                return false;
-            current = current.BaseType;
-        }
-        
         var ns = type.ContainingNamespace?.ToDisplayString() ?? "";
         if (ns.StartsWith("Microsoft.AspNetCore")) return false;
-        if (ns.StartsWith("Microsoft.Extensions")) return false;
-        if (ns.StartsWith("System.Text.Json")) return false;
-        if (ns.StartsWith("System.Threading.Tasks")) return false;
-        if (ns.StartsWith("System.Security")) return false;
-        if (ns.StartsWith("System.Threading")) return false;
-        if (ns.StartsWith("System.Reflection")) return false;
-        if (ns.StartsWith("System.Runtime")) return false;
-        if (ns.StartsWith("System.Net.Http")) return false;
-        if (ns.StartsWith("JetBrains.Annotations")) return false;
-        if (ns.StartsWith("OpenAI")) return false;
-        if (ns.StartsWith("System.ClientModel")) return false;
-
-        if (ns == "System")
-        {
-            if (type.Name is "IServiceProvider" or "CancellationToken" or "ValueType" or "Enum" or "Guid" or "DateTimeOffset" or "TimeSpan" or "Uri" or "Version" or "Type" or "RuntimeTypeHandle" or "Delegate" or "MulticastDelegate") return false;
-            if (type.Name is "Func" or "Action" || type.Name.StartsWith("Func`") || type.Name.StartsWith("Action`")) return false;
-        }
 
         return true;
     }
 
-    private static void AddWithHierarchy(HashSet<ITypeSymbol> types, ITypeSymbol? type)
-    {
-        if (type == null || type.SpecialType == SpecialType.System_Object) return;
-
-        if (type is IArrayTypeSymbol array)
-        {
-            AddWithHierarchy(types, array.ElementType);
-        }
-
-        if (type is INamedTypeSymbol named && named.IsGenericType)
-        {
-            foreach (var arg in named.TypeArguments) AddWithHierarchy(types, arg);
-        }
-
-        if (IsRelevantType(type))
-        {
-            if (types.Add(type))
-            {
-                // We register types that are send or received. 
-                // We also register their base types to support polymorphic serialization via the base type.
-                AddWithHierarchy(types, type.BaseType);
-            }
-        }
-    }
-
-    private static void Execute(Compilation compilation, ImmutableArray<MapInfo> maps, SourceProductionContext context)
+    private static void Execute(Compilation compilation, ImmutableArray<RawMapInfo> maps, ImmutableArray<ITypeSymbol> services, SourceProductionContext context)
     {
         if (maps.IsDefaultOrEmpty) return;
 
+        var serviceTypes = new HashSet<ITypeSymbol>(services, SymbolEqualityComparer.Default);
         var groupedByFile = maps.GroupBy(m => new { m.FilePath, m.Namespace });
 
+        var allTypesInCompilation = JsonSerializerContextEmitter.GetAllTypesInCompilation(compilation);
         foreach (var fileGroup in groupedByFile)
         {
             var sb = new StringBuilder();
@@ -466,58 +309,45 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
 
             foreach (var serializerGroup in serializersInFile)
             {
-                var allTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
-                var contractTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
-                foreach (var m in serializerGroup)
+                var graph = new JsonSerializerContextEmitter.SerializationGraph();
+
+                foreach (var raw in serializerGroup)
                 {
-                    foreach (var t in m.ContractTypes) 
+                    if (raw.ReturnType != null && !ImplementsIResult(raw.ReturnType))
                     {
-                        contractTypes.Add(t);
+                        JsonSerializerContextEmitter.AddSerializableTypes(graph, raw.ReturnType, compilation, allTypesInCompilation,
+                            context.ReportDiagnostic, IsRelevantType);
+                    }
+
+                    ITypeSymbol? bodyParam = null;
+                    foreach (var p in raw.Parameters)
+                    {
+                        if (p.IsExplicitBody)
+                        {
+                            bodyParam = p.Type;
+                            break;
+                        }
+
+                        if (bodyParam == null && p.IsCandidateBody && !serviceTypes.Contains(p.Type))
+                        {
+                            bodyParam = p.Type;
+                        }
+                    }
+
+                    if (bodyParam != null)
+                    {
+                        JsonSerializerContextEmitter.AddSerializableTypes(graph, bodyParam, compilation, allTypesInCompilation,
+                            context.ReportDiagnostic, IsRelevantType);
                     }
                 }
 
-                if (contractTypes.Count == 0) continue;
+                if (graph.GetAllTypes().Count == 0) continue;
                 anySerializerAdded = true;
-
-                foreach (var type in contractTypes)
-                {
-                    JsonSerializerContextEmitter.AddPolymorphicBranch(allTypes, type, compilation.GlobalNamespace, AddWithHierarchy);
-                }
-
-                foreach (var type in allTypes.OrderBy(t => t.ToDisplayString()))
-                {
-                    sb.AppendLine($"[JsonSerializable(typeof({type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}))]");
-                }
 
                 var accessibility = serializerGroup.Any(m => m.Accessibility == "public") ? "public" : "internal";
 
-                sb.AppendLine("[global::System.Text.Json.Serialization.JsonSourceGenerationOptions(UseStringEnumConverter = true)]");
-                sb.AppendLine($"{accessibility} partial class {serializerGroup.Key} : JsonSerializerContext");
-                sb.AppendLine("{");
-                sb.AppendLine("    public static JsonSerializerOptions SerializerOptions => field ??= ConstructPolymorphism();");
-                sb.AppendLine();
-                sb.AppendLine("    private static JsonSerializerOptions ConstructPolymorphism()");
-                sb.AppendLine("    {");
-                sb.AppendLine("        var options = new JsonSerializerOptions");
-                sb.AppendLine("        {");
-                sb.AppendLine("            WriteIndented = false,");
-                sb.AppendLine("            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,");
-                sb.AppendLine("            RespectNullableAnnotations = true,");
-                sb.AppendLine("            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,");
-                sb.AppendLine("        };");
-                sb.AppendLine("        options.TypeInfoResolver = JsonTypeInfoResolver.WithAddedModifier(Default, AddPolymorphism);");
-                sb.AppendLine("        Generated.Initialize(options);");
-                sb.AppendLine("        return options;");
-                sb.AppendLine("    }");
-                sb.AppendLine();
-                
-                JsonSerializerContextEmitter.EmitAddPolymorphism(sb, allTypes);
-                
-                sb.AppendLine();
-                
-                JsonSerializerContextEmitter.EmitGeneratedClass(sb, allTypes);
-                
-                sb.AppendLine("}");
+                JsonSerializerContextEmitter.EmitContext(sb, serializerGroup.Key, accessibility, graph,
+                    "SerializerOptions", "ConstructPolymorphism");
                 sb.AppendLine();
             }
 
