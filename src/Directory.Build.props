@@ -10,6 +10,8 @@
         <AnalysisLevel>latest</AnalysisLevel>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <WarningsAsErrors>$(WarningsAsErrors);CA2000</WarningsAsErrors>
+        <WarningsAsErrors>$(WarningsAsErrors);CA2000</WarningsAsErrors>
+        <NoWarn>$(NoWarn);CS4014</NoWarn>
 
     </PropertyGroup>
 
