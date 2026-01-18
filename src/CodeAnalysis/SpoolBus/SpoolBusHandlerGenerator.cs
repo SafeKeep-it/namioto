@@ -106,21 +106,11 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         // Normalize project directory
         projectDirectory = Path.GetFullPath(projectDirectory);
 
+        // Group by source file path - each source file gets its own generated file
+        // with its own uniquely-named serialization context.
+        // NO deduplication - each usage site gets its own serializer.
         var groups = distinctRegistrations
-            .GroupBy(r =>
-            {
-                // For client registrations (interfaces from other assemblies), always use the call site
-                if (r.Kind == RegistrationType.Client) return r.SourceFilePath;
-
-                var declPath = r.Type.DeclaringSyntaxReferences.FirstOrDefault()?.SyntaxTree.FilePath;
-                if (declPath != null)
-                {
-                    var fullDeclPath = Path.GetFullPath(declPath);
-                    if (fullDeclPath.StartsWith(projectDirectory, StringComparison.OrdinalIgnoreCase)) return declPath;
-                }
-
-                return r.SourceFilePath;
-            })
+            .GroupBy(r => r.SourceFilePath)
             .ToList();
 
         // Load manifest for tracking
@@ -143,10 +133,10 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 // Skip generation for external files
                 continue;
 
-            currentSourceFiles.Add(sourcePath);
+            currentSourceFiles.Add(Path.GetFullPath(sourcePath));
 
             var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
-            var outputPath = Path.Combine(directory, $"{sourceFileName}.generated.cs");
+            var outputPath = Path.Combine(directory, $"{sourceFileName}.SpoolBus.generated.cs");
 
             // Check if file was renamed (old path in manifest with different output)
             var previousPath = manifest.GetPreviousGeneratedPath(sourcePath);
@@ -172,7 +162,7 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         if (directory == null) return symbolNames;
 
         var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
-        var outputPath = Path.Combine(directory, $"{sourceFileName}.generated.cs");
+        var outputPath = Path.Combine(directory, $"{sourceFileName}.SpoolBus.generated.cs");
         if (sourceFileName.StartsWith("SpoolBus.Remote."))
             foreach (var reg in registrations)
             {
@@ -230,9 +220,11 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
             var info = GetHandlerInfo(type, compilation, context);
             if (info.Methods.Count == 0) continue;
 
+            // Use source file name + type name for unique serializer class name.
+            // Each source file gets its own serialization context to avoid STJ hintName conflicts.
             var contextClassName = reg.Kind == RegistrationType.Handler
-                ? $"{type.Name}SpoolBusServerSerializer"
-                : $"{type.Name}SpoolBusClientSerializer";
+                ? $"{sourceFileName}{type.Name}SpoolBusServerSerializer"
+                : $"{sourceFileName}{type.Name}SpoolBusClientSerializer";
 
             JsonSerializerContextEmitter.EmitContext(sb, contextClassName, "internal", info.MessageGraph,
                 "SpoolBusOptions", "ConstructPolymorphism", contextSb =>

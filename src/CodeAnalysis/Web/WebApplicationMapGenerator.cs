@@ -326,7 +326,7 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
             if (directory == null) continue;
 
             var sourceFileName = Path.GetFileNameWithoutExtension(fileGroup.Key.FilePath);
-            var outputPath = Path.Combine(directory, $"{sourceFileName}.generated.cs");
+            var outputPath = Path.Combine(directory, $"{sourceFileName}.Web.generated.cs");
 
             // Write attributes-only to disk for STJ source generator
             var diskContent = diskSb.ToString();
