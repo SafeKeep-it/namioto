@@ -1,45 +1,35 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
+using Comptatata.CodeAnalysis.Common;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Comptatata.CodeAnalysis.Common;
 
 namespace Comptatata.CodeAnalysis.Http;
 
 [Generator(LanguageNames.CSharp)]
 public class HttpClientGenerator : IIncrementalGenerator
 {
-    private class Registration
+    static readonly HashSet<string> CommonMethods = new(StringComparer.Ordinal)
     {
-        public ITypeSymbol InterfaceType { get; }
-        public string SourceFilePath { get; }
+        "Delete", "Get", "Head", "Options", "Patch", "Post", "Put", "Trace"
+    };
 
-        public Registration(ITypeSymbol interfaceType, string sourceFilePath)
-        {
-            InterfaceType = interfaceType;
-            SourceFilePath = sourceFilePath;
-        }
-    }
-
-    private class RegistrationComparer : IEqualityComparer<Registration>
+    static readonly string[] KnownMethods = new[]
     {
-        public static RegistrationComparer Instance { get; } = new RegistrationComparer();
-        public bool Equals(Registration x, Registration y) => SymbolEqualityComparer.Default.Equals(x?.InterfaceType, y?.InterfaceType);
-        public int GetHashCode(Registration obj) => SymbolEqualityComparer.Default.GetHashCode(obj.InterfaceType);
-    }
+        "Acl", "BaselineControl", "Bind", "Checkin", "Checkout", "Connect", "Copy", "Delete", "Get", "Head",
+        "Label", "Link", "Lock", "Merge", "MkActivity", "MkCalendar", "MkCol", "MkRedirectRef", "MkWorkspace",
+        "Move", "Options", "OrderPatch", "Patch", "Post", "Pri", "PropFind", "PropPatch", "Put", "Query", "Rebind",
+        "Report", "Search", "Trace", "Unbind", "Uncheckout", "Unlink", "Unlock", "Update", "UpdateRedirectRef",
+        "VersionControl"
+    }.OrderByDescending(m => m.Length).ToArray();
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var interfaceTypes = context.SyntaxProvider
             .CreateSyntaxProvider(
-                predicate: static (s, _) => IsCreateInvocation(s),
-                transform: static (ctx, _) => GetRegistration(ctx))
+                static (s, _) => IsCreateInvocation(s),
+                static (ctx, _) => GetRegistration(ctx))
             .Where(static r => r is not null)
             .Select(static (r, _) => r!);
 
@@ -47,38 +37,31 @@ public class HttpClientGenerator : IIncrementalGenerator
             static (spc, source) => Execute(source.Left, source.Right, spc));
     }
 
-    private static bool IsCreateInvocation(SyntaxNode node)
+    static bool IsCreateInvocation(SyntaxNode node)
     {
         if (node is InvocationExpressionSyntax invocation)
         {
             var expression = invocation.Expression;
             if (expression is MemberAccessExpressionSyntax memberAccess)
-            {
                 return memberAccess.Name.Identifier.Text == "Create";
-            }
-            if (expression is IdentifierNameSyntax identifier)
-            {
-                return identifier.Identifier.Text == "Create";
-            }
-            if (expression is GenericNameSyntax genericName)
-            {
-                return genericName.Identifier.Text == "Create";
-            }
+            if (expression is IdentifierNameSyntax identifier) return identifier.Identifier.Text == "Create";
+            if (expression is GenericNameSyntax genericName) return genericName.Identifier.Text == "Create";
         }
+
         return false;
     }
 
-    private static Registration? GetRegistration(GeneratorSyntaxContext context)
+    static Registration? GetRegistration(GeneratorSyntaxContext context)
     {
         var invocation = (InvocationExpressionSyntax)context.Node;
-        
+
         // Try to get symbol info
         var symbolInfo = context.SemanticModel.GetSymbolInfo(invocation);
         var symbol = symbolInfo.Symbol as IMethodSymbol;
 
         // If symbol is null, it might be because it's not yet generated or it's a pseudo-extension
         // But for our generator to work, we need the interface type.
-        
+
         ITypeSymbol? interfaceType = null;
         if (symbol != null)
         {
@@ -91,18 +74,12 @@ public class HttpClientGenerator : IIncrementalGenerator
             if (invocation.Expression is MemberAccessExpressionSyntax { Name: GenericNameSyntax g1 })
             {
                 var typeSyntax = g1.TypeArgumentList.Arguments.FirstOrDefault();
-                if (typeSyntax != null)
-                {
-                    interfaceType = context.SemanticModel.GetTypeInfo(typeSyntax).Type;
-                }
+                if (typeSyntax != null) interfaceType = context.SemanticModel.GetTypeInfo(typeSyntax).Type;
             }
             else if (invocation.Expression is GenericNameSyntax g2)
             {
                 var typeSyntax = g2.TypeArgumentList.Arguments.FirstOrDefault();
-                if (typeSyntax != null)
-                {
-                    interfaceType = context.SemanticModel.GetTypeInfo(typeSyntax).Type;
-                }
+                if (typeSyntax != null) interfaceType = context.SemanticModel.GetTypeInfo(typeSyntax).Type;
             }
         }
 
@@ -111,7 +88,8 @@ public class HttpClientGenerator : IIncrementalGenerator
         return new Registration(interfaceType, invocation.SyntaxTree.FilePath);
     }
 
-    private static void Execute(ImmutableArray<Registration> registrations, Compilation compilation, SourceProductionContext context)
+    static void Execute(ImmutableArray<Registration> registrations, Compilation compilation,
+        SourceProductionContext context)
     {
         var distinctRegistrations = registrations.Distinct(RegistrationComparer.Instance).ToList();
         if (distinctRegistrations.Count == 0) return;
@@ -119,19 +97,20 @@ public class HttpClientGenerator : IIncrementalGenerator
         var firstSourcePath = distinctRegistrations
             .Select(r => r.SourceFilePath)
             .FirstOrDefault(p => !string.IsNullOrEmpty(p));
-        
+
         var projectDirectory = GeneratorManifest.FindProjectRoot(firstSourcePath);
         if (projectDirectory == null) return;
-        
+
         // Normalize project directory for comparison
         projectDirectory = Path.GetFullPath(projectDirectory);
 
         // Load manifest for tracking
-        var manifest = GeneratorManifest.LoadOrCreate("Http", projectDirectory, "// <auto-generated by=\"Comptatata.CodeAnalysis.Http\" />", compilation.AssemblyName);
+        var manifest = GeneratorManifest.LoadOrCreate("Http", projectDirectory,
+            "// <auto-generated by=\"Comptatata.CodeAnalysis.Http\" />", compilation.AssemblyName);
 
         // Build current source file set and process registrations
         var currentSourceFiles = new HashSet<string>(StringComparer.Ordinal);
-        
+
         // Group by output file path to avoid writing to the same file multiple times
         var byOutputPath = distinctRegistrations
             .GroupBy(r =>
@@ -141,11 +120,9 @@ public class HttpClientGenerator : IIncrementalGenerator
                 if (declPath != null)
                 {
                     var fullDeclPath = Path.GetFullPath(declPath);
-                    if (fullDeclPath.StartsWith(projectDirectory, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return declPath;
-                    }
+                    if (fullDeclPath.StartsWith(projectDirectory, StringComparison.OrdinalIgnoreCase)) return declPath;
                 }
+
                 return r.SourceFilePath;
             })
             .Where(g => !string.IsNullOrEmpty(g.Key));
@@ -153,40 +130,36 @@ public class HttpClientGenerator : IIncrementalGenerator
         foreach (var group in byOutputPath)
         {
             var sourcePath = group.Key;
-            
+
             var directory = Path.GetDirectoryName(sourcePath);
             if (directory == null) continue;
-            
+
             // Check if output is within project directory
             // If the interface is defined in another project, we shouldn't generate it here
             // unless we can't determine the location (3rd party) in which case we fallback to local generation?
             // Actually, if it's 3rd party, DeclaringSyntaxReferences is likely empty/metadata, so sourcePath would be r.SourceFilePath (local).
             // If it's Project Reference, sourcePath is remote.
-            
+
             var fullDirectory = Path.GetFullPath(directory);
             if (!fullDirectory.StartsWith(projectDirectory, StringComparison.OrdinalIgnoreCase))
-            {
                 // Skip generation for external files
                 continue;
-            }
 
             currentSourceFiles.Add(sourcePath);
-            
+
             var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
             var outputPath = Path.Combine(directory, $"{sourceFileName}.generated.cs");
 
             // Check if file was renamed (old path in manifest with different output)
             var previousPath = manifest.GetPreviousGeneratedPath(sourcePath);
             if (previousPath != null && previousPath != outputPath)
-            {
                 manifest.HandleFileRename(sourcePath, sourcePath, outputPath);
-            }
 
             // Take only the first registration for each source file
             var reg = group.First();
             try
             {
-                var symbolNames = GenerateFileForInterface(reg, compilation, context, manifest);
+                var symbolNames = GenerateFileForInterface(reg, compilation, context, manifest, sourcePath);
                 manifest.RecordGeneration(sourcePath, outputPath, symbolNames);
             }
             catch (Exception)
@@ -202,11 +175,11 @@ public class HttpClientGenerator : IIncrementalGenerator
         manifest.Save("Http", projectDirectory, compilation.AssemblyName);
     }
 
-    private static List<string> GenerateFileForInterface(Registration reg, Compilation compilation, SourceProductionContext context, GeneratorManifest manifest)
+    static List<string> GenerateFileForInterface(Registration reg, Compilation compilation,
+        SourceProductionContext context, GeneratorManifest manifest, string sourcePath)
     {
         var symbolNames = new List<string>();
         var interfaceType = (INamedTypeSymbol)reg.InterfaceType;
-        var sourcePath = interfaceType.DeclaringSyntaxReferences.FirstOrDefault()?.SyntaxTree.FilePath ?? reg.SourceFilePath;
         symbolNames.Add(interfaceType.Name);
         var directory = Path.GetDirectoryName(sourcePath);
         if (directory == null) return symbolNames;
@@ -214,6 +187,52 @@ public class HttpClientGenerator : IIncrementalGenerator
         var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
         var outputPath = Path.Combine(directory, $"{sourceFileName}.generated.cs");
 
+        var ns = interfaceType.ContainingNamespace.IsGlobalNamespace
+            ? ""
+            : interfaceType.ContainingNamespace.ToDisplayString();
+
+        var syntaxTree = compilation.SyntaxTrees.FirstOrDefault(t => t.FilePath == sourcePath);
+        if (syntaxTree != null)
+        {
+            var root = syntaxTree.GetRoot();
+            var namespaceDecl = root.DescendantNodes().OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
+            if (namespaceDecl != null)
+                ns = namespaceDecl.Name.ToString();
+            else
+                ns = "";
+        }
+
+        var info = GetInterfaceInfo(interfaceType, compilation, context);
+        var serializerClassName = $"{interfaceType.Name}Serializer";
+
+        // === DISK FILE: Attributes only for STJ source generator ===
+        var diskSb = new StringBuilder();
+        diskSb.AppendLine("// <auto-generated by=\"Comptatata.CodeAnalysis.Http\" />");
+        diskSb.AppendLine("// This file contains only STJ attributes. Runtime code is in the .g.cs file.");
+        diskSb.AppendLine("#nullable enable");
+        diskSb.AppendLine();
+        diskSb.AppendLine("using System.Text.Json.Serialization;");
+        diskSb.AppendLine();
+
+        if (!string.IsNullOrEmpty(ns))
+        {
+            diskSb.AppendLine($"namespace {ns};");
+            diskSb.AppendLine();
+        }
+
+        JsonSerializerContextEmitter.EmitAttributesOnly(diskSb, serializerClassName, "internal", info.MessageGraph);
+
+        var diskContent = diskSb.ToString();
+        try
+        {
+            if (!File.Exists(outputPath) || File.ReadAllText(outputPath) != diskContent)
+                File.WriteAllText(outputPath, diskContent);
+        }
+        catch (Exception)
+        {
+        }
+
+        // === ADDSOURCE: Runtime members and implementation ===
         var sb = new StringBuilder();
         sb.AppendLine("// <auto-generated by=\"Comptatata.CodeAnalysis.Http\" />");
         sb.AppendLine("#nullable enable");
@@ -230,34 +249,14 @@ public class HttpClientGenerator : IIncrementalGenerator
         sb.AppendLine("using Comptatata.Http;");
         sb.AppendLine();
 
-        var ns = interfaceType.ContainingNamespace.IsGlobalNamespace ? "" : interfaceType.ContainingNamespace.ToDisplayString();
-
-        var syntaxTree = compilation.SyntaxTrees.FirstOrDefault(t => t.FilePath == sourcePath);
-        if (syntaxTree != null)
-        {
-            var root = syntaxTree.GetRoot();
-            var namespaceDecl = root.DescendantNodes().OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
-            if (namespaceDecl != null)
-            {
-                ns = namespaceDecl.Name.ToString();
-            }
-            else
-            {
-                ns = "";
-            }
-        }
-
         if (!string.IsNullOrEmpty(ns))
         {
             sb.AppendLine($"namespace {ns};");
             sb.AppendLine();
         }
 
-        var info = GetInterfaceInfo(interfaceType, compilation, context);
-
-        var serializerClassName = $"{interfaceType.Name}Serializer";
-
-        JsonSerializerContextEmitter.EmitContext(sb, serializerClassName, "internal", info.MessageGraph, "SerializerOptions", "ConstructOptions");
+        JsonSerializerContextEmitter.EmitRuntimeMembers(sb, serializerClassName, "internal", info.MessageGraph,
+            "SerializerOptions");
         sb.AppendLine();
 
         sb.AppendLine($"internal partial class {serializerClassName}");
@@ -265,13 +264,15 @@ public class HttpClientGenerator : IIncrementalGenerator
         sb.AppendLine("    [global::System.Runtime.CompilerServices.ModuleInitializer]");
         sb.AppendLine("    public static void Initialize()");
         sb.AppendLine("    {");
-        sb.AppendLine($"        global::Comptatata.Http.Factory<{interfaceType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.SetFactory(client => new {interfaceType.Name}Implementation(client));");
+        sb.AppendLine(
+            $"        global::Comptatata.Http.Factory<{interfaceType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>.SetFactory(client => new {interfaceType.Name}Implementation(client));");
         sb.AppendLine("    }");
         sb.AppendLine("}");
         sb.AppendLine();
 
         sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
-        sb.AppendLine($"file class {interfaceType.Name}Implementation : {interfaceType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}");
+        sb.AppendLine(
+            $"file class {interfaceType.Name}Implementation : {interfaceType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}");
         sb.AppendLine("{");
         sb.AppendLine("    private readonly HttpClient _client;");
         sb.AppendLine($"    public {interfaceType.Name}Implementation(HttpClient client)");
@@ -283,19 +284,25 @@ public class HttpClientGenerator : IIncrementalGenerator
 
         foreach (var method in info.Methods)
         {
-            var parameters = string.Join(", ", method.Method.Parameters.Select(p => $"{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {p.Name}"));
+            var parameters = string.Join(", ",
+                method.Method.Parameters.Select(p =>
+                    $"{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {p.Name}"));
             var asyncKeyword = method.IsAsync ? "async " : "";
-            
-            sb.AppendLine($"    public {asyncKeyword}{method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {method.Method.Name}({parameters})");
+
+            sb.AppendLine(
+                $"    public {asyncKeyword}{method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {method.Method.Name}({parameters})");
             sb.AppendLine("    {");
 
             var unwrappedReturn = JsonSerializerContextEmitter.UnwrapTask(method.Method.ReturnType);
-            var isHttpResponseMessage = unwrappedReturn is not null && IsHttpResponseMessage(unwrappedReturn, compilation);
+            var isHttpResponseMessage =
+                unwrappedReturn is not null && IsHttpResponseMessage(unwrappedReturn, compilation);
             var urlPath = GetUrlPath(method.Method.Name, out var httpMethod);
-            var requestMethod = CommonMethods.Contains(httpMethod) 
-                ? $"global::System.Net.Http.HttpMethod.{httpMethod}" 
+            var requestMethod = CommonMethods.Contains(httpMethod)
+                ? $"global::System.Net.Http.HttpMethod.{httpMethod}"
                 : $"global::System.Net.Http.HttpMethod.Parse(\"{httpMethod.ToUpperInvariant()}\")";
-            var ctPart = method.CancellationTokenParameterName != null ? $", {method.CancellationTokenParameterName}" : "";
+            var ctPart = method.CancellationTokenParameterName != null
+                ? $", {method.CancellationTokenParameterName}"
+                : "";
 
             if (isHttpResponseMessage)
             {
@@ -303,22 +310,29 @@ public class HttpClientGenerator : IIncrementalGenerator
                 {
                     var paramName = method.ParameterName;
                     var paramTypeStr = method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                    sb.AppendLine($"        var content = JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(method.ParameterType)});");
-                    sb.AppendLine($"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\") {{ Content = content }};");
+                    sb.AppendLine(
+                        $"        var content = JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(method.ParameterType)});");
+                    sb.AppendLine(
+                        $"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\") {{ Content = content }};");
                 }
                 else
                 {
-                    sb.AppendLine($"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\");");
+                    sb.AppendLine(
+                        $"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\");");
                 }
-                sb.AppendLine($"        return await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead{ctPart}).ConfigureAwait(false);");
+
+                sb.AppendLine(
+                    $"        return await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead{ctPart}).ConfigureAwait(false);");
                 sb.AppendLine("    }");
                 continue;
             }
 
             ITypeSymbol? rawEntityType = null;
-            var isRawResponse = unwrappedReturn is not null && TryGetHttpResponseEntityType(unwrappedReturn, compilation, out rawEntityType);
+            var isRawResponse = unwrappedReturn is not null &&
+                                TryGetHttpResponseEntityType(unwrappedReturn, compilation, out rawEntityType);
 
-            sb.AppendLine($"        var currentUri = new global::System.Uri(\"{urlPath}\", global::System.UriKind.RelativeOrAbsolute);");
+            sb.AppendLine(
+                $"        var currentUri = new global::System.Uri(\"{urlPath}\", global::System.UriKind.RelativeOrAbsolute);");
             sb.AppendLine($"        var currentMethod = {requestMethod};");
 
             var ctArg = method.CancellationTokenParameterName ?? "default";
@@ -327,81 +341,69 @@ public class HttpClientGenerator : IIncrementalGenerator
             {
                 var paramName = method.ParameterName;
                 var paramTypeStr = method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                contentFactory = $"() => global::System.Net.Http.Json.JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(method.ParameterType)})";
+                contentFactory =
+                    $"() => global::System.Net.Http.Json.JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(method.ParameterType)})";
             }
 
-            if (method.Method.ReturnType is INamedTypeSymbol returnType && returnType.IsGenericType && JsonSerializerContextEmitter.IsTask(returnType))
+            if (method.Method.ReturnType is INamedTypeSymbol returnType && returnType.IsGenericType &&
+                JsonSerializerContextEmitter.IsTask(returnType))
             {
                 var resultType = returnType.TypeArguments[0];
 
                 if (isRawResponse)
                 {
-                    sb.AppendLine($"        return await global::Comptatata.Http.HttpClientHelper.RequestRawAsync(");
+                    sb.AppendLine("        return await global::Comptatata.Http.HttpClientHelper.RequestRawAsync(");
                     sb.AppendLine($"            _client, currentUri, currentMethod, {contentFactory},");
-                    sb.AppendLine($"            {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(rawEntityType!)},");
-                    sb.AppendLine($"            {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
+                    sb.AppendLine(
+                        $"            {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(rawEntityType!)},");
+                    sb.AppendLine(
+                        $"            {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
                 }
                 else
                 {
-                    sb.AppendLine($"        return await global::Comptatata.Http.HttpClientHelper.RequestAsync(");
+                    sb.AppendLine("        return await global::Comptatata.Http.HttpClientHelper.RequestAsync(");
                     sb.AppendLine($"            _client, currentUri, currentMethod, {contentFactory},");
-                    sb.AppendLine($"            {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(resultType)},");
-                    sb.AppendLine($"            {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
+                    sb.AppendLine(
+                        $"            {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(resultType)},");
+                    sb.AppendLine(
+                        $"            {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
                 }
             }
             else
             {
-                sb.AppendLine($"        await global::Comptatata.Http.HttpClientHelper.RequestVoidAsync(");
+                sb.AppendLine("        await global::Comptatata.Http.HttpClientHelper.RequestVoidAsync(");
                 sb.AppendLine($"            _client, currentUri, currentMethod, {contentFactory},");
-                sb.AppendLine($"            {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
+                sb.AppendLine(
+                    $"            {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
             }
+
             sb.AppendLine("    }");
         }
+
         sb.AppendLine("}");
         sb.AppendLine();
 
-        var content = sb.ToString();
-        try
-        {
-            if (!File.Exists(outputPath) || File.ReadAllText(outputPath) != content)
-            {
-                File.WriteAllText(outputPath, content);
-            }
-        }
-        catch (Exception) { }
-        
+        // Add runtime code via AddSource for IDE incremental updates
+        var runtimeContent = sb.ToString();
+        context.AddSource($"{interfaceType.Name}.g.cs", runtimeContent);
+
         return symbolNames;
     }
 
-    private static readonly HashSet<string> CommonMethods = new HashSet<string>(StringComparer.Ordinal)
-    {
-        "Delete", "Get", "Head", "Options", "Patch", "Post", "Put", "Trace"
-    };
-
-    private static readonly string[] KnownMethods = new[]
-    {
-        "Acl", "BaselineControl", "Bind", "Checkin", "Checkout", "Connect", "Copy", "Delete", "Get", "Head",
-        "Label", "Link", "Lock", "Merge", "MkActivity", "MkCalendar", "MkCol", "MkRedirectRef", "MkWorkspace",
-        "Move", "Options", "OrderPatch", "Patch", "Post", "Pri", "PropFind", "PropPatch", "Put", "Query", "Rebind",
-        "Report", "Search", "Trace", "Unbind", "Uncheckout", "Unlink", "Unlock", "Update", "UpdateRedirectRef",
-        "VersionControl"
-    }.OrderByDescending(m => m.Length).ToArray();
-
-    private static string GetUrlPath(string methodName, out string httpMethod)
+    static string GetUrlPath(string methodName, out string httpMethod)
     {
         httpMethod = "Get";
         foreach (var method in KnownMethods)
-        {
             if (methodName.StartsWith(method, StringComparison.Ordinal))
             {
                 httpMethod = method;
                 methodName = methodName.Substring(method.Length);
                 break;
             }
-        }
 
         // Strip "Async" suffix if present
-        if (methodName.EndsWith("Async", StringComparison.Ordinal)) methodName = methodName.Substring(0, methodName.Length - 5);
+        if (methodName.EndsWith("Async", StringComparison.Ordinal))
+            methodName = methodName.Substring(0, methodName.Length - 5);
 
         if (string.IsNullOrEmpty(methodName) || methodName == "Async") return "/";
 
@@ -424,9 +426,9 @@ public class HttpClientGenerator : IIncrementalGenerator
             sb.Append(methodName[0]);
         }
 
-        for (int i = 1; i < methodName.Length; i++)
+        for (var i = 1; i < methodName.Length; i++)
         {
-            char c = methodName[i];
+            var c = methodName[i];
             if (char.IsUpper(c))
             {
                 sb.Append('/');
@@ -437,40 +439,12 @@ public class HttpClientGenerator : IIncrementalGenerator
                 sb.Append(c);
             }
         }
+
         return sb.ToString();
     }
 
 
-    private class InterfaceInfo
-    {
-        public JsonSerializerContextEmitter.SerializationGraph MessageGraph { get; }
-        public List<MethodInfo> Methods { get; }
-        public InterfaceInfo(JsonSerializerContextEmitter.SerializationGraph messageGraph, List<MethodInfo> methods)
-        {
-            MessageGraph = messageGraph;
-            Methods = methods;
-        }
-    }
-
-    private class MethodInfo
-    {
-        public IMethodSymbol Method { get; }
-        public ITypeSymbol? ParameterType { get; }
-        public string? ParameterName { get; }
-        public string? CancellationTokenParameterName { get; }
-        public bool IsAsync { get; }
-        public MethodInfo(IMethodSymbol method, ITypeSymbol? parameterType, string? parameterName, string? cancellationTokenParameterName, bool isAsync)
-        {
-            Method = method;
-            ParameterType = parameterType;
-            ParameterName = parameterName;
-            CancellationTokenParameterName = cancellationTokenParameterName;
-            IsAsync = isAsync;
-        }
-    }
-
-
-    private static bool TryGetHttpResponseEntityType(ITypeSymbol type, Compilation compilation, out ITypeSymbol? entityType)
+    static bool TryGetHttpResponseEntityType(ITypeSymbol type, Compilation compilation, out ITypeSymbol? entityType)
     {
         entityType = null;
         if (type is not INamedTypeSymbol named || !named.IsGenericType) return false;
@@ -484,13 +458,14 @@ public class HttpClientGenerator : IIncrementalGenerator
         return true;
     }
 
-    private static bool IsCancellationToken(ITypeSymbol type, Compilation compilation)
+    static bool IsCancellationToken(ITypeSymbol type, Compilation compilation)
     {
         var ctType = compilation.GetTypeByMetadataName("System.Threading.CancellationToken");
         return SymbolEqualityComparer.Default.Equals(type, ctType);
     }
 
-    private static InterfaceInfo GetInterfaceInfo(INamedTypeSymbol interfaceType, Compilation compilation, SourceProductionContext context)
+    static InterfaceInfo GetInterfaceInfo(INamedTypeSymbol interfaceType, Compilation compilation,
+        SourceProductionContext context)
     {
         var graph = new JsonSerializerContextEmitter.SerializationGraph();
         var methods = new List<MethodInfo>();
@@ -510,7 +485,6 @@ public class HttpClientGenerator : IIncrementalGenerator
             string? ctName = null;
 
             foreach (var p in member.Parameters)
-            {
                 if (IsCancellationToken(p.Type, compilation))
                 {
                     ctName = p.Name;
@@ -520,9 +494,8 @@ public class HttpClientGenerator : IIncrementalGenerator
                     paramType = p.Type;
                     paramName = p.Name;
                 }
-            }
 
-            bool isAsync = JsonSerializerContextEmitter.IsTask(member.ReturnType);
+            var isAsync = JsonSerializerContextEmitter.IsTask(member.ReturnType);
 
             methods.Add(new MethodInfo(member, paramType, paramName, ctName, isAsync));
 
@@ -532,10 +505,9 @@ public class HttpClientGenerator : IIncrementalGenerator
 
             var unwrappedReturn = JsonSerializerContextEmitter.UnwrapTask(member.ReturnType);
             if (unwrappedReturn != null)
-            {
-                JsonSerializerContextEmitter.AddSerializableTypes(graph, unwrappedReturn, compilation, allTypesInCompilation,
+                JsonSerializerContextEmitter.AddSerializableTypes(graph, unwrappedReturn, compilation,
+                    allTypesInCompilation,
                     context.ReportDiagnostic);
-            }
         }
 
         var problemDetails = compilation.GetTypeByMetadataName("Comptatata.Http.ProblemDetails");
@@ -545,7 +517,8 @@ public class HttpClientGenerator : IIncrementalGenerator
 
         var validationProblemDetails = compilation.GetTypeByMetadataName("Comptatata.Http.ValidationProblemDetails");
         if (validationProblemDetails != null)
-            JsonSerializerContextEmitter.AddSerializableTypes(graph, validationProblemDetails, compilation, allTypesInCompilation,
+            JsonSerializerContextEmitter.AddSerializableTypes(graph, validationProblemDetails, compilation,
+                allTypesInCompilation,
                 context.ReportDiagnostic);
 
 
@@ -553,10 +526,63 @@ public class HttpClientGenerator : IIncrementalGenerator
     }
 
 
-
-    private static bool IsHttpResponseMessage(ITypeSymbol type, Compilation compilation)
+    static bool IsHttpResponseMessage(ITypeSymbol type, Compilation compilation)
     {
         var httpResponseMessageType = compilation.GetTypeByMetadataName("System.Net.Http.HttpResponseMessage");
         return SymbolEqualityComparer.Default.Equals(type, httpResponseMessageType);
+    }
+
+    class Registration
+    {
+        public Registration(ITypeSymbol interfaceType, string sourceFilePath)
+        {
+            InterfaceType = interfaceType;
+            SourceFilePath = sourceFilePath;
+        }
+
+        public ITypeSymbol InterfaceType { get; }
+        public string SourceFilePath { get; }
+    }
+
+    class RegistrationComparer : IEqualityComparer<Registration>
+    {
+        public static RegistrationComparer Instance { get; } = new();
+
+        public bool Equals(Registration x, Registration y) =>
+            SymbolEqualityComparer.Default.Equals(x?.InterfaceType, y?.InterfaceType);
+
+        public int GetHashCode(Registration obj) => SymbolEqualityComparer.Default.GetHashCode(obj.InterfaceType);
+    }
+
+
+    class InterfaceInfo
+    {
+        public InterfaceInfo(JsonSerializerContextEmitter.SerializationGraph messageGraph, List<MethodInfo> methods)
+        {
+            MessageGraph = messageGraph;
+            Methods = methods;
+        }
+
+        public JsonSerializerContextEmitter.SerializationGraph MessageGraph { get; }
+        public List<MethodInfo> Methods { get; }
+    }
+
+    class MethodInfo
+    {
+        public MethodInfo(IMethodSymbol method, ITypeSymbol? parameterType, string? parameterName,
+            string? cancellationTokenParameterName, bool isAsync)
+        {
+            Method = method;
+            ParameterType = parameterType;
+            ParameterName = parameterName;
+            CancellationTokenParameterName = cancellationTokenParameterName;
+            IsAsync = isAsync;
+        }
+
+        public IMethodSymbol Method { get; }
+        public ITypeSymbol? ParameterType { get; }
+        public string? ParameterName { get; }
+        public string? CancellationTokenParameterName { get; }
+        public bool IsAsync { get; }
     }
 }
