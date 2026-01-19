@@ -434,8 +434,9 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     {
                         if (!method.IsOneWay)
                         {
+                            var timeoutArg = method.HasCancellationToken ? "null, ct" : "null, default";
                             sb.AppendLine(
-                                $"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, this{ctArg});");
+                                $"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, this, {timeoutArg});");
                             sb.AppendLine(
                                 $"        await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
                             sb.AppendLine("        return await responseTask.ConfigureAwait(false);");
@@ -475,8 +476,9 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     {
                         if (!method.IsOneWay)
                         {
+                            var timeoutArg = method.HasCancellationToken ? "null, ct" : "null, default";
                             sb.AppendLine(
-                                $"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, this{ctArg});");
+                                $"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, this, {timeoutArg});");
                             sb.AppendLine(
                                 $"        global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
                             sb.AppendLine("        return responseTask.GetAwaiter().GetResult();");
