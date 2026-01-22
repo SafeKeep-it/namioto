@@ -290,9 +290,15 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     : null;
                 var discriminatorExpr =
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetDiscriminatorMethodName(messageRoot)}(message)";
+                var discriminatorPrefixes = GetDiscriminatorPrefixes(info.MessageGraph, messageRoot);
+                var discriminatorInitializer = BuildDiscriminatorSetInitializer(discriminatorPrefixes);
 
                 sb.AppendLine(
                     $"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {discriminatorExpr};");
+                sb.AppendLine(
+                    $"    private static readonly global::System.Collections.Generic.HashSet<string> Discriminators = {discriminatorInitializer};");
+                sb.AppendLine(
+                    "    public bool CanHandleDiscriminator(string discriminator) => Discriminators.Count == 0 || Discriminators.Contains(discriminator);");
                 sb.AppendLine();
                 sb.AppendLine(
                     $"    public {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} CreateClient(global::Comptatata.SpoolBus.SpoolBusClientFactory factory) => throw new global::System.NotSupportedException();");
@@ -405,9 +411,15 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     : null;
                 var discriminatorExpr =
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetDiscriminatorMethodName(messageRoot)}(message)";
+                var discriminatorPrefixes = GetDiscriminatorPrefixes(info.MessageGraph, messageRoot);
+                var discriminatorInitializer = BuildDiscriminatorSetInitializer(discriminatorPrefixes);
 
                 sb.AppendLine(
                     $"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {discriminatorExpr};");
+                sb.AppendLine(
+                    $"    private static readonly global::System.Collections.Generic.HashSet<string> Discriminators = {discriminatorInitializer};");
+                sb.AppendLine(
+                    "    public bool CanHandleDiscriminator(string discriminator) => Discriminators.Count == 0 || Discriminators.Contains(discriminator);");
                 sb.AppendLine();
                 sb.AppendLine(
                     $"    public {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} CreateClient(global::Comptatata.SpoolBus.SpoolBusClientFactory factory) => new {type.Name}SpoolBusClient(factory);");
@@ -627,6 +639,36 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         return new HandlerInfo(graph, handlerMethods);
     }
 
+    static List<string> GetDiscriminatorPrefixes(JsonSerializerContextEmitter.SerializationGraph graph,
+        ITypeSymbol? root)
+    {
+        if (root == null) return [];
+        if (!graph.Families.TryGetValue(root, out var hierarchy)) return [];
+
+        var allFamilyTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+        foreach (var parent in hierarchy.Keys) allFamilyTypes.Add(parent);
+        foreach (var children in hierarchy.Values)
+        foreach (var child in children)
+            allFamilyTypes.Add(child);
+
+        return allFamilyTypes
+            .Where(t => !t.IsAbstract && t.TypeKind != TypeKind.Interface)
+            .Select(t => JsonSerializerContextEmitter.ToKebabCase(t.Name))
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(n => n, StringComparer.Ordinal)
+            .ToList();
+    }
+
+    static string BuildDiscriminatorSetInitializer(IReadOnlyCollection<string> prefixes)
+    {
+        if (prefixes.Count == 0)
+            return "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal)";
+
+        var items = string.Join(", ", prefixes.Select(p => $"\"{p}\""));
+        return "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal) { " +
+               items + " }";
+    }
+
     static bool IsOrInheritsFromMessage(ITypeSymbol type)
     {
         var current = type;
@@ -675,10 +717,12 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         public static RegistrationComparer Instance { get; } = new();
 
         public bool Equals(Registration x, Registration y) =>
-            SymbolEqualityComparer.Default.Equals(x?.Type, y?.Type) && x?.Kind == y?.Kind;
+            SymbolEqualityComparer.Default.Equals(x?.Type, y?.Type) && x?.Kind == y?.Kind &&
+            string.Equals(x?.SourceFilePath, y?.SourceFilePath, StringComparison.Ordinal);
 
         public int GetHashCode(Registration obj) =>
-            (SymbolEqualityComparer.Default.GetHashCode(obj.Type) * 397) ^ obj.Kind.GetHashCode();
+            (((SymbolEqualityComparer.Default.GetHashCode(obj.Type) * 397) ^ obj.Kind.GetHashCode()) * 397) ^
+            StringComparer.Ordinal.GetHashCode(obj.SourceFilePath);
     }
 
     class HandlerMethodInfo
