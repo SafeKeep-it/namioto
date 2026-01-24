@@ -290,11 +290,15 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     : null;
                 var discriminatorExpr =
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetDiscriminatorMethodName(messageRoot)}(message)";
+                var tokenChainExpr =
+                    $"{contextClassName}.{JsonSerializerContextEmitter.GetTokenChainMethodName(messageRoot)}(message)";
                 var discriminatorPrefixes = GetDiscriminatorPrefixes(info.MessageGraph, messageRoot);
                 var discriminatorInitializer = BuildDiscriminatorSetInitializer(discriminatorPrefixes);
 
                 sb.AppendLine(
                     $"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {discriminatorExpr};");
+                sb.AppendLine(
+                    $"    public string GetTokenChain(global::Comptatata.SpoolDrop.Messages.Message message) => {tokenChainExpr};");
                 sb.AppendLine(
                     $"    private static readonly global::System.Collections.Generic.HashSet<string> Discriminators = {discriminatorInitializer};");
                 sb.AppendLine(
@@ -372,7 +376,7 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     sb.AppendLine("                    response = e with { ReplyTo = request?.Id };");
                     sb.AppendLine("                }");
                     sb.AppendLine(
-                        $"                await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync(response, {contextClassName}.SerializeAsync, {contextClassName}.{JsonSerializerContextEmitter.GetDiscriminatorMethodName(messageRoot)}, directory, ct).ConfigureAwait(false);");
+                        $"                await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync(response, {contextClassName}.SerializeAsync, {contextClassName}.{JsonSerializerContextEmitter.GetDiscriminatorMethodName(messageRoot)}, {contextClassName}.{JsonSerializerContextEmitter.GetTokenChainMethodName(messageRoot)}, directory, ct).ConfigureAwait(false);");
                     sb.AppendLine("            }");
                     sb.AppendLine("            handled = true;");
                     sb.AppendLine("        }");
@@ -411,11 +415,15 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     : null;
                 var discriminatorExpr =
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetDiscriminatorMethodName(messageRoot)}(message)";
+                var tokenChainExpr =
+                    $"{contextClassName}.{JsonSerializerContextEmitter.GetTokenChainMethodName(messageRoot)}(message)";
                 var discriminatorPrefixes = GetDiscriminatorPrefixes(info.MessageGraph, messageRoot);
                 var discriminatorInitializer = BuildDiscriminatorSetInitializer(discriminatorPrefixes);
 
                 sb.AppendLine(
                     $"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {discriminatorExpr};");
+                sb.AppendLine(
+                    $"    public string GetTokenChain(global::Comptatata.SpoolDrop.Messages.Message message) => {tokenChainExpr};");
                 sb.AppendLine(
                     $"    private static readonly global::System.Collections.Generic.HashSet<string> Discriminators = {discriminatorInitializer};");
                 sb.AppendLine(
@@ -450,13 +458,13 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                             sb.AppendLine(
                                 $"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, this, {timeoutArg});");
                             sb.AppendLine(
-                                $"        await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
+                                $"        await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, GetTokenChain, _factory.Directory{ctArg}).ConfigureAwait(false);");
                             sb.AppendLine("        return await responseTask.ConfigureAwait(false);");
                         }
                         else
                         {
                             sb.AppendLine(
-                                $"        await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, _factory.Directory{ctArg}).ConfigureAwait(false);");
+                                $"        await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, GetTokenChain, _factory.Directory{ctArg}).ConfigureAwait(false);");
                             var returnType = method.Method.ReturnType.ToDisplayString();
                             if (returnType == "global::System.Threading.Tasks.Task")
                             {
@@ -492,13 +500,13 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                             sb.AppendLine(
                                 $"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, this, {timeoutArg});");
                             sb.AppendLine(
-                                $"        global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
+                                $"        global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, GetTokenChain, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
                             sb.AppendLine("        return responseTask.GetAwaiter().GetResult();");
                         }
                         else
                         {
                             sb.AppendLine(
-                                $"        global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
+                                $"        global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, GetTokenChain, _factory.Directory{ctArg}).GetAwaiter().GetResult();");
                         }
                     }
 

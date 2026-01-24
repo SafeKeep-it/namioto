@@ -34,6 +34,54 @@ public static class JsonSerializerContextEmitter
         return sb.ToString();
     }
 
+    private static string GetToken(string discriminator)
+    {
+        uint crc = 0xFFFFFFFF;
+        foreach (var b in Encoding.UTF8.GetBytes(discriminator))
+        {
+            crc ^= b;
+            for (var i = 0; i < 8; i++)
+                crc = (crc >> 1) ^ (0xEDB88320 & (uint)-(int)(crc & 1));
+        }
+
+        crc = ~crc;
+
+        const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+        var char1 = alphabet[(int)((crc >> 27) & 0x1F)];
+        var char2 = alphabet[(int)((crc >> 22) & 0x1F)];
+        return $"{char1}{char2}";
+    }
+
+    private static string GetTokenChain(ITypeSymbol type, SerializationGraph graph, ITypeSymbol root)
+    {
+        var chain = new StringBuilder();
+        var current = type;
+        while (current != null)
+        {
+            chain.Append(GetToken(ToKebabCase(current.Name)));
+            if (SymbolEqualityComparer.Default.Equals(current, root)) break;
+
+            // Follow the hierarchy defined in the graph
+            ITypeSymbol? parent = null;
+            foreach (var family in graph.Families.Values)
+            {
+                foreach (var entry in family)
+                {
+                    if (entry.Value.Contains(current))
+                    {
+                        parent = entry.Key;
+                        break;
+                    }
+                }
+                if (parent != null) break;
+            }
+
+            current = parent;
+        }
+
+        return chain.ToString();
+    }
+
     public static bool IsDescendantOf(ITypeSymbol type, ITypeSymbol potentialBase)
     {
         if (SymbolEqualityComparer.Default.Equals(type, potentialBase)) return false;
@@ -346,6 +394,14 @@ public static class JsonSerializerContextEmitter
         return $"GetDiscriminator_{name}";
     }
 
+    public static string GetTokenChainMethodName(ITypeSymbol? root)
+    {
+        if (root == null) return "GetTokenChain";
+        var parts = root.ToDisplayString().Split('.');
+        var name = string.Join("_", parts.Select(p => p.Replace("global::", "")));
+        return $"GetTokenChain_{name}";
+    }
+
     public static void EmitDiscriminatorMethods(StringBuilder sb, SerializationGraph graph,
         string indent = "    ")
     {
@@ -374,6 +430,36 @@ public static class JsonSerializerContextEmitter
 
         if (graph.Families.Count == 0)
             sb.AppendLine($"{indent}public static string GetDiscriminator(object value) => \"unknown\";");
+    }
+
+    public static void EmitTokenChainMethods(StringBuilder sb, SerializationGraph graph,
+        string indent = "    ")
+    {
+        foreach (var family in graph.Families.OrderBy(f => f.Key.ToDisplayString()))
+        {
+            var root = family.Key;
+            var hierarchy = family.Value;
+            var methodName = GetTokenChainMethodName(root);
+            var rootType = root.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            sb.AppendLine($"{indent}public static string {methodName}({rootType} value) => value switch");
+            sb.AppendLine($"{indent}{{");
+
+            var allFamilyTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+            foreach (var parent in hierarchy.Keys) allFamilyTypes.Add(parent);
+            foreach (var children in hierarchy.Values)
+            foreach (var child in children)
+                allFamilyTypes.Add(child);
+
+            foreach (var t in allFamilyTypes.Where(t => !t.IsAbstract && t.TypeKind != TypeKind.Interface)
+                         .OrderBy(t => t.Name))
+                sb.AppendLine(
+                    $"{indent}    {t.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{GetTokenChain(t, graph, root)}\",");
+            sb.AppendLine($"{indent}    _ => \"\"");
+            sb.AppendLine($"{indent}}};");
+        }
+
+        if (graph.Families.Count == 0)
+            sb.AppendLine($"{indent}public static string GetTokenChain(object value) => \"\";");
     }
 
     public static void EmitJsonSerializerOptions(StringBuilder sb, string propertyName, string methodName,
@@ -494,6 +580,9 @@ public static class JsonSerializerContextEmitter
         EmitDiscriminatorMethods(sb, graph);
         sb.AppendLine();
 
+        EmitTokenChainMethods(sb, graph);
+        sb.AppendLine();
+
         EmitAddPolymorphism(sb, graph);
         sb.AppendLine();
 
@@ -546,6 +635,9 @@ public static class JsonSerializerContextEmitter
         sb.AppendLine();
 
         EmitDiscriminatorMethods(sb, graph);
+        sb.AppendLine();
+
+        EmitTokenChainMethods(sb, graph);
         sb.AppendLine();
 
         EmitAddPolymorphism(sb, graph);
