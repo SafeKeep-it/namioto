@@ -34,9 +34,9 @@ public static class JsonSerializerContextEmitter
         return sb.ToString();
     }
 
-    private static string GetToken(string discriminator)
+    public static string GetToken(string discriminator)
     {
-        uint crc = 0xFFFFFFFF;
+        var crc = 0xFFFFFFFF;
         foreach (var b in Encoding.UTF8.GetBytes(discriminator))
         {
             crc ^= b;
@@ -52,7 +52,7 @@ public static class JsonSerializerContextEmitter
         return $"{char1}{char2}";
     }
 
-    private static string GetTokenChain(ITypeSymbol type, SerializationGraph graph, ITypeSymbol root)
+    public static string GetTokenChain(ITypeSymbol type, SerializationGraph graph, ITypeSymbol root)
     {
         var chain = new StringBuilder();
         var current = type;
@@ -66,13 +66,12 @@ public static class JsonSerializerContextEmitter
             foreach (var family in graph.Families.Values)
             {
                 foreach (var entry in family)
-                {
                     if (entry.Value.Contains(current))
                     {
                         parent = entry.Key;
                         break;
                     }
-                }
+
                 if (parent != null) break;
             }
 
@@ -80,6 +79,19 @@ public static class JsonSerializerContextEmitter
         }
 
         return chain.ToString();
+    }
+
+    static int GetInheritanceDepth(ITypeSymbol type)
+    {
+        var depth = 0;
+        var current = type.BaseType;
+        while (current != null)
+        {
+            depth++;
+            current = current.BaseType;
+        }
+
+        return depth;
     }
 
     public static bool IsDescendantOf(ITypeSymbol type, ITypeSymbol potentialBase)
@@ -421,7 +433,8 @@ public static class JsonSerializerContextEmitter
                 allFamilyTypes.Add(child);
 
             foreach (var t in allFamilyTypes.Where(t => !t.IsAbstract && t.TypeKind != TypeKind.Interface)
-                         .OrderBy(t => t.Name))
+                         .OrderByDescending(t => GetInheritanceDepth(t))
+                         .ThenBy(t => t.Name))
                 sb.AppendLine(
                     $"{indent}    {t.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{ToKebabCase(t.Name)}\",");
             sb.AppendLine($"{indent}    _ => \"unknown\"");
@@ -451,7 +464,8 @@ public static class JsonSerializerContextEmitter
                 allFamilyTypes.Add(child);
 
             foreach (var t in allFamilyTypes.Where(t => !t.IsAbstract && t.TypeKind != TypeKind.Interface)
-                         .OrderBy(t => t.Name))
+                         .OrderByDescending(t => GetInheritanceDepth(t))
+                         .ThenBy(t => t.Name))
                 sb.AppendLine(
                     $"{indent}    {t.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _ => \"{GetTokenChain(t, graph, root)}\",");
             sb.AppendLine($"{indent}    _ => \"\"");

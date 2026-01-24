@@ -182,6 +182,7 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         sb.AppendLine("#nullable enable");
         sb.AppendLine();
         sb.AppendLine("using System.ComponentModel;");
+        sb.AppendLine("using System.Linq;");
         sb.AppendLine("using System.Collections.Generic;");
         sb.AppendLine("using System.Runtime.CompilerServices;");
         sb.AppendLine("using System.Text.Json;");
@@ -294,6 +295,12 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetTokenChainMethodName(messageRoot)}(message)";
                 var discriminatorPrefixes = GetDiscriminatorPrefixes(info.MessageGraph, messageRoot);
                 var discriminatorInitializer = BuildDiscriminatorSetInitializer(discriminatorPrefixes);
+                var tokenChains = info.Methods
+                    .Select(m =>
+                        JsonSerializerContextEmitter.GetTokenChain(m.ParameterType, info.MessageGraph, messageRoot!))
+                    .Distinct()
+                    .ToList();
+                var tokenChainInitializer = BuildTokenChainSetInitializer(tokenChains);
 
                 sb.AppendLine(
                     $"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {discriminatorExpr};");
@@ -303,6 +310,10 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"    private static readonly global::System.Collections.Generic.HashSet<string> Discriminators = {discriminatorInitializer};");
                 sb.AppendLine(
                     "    public bool CanHandleDiscriminator(string discriminator) => Discriminators.Count == 0 || Discriminators.Contains(discriminator);");
+                sb.AppendLine(
+                    $"    private static readonly global::System.Collections.Generic.HashSet<string> TokenChains = {tokenChainInitializer};");
+                sb.AppendLine(
+                    "    public bool CanHandleTokenChain(string tokenChain) => TokenChains.Count == 0 || TokenChains.Any(t => tokenChain.EndsWith(t, global::System.StringComparison.Ordinal));");
                 sb.AppendLine();
                 sb.AppendLine(
                     $"    public {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} CreateClient(global::Comptatata.SpoolBus.SpoolBusClientFactory factory) => throw new global::System.NotSupportedException();");
@@ -419,6 +430,14 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetTokenChainMethodName(messageRoot)}(message)";
                 var discriminatorPrefixes = GetDiscriminatorPrefixes(info.MessageGraph, messageRoot);
                 var discriminatorInitializer = BuildDiscriminatorSetInitializer(discriminatorPrefixes);
+                var tokenChains = info.Methods
+                    .Where(m => m.MessageResultType != null)
+                    .Select(m =>
+                        JsonSerializerContextEmitter.GetTokenChain(m.MessageResultType!, info.MessageGraph,
+                            messageRoot!))
+                    .Distinct()
+                    .ToList();
+                var tokenChainInitializer = BuildTokenChainSetInitializer(tokenChains);
 
                 sb.AppendLine(
                     $"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {discriminatorExpr};");
@@ -428,6 +447,10 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"    private static readonly global::System.Collections.Generic.HashSet<string> Discriminators = {discriminatorInitializer};");
                 sb.AppendLine(
                     "    public bool CanHandleDiscriminator(string discriminator) => Discriminators.Count == 0 || Discriminators.Contains(discriminator);");
+                sb.AppendLine(
+                    $"    private static readonly global::System.Collections.Generic.HashSet<string> TokenChains = {tokenChainInitializer};");
+                sb.AppendLine(
+                    "    public bool CanHandleTokenChain(string tokenChain) => TokenChains.Count == 0 || TokenChains.Any(t => tokenChain.EndsWith(t, global::System.StringComparison.Ordinal));");
                 sb.AppendLine();
                 sb.AppendLine(
                     $"    public {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} CreateClient(global::Comptatata.SpoolBus.SpoolBusClientFactory factory) => new {type.Name}SpoolBusClient(factory);");
@@ -673,6 +696,16 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
             return "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal)";
 
         var items = string.Join(", ", prefixes.Select(p => $"\"{p}\""));
+        return "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal) { " +
+               items + " }";
+    }
+
+    static string BuildTokenChainSetInitializer(IReadOnlyCollection<string> chains)
+    {
+        if (chains.Count == 0)
+            return "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal)";
+
+        var items = string.Join(", ", chains.Select(c => $"\"{c}\""));
         return "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal) { " +
                items + " }";
     }
