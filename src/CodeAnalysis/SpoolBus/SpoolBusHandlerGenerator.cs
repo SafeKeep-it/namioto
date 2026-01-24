@@ -293,8 +293,6 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetDiscriminatorMethodName(messageRoot)}(message)";
                 var tokenChainExpr =
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetTokenChainMethodName(messageRoot)}(message)";
-                var discriminatorPrefixes = GetDiscriminatorPrefixes(info.MessageGraph, messageRoot);
-                var discriminatorInitializer = BuildDiscriminatorSetInitializer(discriminatorPrefixes);
                 var tokenChains = info.Methods
                     .Select(m =>
                         JsonSerializerContextEmitter.GetTokenChain(m.ParameterType, info.MessageGraph, messageRoot!))
@@ -306,10 +304,6 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {discriminatorExpr};");
                 sb.AppendLine(
                     $"    public string GetTokenChain(global::Comptatata.SpoolDrop.Messages.Message message) => {tokenChainExpr};");
-                sb.AppendLine(
-                    $"    private static readonly global::System.Collections.Generic.HashSet<string> Discriminators = {discriminatorInitializer};");
-                sb.AppendLine(
-                    "    public bool CanHandleDiscriminator(string discriminator) => Discriminators.Count == 0 || Discriminators.Contains(discriminator);");
                 sb.AppendLine(
                     $"    private static readonly global::System.Collections.Generic.HashSet<string> TokenChains = {tokenChainInitializer};");
                 sb.AppendLine(
@@ -428,8 +422,6 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetDiscriminatorMethodName(messageRoot)}(message)";
                 var tokenChainExpr =
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetTokenChainMethodName(messageRoot)}(message)";
-                var discriminatorPrefixes = GetDiscriminatorPrefixes(info.MessageGraph, messageRoot);
-                var discriminatorInitializer = BuildDiscriminatorSetInitializer(discriminatorPrefixes);
                 var tokenChains = info.Methods
                     .Where(m => m.MessageResultType != null)
                     .Select(m =>
@@ -443,10 +435,6 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"    public string GetDiscriminator(global::Comptatata.SpoolDrop.Messages.Message message) => {discriminatorExpr};");
                 sb.AppendLine(
                     $"    public string GetTokenChain(global::Comptatata.SpoolDrop.Messages.Message message) => {tokenChainExpr};");
-                sb.AppendLine(
-                    $"    private static readonly global::System.Collections.Generic.HashSet<string> Discriminators = {discriminatorInitializer};");
-                sb.AppendLine(
-                    "    public bool CanHandleDiscriminator(string discriminator) => Discriminators.Count == 0 || Discriminators.Contains(discriminator);");
                 sb.AppendLine(
                     $"    private static readonly global::System.Collections.Generic.HashSet<string> TokenChains = {tokenChainInitializer};");
                 sb.AppendLine(
@@ -668,36 +656,6 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
 
 
         return new HandlerInfo(graph, handlerMethods);
-    }
-
-    static List<string> GetDiscriminatorPrefixes(JsonSerializerContextEmitter.SerializationGraph graph,
-        ITypeSymbol? root)
-    {
-        if (root == null) return [];
-        if (!graph.Families.TryGetValue(root, out var hierarchy)) return [];
-
-        var allFamilyTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
-        foreach (var parent in hierarchy.Keys) allFamilyTypes.Add(parent);
-        foreach (var children in hierarchy.Values)
-        foreach (var child in children)
-            allFamilyTypes.Add(child);
-
-        return allFamilyTypes
-            .Where(t => !t.IsAbstract && t.TypeKind != TypeKind.Interface)
-            .Select(t => JsonSerializerContextEmitter.ToKebabCase(t.Name))
-            .Distinct(StringComparer.Ordinal)
-            .OrderBy(n => n, StringComparer.Ordinal)
-            .ToList();
-    }
-
-    static string BuildDiscriminatorSetInitializer(IReadOnlyCollection<string> prefixes)
-    {
-        if (prefixes.Count == 0)
-            return "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal)";
-
-        var items = string.Join(", ", prefixes.Select(p => $"\"{p}\""));
-        return "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal) { " +
-               items + " }";
     }
 
     static string BuildTokenChainSetInitializer(IReadOnlyCollection<string> chains)
