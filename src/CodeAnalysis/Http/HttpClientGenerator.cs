@@ -344,9 +344,15 @@ public class HttpClientGenerator : IIncrementalGenerator
 
                 sb.AppendLine($"        var currentUri = new global::System.Uri(\"{urlPath}\", global::System.UriKind.RelativeOrAbsolute);");
                 sb.AppendLine($"        var currentMethod = {requestMethod};");
-                sb.AppendLine($"        using var request = new HttpRequestMessage(currentMethod, currentUri);");
                 if (contentFactory != "null")
-                    sb.AppendLine($"        request.Content = {contentFactory}();");
+                {
+                    sb.AppendLine($"        var contentFunc = {contentFactory};");
+                    sb.AppendLine($"        using var request = new HttpRequestMessage(currentMethod, currentUri) {{ Content = contentFunc() }};");
+                }
+                else
+                {
+                    sb.AppendLine($"        using var request = new HttpRequestMessage(currentMethod, currentUri);");
+                }
 
                 sb.AppendLine($"        using var response = await _client.SendAsync(request, global::System.Net.Http.HttpCompletionOption.ResponseHeadersRead, {ctArg}).ConfigureAwait(false);");
                 sb.AppendLine($"        if (!response.IsSuccessStatusCode)");
@@ -540,9 +546,23 @@ public class HttpClientGenerator : IIncrementalGenerator
                     paramName = p.Name;
                 }
 
-            var isAsync = JsonSerializerContextEmitter.IsTask(member.ReturnType);
+            // Check for IAsyncEnumerable<T> directly first (not wrapped in Task)
             var isStreaming = JsonSerializerContextEmitter.IsAsyncEnumerable(member.ReturnType);
-            var streamingType = isStreaming ? ((INamedTypeSymbol)member.ReturnType).TypeArguments[0] : null;
+            var streamingReturnType = member.ReturnType;
+            
+            // If not streaming, check if it's Task<IAsyncEnumerable<T>>
+            if (!isStreaming)
+            {
+                var unwrapped = JsonSerializerContextEmitter.UnwrapTask(member.ReturnType);
+                if (unwrapped != null && JsonSerializerContextEmitter.IsAsyncEnumerable(unwrapped))
+                {
+                    isStreaming = true;
+                    streamingReturnType = unwrapped;
+                }
+            }
+            
+            var isAsync = JsonSerializerContextEmitter.IsTask(member.ReturnType) || isStreaming;
+            var streamingType = isStreaming ? ((INamedTypeSymbol)streamingReturnType).TypeArguments[0] : null;
 
             methods.Add(new MethodInfo(member, paramType, paramName, ctName, isAsync || isStreaming, isStreaming,
                 streamingType));
@@ -560,6 +580,12 @@ public class HttpClientGenerator : IIncrementalGenerator
                     serializableType = ((INamedTypeSymbol)serializableType).TypeArguments[0];
                 }
                 JsonSerializerContextEmitter.AddSerializableTypes(graph, serializableType, compilation,
+                    allTypesInCompilation,
+                    context.ReportDiagnostic);
+            }
+            else if (isStreaming && streamingType != null)
+            {
+                JsonSerializerContextEmitter.AddSerializableTypes(graph, streamingType, compilation,
                     allTypesInCompilation,
                     context.ReportDiagnostic);
             }
