@@ -283,7 +283,12 @@ public class HttpClientGenerator : IIncrementalGenerator
         {
             var parameters = string.Join(", ",
                 method.Method.Parameters.Select(p =>
-                    $"{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {p.Name}"));
+                {
+                    var attr = (method.IsStreaming && p.Name == method.CancellationTokenParameterName)
+                        ? "[global::System.Runtime.CompilerServices.EnumeratorCancellation] "
+                        : "";
+                    return $"{attr}{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {p.Name}";
+                }));
             var asyncKeyword = method.IsAsync ? "async " : "";
 
             sb.AppendLine(
@@ -301,14 +306,22 @@ public class HttpClientGenerator : IIncrementalGenerator
                 ? $", {method.CancellationTokenParameterName}"
                 : "";
 
+            var ctArg = method.CancellationTokenParameterName ?? "default";
+            var contentFactory = "null";
+            if (method.ParameterType != null)
+            {
+                var paramName = method.ParameterName;
+                var paramTypeStr = method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                contentFactory =
+                    $"() => global::System.Net.Http.Json.JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(method.ParameterType)})";
+            }
+
             if (isHttpResponseMessage)
             {
                 if (method.ParameterType != null)
                 {
-                    var paramName = method.ParameterName;
-                    var paramTypeStr = method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                     sb.AppendLine(
-                        $"        var content = JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(method.ParameterType)});");
+                        $"        var content = {contentFactory}();");
                     sb.AppendLine(
                         $"        using var request = new HttpRequestMessage({requestMethod}, \"{urlPath}\") {{ Content = content }};");
                 }
@@ -324,6 +337,46 @@ public class HttpClientGenerator : IIncrementalGenerator
                 continue;
             }
 
+            if (method.IsStreaming)
+            {
+                var streamingTypeStr = method.StreamingType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                var streamingTypePropertyName = JsonSerializerContextEmitter.GetPropertyName(method.StreamingType!);
+
+                sb.AppendLine($"        var currentUri = new global::System.Uri(\"{urlPath}\", global::System.UriKind.RelativeOrAbsolute);");
+                sb.AppendLine($"        var currentMethod = {requestMethod};");
+                sb.AppendLine($"        using var request = new HttpRequestMessage(currentMethod, currentUri);");
+                if (contentFactory != "null")
+                    sb.AppendLine($"        request.Content = {contentFactory}();");
+
+                sb.AppendLine($"        using var response = await _client.SendAsync(request, global::System.Net.Http.HttpCompletionOption.ResponseHeadersRead, {ctArg}).ConfigureAwait(false);");
+                sb.AppendLine($"        if (!response.IsSuccessStatusCode)");
+                sb.AppendLine("        {");
+                sb.AppendLine($"            await global::Comptatata.Http.HttpClientHelper.RequestVoidAsync(_client, currentUri, currentMethod, {contentFactory}, {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
+                sb.AppendLine("        }");
+                sb.AppendLine();
+                sb.AppendLine($"        var stream = await response.Content.ReadAsStreamAsync({ctArg}).ConfigureAwait(false);");
+                sb.AppendLine($"        var contentType = response.Content.Headers.ContentType?.ToString();");
+                sb.AppendLine($"        if (contentType is not null && contentType.Contains(\"ndjson\", global::System.StringComparison.OrdinalIgnoreCase))");
+                sb.AppendLine("        {");
+                sb.AppendLine("            using var reader = new global::System.IO.StreamReader(stream);");
+                sb.AppendLine($"            while (await reader.ReadLineAsync({ctArg}).ConfigureAwait(false) is string line)");
+                sb.AppendLine("            {");
+                sb.AppendLine("                if (string.IsNullOrWhiteSpace(line)) continue;");
+                sb.AppendLine($"                var item = global::System.Text.Json.JsonSerializer.Deserialize<{streamingTypeStr}>(line, {serializerClassName}.Generated.{streamingTypePropertyName});");
+                sb.AppendLine("                if (item is not null) yield return item;");
+                sb.AppendLine("            }");
+                sb.AppendLine("        }");
+                sb.AppendLine("        else");
+                sb.AppendLine("        {");
+                sb.AppendLine($"            await foreach (var item in global::System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<{streamingTypeStr}>(stream, {serializerClassName}.Generated.{streamingTypePropertyName}, {ctArg}).ConfigureAwait(false))");
+                sb.AppendLine("            {");
+                sb.AppendLine("                if (item is not null) yield return item;");
+                sb.AppendLine("            }");
+                sb.AppendLine("        }");
+                sb.AppendLine("    }");
+                continue;
+            }
+
             ITypeSymbol? rawEntityType = null;
             var isRawResponse = unwrappedReturn is not null &&
                                 TryGetHttpResponseEntityType(unwrappedReturn, compilation, out rawEntityType);
@@ -331,16 +384,6 @@ public class HttpClientGenerator : IIncrementalGenerator
             sb.AppendLine(
                 $"        var currentUri = new global::System.Uri(\"{urlPath}\", global::System.UriKind.RelativeOrAbsolute);");
             sb.AppendLine($"        var currentMethod = {requestMethod};");
-
-            var ctArg = method.CancellationTokenParameterName ?? "default";
-            var contentFactory = "null";
-            if (method.ParameterType != null)
-            {
-                var paramName = method.ParameterName;
-                var paramTypeStr = method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                contentFactory =
-                    $"() => global::System.Net.Http.Json.JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(method.ParameterType)})";
-            }
 
             if (method.Method.ReturnType is INamedTypeSymbol returnType && returnType.IsGenericType &&
                 JsonSerializerContextEmitter.IsTask(returnType))
@@ -498,8 +541,11 @@ public class HttpClientGenerator : IIncrementalGenerator
                 }
 
             var isAsync = JsonSerializerContextEmitter.IsTask(member.ReturnType);
+            var isStreaming = JsonSerializerContextEmitter.IsAsyncEnumerable(member.ReturnType);
+            var streamingType = isStreaming ? ((INamedTypeSymbol)member.ReturnType).TypeArguments[0] : null;
 
-            methods.Add(new MethodInfo(member, paramType, paramName, ctName, isAsync));
+            methods.Add(new MethodInfo(member, paramType, paramName, ctName, isAsync || isStreaming, isStreaming,
+                streamingType));
 
             if (paramType != null)
                 JsonSerializerContextEmitter.AddSerializableTypes(graph, paramType, compilation, allTypesInCompilation,
@@ -507,9 +553,16 @@ public class HttpClientGenerator : IIncrementalGenerator
 
             var unwrappedReturn = JsonSerializerContextEmitter.UnwrapTask(member.ReturnType);
             if (unwrappedReturn != null)
-                JsonSerializerContextEmitter.AddSerializableTypes(graph, unwrappedReturn, compilation,
+            {
+                var serializableType = unwrappedReturn;
+                if (JsonSerializerContextEmitter.IsAsyncEnumerable(serializableType))
+                {
+                    serializableType = ((INamedTypeSymbol)serializableType).TypeArguments[0];
+                }
+                JsonSerializerContextEmitter.AddSerializableTypes(graph, serializableType, compilation,
                     allTypesInCompilation,
                     context.ReportDiagnostic);
+            }
         }
 
         var problemDetails = compilation.GetTypeByMetadataName("Comptatata.Http.ProblemDetails");
@@ -572,13 +625,15 @@ public class HttpClientGenerator : IIncrementalGenerator
     class MethodInfo
     {
         public MethodInfo(IMethodSymbol method, ITypeSymbol? parameterType, string? parameterName,
-            string? cancellationTokenParameterName, bool isAsync)
+            string? cancellationTokenParameterName, bool isAsync, bool isStreaming, ITypeSymbol? streamingType)
         {
             Method = method;
             ParameterType = parameterType;
             ParameterName = parameterName;
             CancellationTokenParameterName = cancellationTokenParameterName;
             IsAsync = isAsync;
+            IsStreaming = isStreaming;
+            StreamingType = streamingType;
         }
 
         public IMethodSymbol Method { get; }
@@ -586,5 +641,7 @@ public class HttpClientGenerator : IIncrementalGenerator
         public string? ParameterName { get; }
         public string? CancellationTokenParameterName { get; }
         public bool IsAsync { get; }
+        public bool IsStreaming { get; }
+        public ITypeSymbol? StreamingType { get; }
     }
 }

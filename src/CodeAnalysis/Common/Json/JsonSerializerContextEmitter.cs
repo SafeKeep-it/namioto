@@ -292,6 +292,13 @@ public static class JsonSerializerContextEmitter
                named.ContainingNamespace?.ToDisplayString() == "System.Threading.Tasks";
     }
 
+    public static bool IsAsyncEnumerable(ITypeSymbol type)
+    {
+        return type is INamedTypeSymbol named &&
+               named.Name == "IAsyncEnumerable" &&
+               named.ContainingNamespace?.ToDisplayString() == "System.Collections.Generic";
+    }
+
     public static ITypeSymbol? UnwrapTask(ITypeSymbol type)
     {
         if (type is INamedTypeSymbol named && IsTask(named)) return named.IsGenericType ? named.TypeArguments[0] : null;
