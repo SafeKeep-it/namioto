@@ -156,9 +156,17 @@ public class HttpClientGenerator : IIncrementalGenerator
                 var symbolNames = GenerateFileForInterface(reg, compilation, context, manifest, sourcePath, addedHintNames);
                 manifest.RecordGeneration(sourcePath, outputPath, symbolNames);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // In a real source generator, we'd report a diagnostic here
+                // Report diagnostic for generator errors
+                var descriptor = new DiagnosticDescriptor(
+                    "HTTPGEN001",
+                    "HTTP Client Generator Error",
+                    "Error generating HTTP client: {0}",
+                    "CodeGeneration",
+                    DiagnosticSeverity.Error,
+                    isEnabledByDefault: true);
+                context.ReportDiagnostic(Diagnostic.Create(descriptor, Location.None, ex.Message));
             }
         }
 
