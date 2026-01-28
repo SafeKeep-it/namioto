@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Comptatata.CodeAnalysis.Web;
 
@@ -10,13 +10,20 @@ namespace Comptatata.CodeAnalysis.Web;
 public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
 {
     public const string DiagnosticId = "COMP0001";
-    private static readonly LocalizableString Title = "Use direct return instead of Results.Json";
-    private static readonly LocalizableString MessageFormat = "Minimal API handler returns Results.Json or TypedResults.Json. Return the object directly instead.";
-    private static readonly LocalizableString Description = "Returning the object directly is preferred in Minimal APIs as it allows for better type inference and is more AOT-friendly when combined with the COAST generator.";
-    private const string Category = "Usage";
+    const string Category = "Usage";
+    static readonly LocalizableString Title = "Use direct return instead of Results.Json";
+    static readonly LocalizableString MessageFormat =
+        "Minimal API handler returns Results.Json or TypedResults.Json. Return the object directly instead.";
+    static readonly LocalizableString Description =
+        "Returning the object directly is preferred in Minimal APIs as it allows for better type inference and is more AOT-friendly when combined with the COAST generator.";
 
-    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
-        DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+    static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
+                                                    Title,
+                                                    MessageFormat,
+                                                    Category,
+                                                    DiagnosticSeverity.Warning,
+                                                    true,
+                                                    Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -27,12 +34,12 @@ public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
         context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
     }
 
-    private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
+    void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
     {
         var invocation = (InvocationExpressionSyntax)context.Node;
-        
+
         // Check if it's a call to .Json()
-        if (invocation.Expression is not MemberAccessExpressionSyntax memberAccess || 
+        if (invocation.Expression is not MemberAccessExpressionSyntax memberAccess ||
             memberAccess.Name.Identifier.Text != "Json") return;
 
         // Check if it's on TypedResults or Results
@@ -40,7 +47,7 @@ public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
         if (symbol == null) return;
 
         var containingType = symbol.ContainingType.ToDisplayString();
-        if (containingType != "Microsoft.AspNetCore.Http.TypedResults" && 
+        if (containingType != "Microsoft.AspNetCore.Http.TypedResults" &&
             containingType != "Microsoft.AspNetCore.Http.Results") return;
 
         // Verify it's inside a MapGet/MapPost etc call (Minimal API handler)
@@ -50,7 +57,7 @@ public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
         context.ReportDiagnostic(diagnostic);
     }
 
-    private bool IsInsideMinimalApiHandler(SyntaxNode node)
+    bool IsInsideMinimalApiHandler(SyntaxNode node)
     {
         var current = node.Parent;
         while (current != null)
@@ -61,14 +68,16 @@ public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
                 var parentInvocation = current.Ancestors().OfType<InvocationExpressionSyntax>().FirstOrDefault();
                 if (parentInvocation != null)
                 {
-                    if (parentInvocation.Expression is MemberAccessExpressionSyntax ma && 
+                    if (parentInvocation.Expression is MemberAccessExpressionSyntax ma &&
                         ma.Name.Identifier.Text.StartsWith("Map")) return true;
-                    if (parentInvocation.Expression is IdentifierNameSyntax id && 
+                    if (parentInvocation.Expression is IdentifierNameSyntax id &&
                         id.Identifier.Text.StartsWith("Map")) return true;
                 }
             }
+
             current = current.Parent;
         }
+
         return false;
     }
 }

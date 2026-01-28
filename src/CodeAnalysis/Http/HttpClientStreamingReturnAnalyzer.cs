@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Comptatata.CodeAnalysis.Http;
 
@@ -10,13 +10,20 @@ namespace Comptatata.CodeAnalysis.Http;
 public class HttpClientStreamingReturnAnalyzer : DiagnosticAnalyzer
 {
     public const string DiagnosticId = "COMP0003";
-    private static readonly LocalizableString Title = "Use IAsyncEnumerable<T> instead of Task<IAsyncEnumerable<T>>";
-    private static readonly LocalizableString MessageFormat = "HTTP client method returns Task<IAsyncEnumerable<{0}>>. Return IAsyncEnumerable<{0}> directly instead.";
-    private static readonly LocalizableString Description = "Streaming HTTP methods should return IAsyncEnumerable<T> directly. Wrapping in Task<> adds unnecessary async overhead without benefits. The enumeration itself is already asynchronous.";
-    private const string Category = "Usage";
+    const string Category = "Usage";
+    static readonly LocalizableString Title = "Use IAsyncEnumerable<T> instead of Task<IAsyncEnumerable<T>>";
+    static readonly LocalizableString MessageFormat =
+        "HTTP client method returns Task<IAsyncEnumerable<{0}>>. Return IAsyncEnumerable<{0}> directly instead.";
+    static readonly LocalizableString Description =
+        "Streaming HTTP methods should return IAsyncEnumerable<T> directly. Wrapping in Task<> adds unnecessary async overhead without benefits. The enumeration itself is already asynchronous.";
 
-    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
-        DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+    static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
+                                                    Title,
+                                                    MessageFormat,
+                                                    Category,
+                                                    DiagnosticSeverity.Warning,
+                                                    true,
+                                                    Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -27,10 +34,10 @@ public class HttpClientStreamingReturnAnalyzer : DiagnosticAnalyzer
         context.RegisterSyntaxNodeAction(AnalyzeMethodDeclaration, SyntaxKind.MethodDeclaration);
     }
 
-    private void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
+    void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
     {
         var methodDeclaration = (MethodDeclarationSyntax)context.Node;
-        
+
         // Only analyze methods in interfaces
         if (methodDeclaration.Parent is not InterfaceDeclarationSyntax) return;
 
@@ -38,7 +45,7 @@ public class HttpClientStreamingReturnAnalyzer : DiagnosticAnalyzer
         if (methodSymbol == null) return;
 
         var returnType = methodSymbol.ReturnType;
-        
+
         // Check if return type is Task<T>
         if (returnType is not INamedTypeSymbol { IsGenericType: true } taskType) return;
         if (taskType.OriginalDefinition.ToDisplayString() != "System.Threading.Tasks.Task<TResult>") return;
@@ -46,7 +53,8 @@ public class HttpClientStreamingReturnAnalyzer : DiagnosticAnalyzer
         // Check if T is IAsyncEnumerable<U>
         var wrappedType = taskType.TypeArguments[0];
         if (wrappedType is not INamedTypeSymbol { IsGenericType: true } asyncEnumerableType) return;
-        if (asyncEnumerableType.OriginalDefinition.ToDisplayString() != "System.Collections.Generic.IAsyncEnumerable<T>") return;
+        if (asyncEnumerableType.OriginalDefinition.ToDisplayString() !=
+            "System.Collections.Generic.IAsyncEnumerable<T>") return;
 
         // Get the element type for the diagnostic message
         var elementType = asyncEnumerableType.TypeArguments[0];

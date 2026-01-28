@@ -17,8 +17,10 @@ public sealed class GeneratorManifest
     /// <summary>
     ///     Loads or creates a manifest for the given generator in the project's obj directory.
     /// </summary>
-    public static GeneratorManifest LoadOrCreate(string generatorName, string projectDirectory, string headerSignature,
-        string? projectName = null)
+    public static GeneratorManifest LoadOrCreate(string generatorName,
+                                                 string projectDirectory,
+                                                 string headerSignature,
+                                                 string? projectName = null)
     {
         var manifestPath = GetManifestPath(generatorName, projectDirectory, projectName);
         var manifest = new GeneratorManifest();
@@ -32,8 +34,8 @@ public sealed class GeneratorManifest
                     var parts = line.Split('|');
                     if (parts.Length >= 2)
                     {
-                        var symbols = parts.Length >= 3 ? parts[2].Split(',').ToList() : new List<string>();
-                        manifest.Entries[parts[0]] = new GeneratedFileInfo(parts[1], symbols);
+                        var symbols = parts.Length >= 3 ? parts[2].Split(',').ToList() : new();
+                        manifest.Entries[parts[0]] = new(parts[1], symbols);
                     }
                 }
 
@@ -70,7 +72,7 @@ public sealed class GeneratorManifest
     {
         var normalizedSourcePath = Path.GetFullPath(sourceFilePath);
         var normalizedGeneratedPath = Path.GetFullPath(generatedFilePath);
-        Entries[normalizedSourcePath] = new GeneratedFileInfo(normalizedGeneratedPath, symbolNames.ToList());
+        Entries[normalizedSourcePath] = new(normalizedGeneratedPath, symbolNames.ToList());
     }
 
     /// <summary>
@@ -95,9 +97,7 @@ public sealed class GeneratorManifest
                 {
                     File.Delete(info.GeneratedFilePath);
                 }
-                catch
-                {
-                }
+                catch { }
 
             Entries.Remove(normalizedPath);
         }
@@ -118,9 +118,7 @@ public sealed class GeneratorManifest
                 {
                     File.Delete(oldInfo.GeneratedFilePath);
                 }
-                catch
-                {
-                }
+                catch { }
 
             Entries.Remove(normalizedOldPath);
         }
@@ -143,7 +141,7 @@ public sealed class GeneratorManifest
         // Only remove from manifest tracking, do NOT delete files from disk.
         // Deleting files causes race conditions with MSBuild file enumeration.
         var staleKeys = Entries.Keys.Where(k => !currentSourceFiles.Contains(k)).ToList();
-        foreach (var key in staleKeys) RemoveEntry(key, deleteFile: false);
+        foreach (var key in staleKeys) RemoveEntry(key, false);
     }
 
     static string GetManifestPath(string generatorName, string projectDirectory, string? projectName = null)
@@ -186,8 +184,9 @@ public sealed class GeneratorManifest
     {
         try
         {
-            foreach (var generatedFile in Directory.GetFiles(projectDirectory, "*.generated.cs",
-                         SearchOption.AllDirectories))
+            foreach (var generatedFile in Directory.GetFiles(projectDirectory,
+                                                             "*.generated.cs",
+                                                             SearchOption.AllDirectories))
             {
                 // Verify ownership by checking the header signature
                 var isOwned = false;
@@ -197,9 +196,7 @@ public sealed class GeneratorManifest
                     var firstLine = reader.ReadLine();
                     if (firstLine != null && firstLine.Contains(signature)) isOwned = true;
                 }
-                catch
-                {
-                }
+                catch { }
 
                 if (isOwned)
                 {
@@ -212,13 +209,11 @@ public sealed class GeneratorManifest
 
                     // Add to entries even if source file doesn't exist (it might have been deleted/renamed)
                     // This allows CleanupStaleEntries to detect and remove it.
-                    Entries[normalizedSourceFile] = new GeneratedFileInfo(normalizedGeneratedFile, new List<string>());
+                    Entries[normalizedSourceFile] = new(normalizedGeneratedFile, new());
                 }
             }
         }
-        catch
-        {
-        }
+        catch { }
     }
 }
 

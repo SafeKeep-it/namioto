@@ -13,24 +13,24 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var services = context.SyntaxProvider
-            .CreateSyntaxProvider<ImmutableArray<ITypeSymbol>>(
-                static (s, _) => IsServiceRegistration(s),
-                static (ctx, ct) => GetServiceTypes(ctx, ct))
-            .SelectMany(static (ts, _) => ts);
+                              .CreateSyntaxProvider<ImmutableArray<ITypeSymbol>>(
+                                  static (s, _) => IsServiceRegistration(s),
+                                  static (ctx, ct) => GetServiceTypes(ctx, ct))
+                              .SelectMany(static (ts, _) => ts);
 
         var maps = context.SyntaxProvider
-            .CreateSyntaxProvider<RawMapInfo?>(
-                static (s, _) => IsMapInvocation(s),
-                static (ctx, ct) => GetRawMapInfo(ctx, ct))
-            .Where(static m => m is not null)
-            .Select(static (m, _) => m!);
+                          .CreateSyntaxProvider<RawMapInfo?>(static (s, _) => IsMapInvocation(s),
+                                                             static (ctx, ct) => GetRawMapInfo(ctx, ct))
+                          .Where(static m => m is not null)
+                          .Select(static (m, _) => m!);
 
         var compilationAndMaps = context.CompilationProvider
-            .Combine(maps.Collect())
-            .Combine(services.Collect());
+                                        .Combine(maps.Collect())
+                                        .Combine(services.Collect());
 
         context.RegisterSourceOutput(compilationAndMaps,
-            static (spc, source) => Execute(source.Left.Left, source.Left.Right, source.Right, spc));
+                                     static (spc, source) =>
+                                         Execute(source.Left.Left, source.Left.Right, source.Right, spc));
     }
 
     static bool IsServiceRegistration(SyntaxNode node)
@@ -38,7 +38,7 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         if (node is not InvocationExpressionSyntax invocation) return false;
         var name = GetMethodName(invocation);
         return name is "AddSingleton" or "AddScoped" or "AddTransient" or "AddHttpClient" or "AddKeyedSingleton"
-            or "AddKeyedScoped" or "AddKeyedTransient";
+                       or "AddKeyedScoped" or "AddKeyedTransient";
     }
 
     static ImmutableArray<ITypeSymbol> GetServiceTypes(GeneratorSyntaxContext context, CancellationToken ct)
@@ -59,6 +59,7 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
                 results.Add(arg);
 
         foreach (var arg in invocation.ArgumentList.Arguments)
+        {
             if (arg.Expression is TypeOfExpressionSyntax typeOf)
             {
                 var type = context.SemanticModel.GetTypeInfo(typeOf.Type, ct).Type;
@@ -70,6 +71,7 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
                 if (typeInfo.Type != null && typeInfo.Type.SpecialType != SpecialType.System_Object)
                     results.Add(typeInfo.Type);
             }
+        }
 
         return results.ToImmutableArray();
     }
@@ -133,16 +135,18 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
             if (genericUnwrapped.TypeArguments.Any(ImplementsIResult))
                 returnType = null;
 
-        var parameters = handlerSymbol.Parameters.Select(p => new ParameterInfo(
-            p.Type,
-            IsExplicitBodyParameter(p),
-            IsCandidateBodyParameter(p)
-        )).ToImmutableArray();
+        var parameters = handlerSymbol.Parameters.Select(p => new ParameterInfo(p.Type,
+                                                             IsExplicitBodyParameter(p),
+                                                             IsCandidateBodyParameter(p)))
+                                      .ToImmutableArray();
 
-        return new RawMapInfo(invocation.SyntaxTree.FilePath, ns, serializerName, accessibility, returnType,
-            parameters);
+        return new(invocation.SyntaxTree.FilePath,
+                   ns,
+                   serializerName,
+                   accessibility,
+                   returnType,
+                   parameters);
     }
-
 
     static bool IsMapInvocation(SyntaxNode node)
     {
@@ -160,7 +164,6 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         return null;
     }
 
-
     static string GetNamespace(SyntaxNode node)
     {
         var ns = node.Ancestors().OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
@@ -175,12 +178,12 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         return containingType == "Microsoft.AspNetCore.Builder.EndpointRouteBuilderExtensions";
     }
 
-
     static bool IsExplicitBodyParameter(IParameterSymbol param)
     {
-        return param.GetAttributes().Any(attr =>
-            attr.AttributeClass?.Name == "FromBodyAttribute" &&
-            attr.AttributeClass?.ContainingNamespace?.ToDisplayString() == "Microsoft.AspNetCore.Mvc");
+        return param.GetAttributes()
+                    .Any(attr =>
+                             attr.AttributeClass?.Name == "FromBodyAttribute" &&
+                             attr.AttributeClass?.ContainingNamespace?.ToDisplayString() == "Microsoft.AspNetCore.Mvc");
     }
 
     static bool IsCandidateBodyParameter(IParameterSymbol param)
@@ -200,8 +203,8 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         {
             var attrName = attr.AttributeClass?.Name;
             if (attrName is "FromServicesAttribute" or "FromRouteAttribute" or "FromQueryAttribute"
-                or "FromHeaderAttribute" or "AsParametersAttribute" or "FromKeyedServicesAttribute"
-                or "FromFormAttribute")
+                            or "FromHeaderAttribute" or "AsParametersAttribute" or "FromKeyedServicesAttribute"
+                            or "FromFormAttribute")
                 return false;
         }
 
@@ -215,9 +218,9 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
             return true;
 
         return type.AllInterfaces.Any(i =>
-            i.Name == "IResult" && i.ContainingNamespace?.ToDisplayString() == "Microsoft.AspNetCore.Http");
+                                          i.Name == "IResult" && i.ContainingNamespace?.ToDisplayString() ==
+                                          "Microsoft.AspNetCore.Http");
     }
-
 
     static bool IsRelevantType(ITypeSymbol type)
     {
@@ -230,8 +233,10 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         return true;
     }
 
-    static void Execute(Compilation compilation, ImmutableArray<RawMapInfo> maps, ImmutableArray<ITypeSymbol> services,
-        SourceProductionContext context)
+    static void Execute(Compilation compilation,
+                        ImmutableArray<RawMapInfo> maps,
+                        ImmutableArray<ITypeSymbol> services,
+                        SourceProductionContext context)
     {
         if (maps.IsDefaultOrEmpty) return;
 
@@ -282,9 +287,12 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
                 foreach (var raw in serializerGroup)
                 {
                     if (raw.ReturnType != null && !ImplementsIResult(raw.ReturnType))
-                        JsonSerializerContextEmitter.AddSerializableTypes(graph, raw.ReturnType, compilation,
-                            allTypesInCompilation,
-                            context.ReportDiagnostic, IsRelevantType);
+                        JsonSerializerContextEmitter.AddSerializableTypes(graph,
+                                                                          raw.ReturnType,
+                                                                          compilation,
+                                                                          allTypesInCompilation,
+                                                                          context.ReportDiagnostic,
+                                                                          IsRelevantType);
 
                     ITypeSymbol? bodyParam = null;
                     foreach (var p in raw.Parameters)
@@ -300,9 +308,12 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
                     }
 
                     if (bodyParam != null)
-                        JsonSerializerContextEmitter.AddSerializableTypes(graph, bodyParam, compilation,
-                            allTypesInCompilation,
-                            context.ReportDiagnostic, IsRelevantType);
+                        JsonSerializerContextEmitter.AddSerializableTypes(graph,
+                                                                          bodyParam,
+                                                                          compilation,
+                                                                          allTypesInCompilation,
+                                                                          context.ReportDiagnostic,
+                                                                          IsRelevantType);
                 }
 
                 if (graph.GetAllTypes().Count == 0) continue;
@@ -315,8 +326,12 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
                 diskSb.AppendLine();
 
                 // Emit runtime members via AddSource
-                JsonSerializerContextEmitter.EmitRuntimeMembers(sb, serializerGroup.Key, accessibility, graph,
-                    "SerializerOptions", "ConstructPolymorphism");
+                JsonSerializerContextEmitter.EmitRuntimeMembers(sb,
+                                                                serializerGroup.Key,
+                                                                accessibility,
+                                                                graph,
+                                                                "SerializerOptions",
+                                                                "ConstructPolymorphism");
                 sb.AppendLine();
             }
 
@@ -335,9 +350,7 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
                 if (!File.Exists(outputPath) || File.ReadAllText(outputPath) != diskContent)
                     File.WriteAllText(outputPath, diskContent);
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
 
             // Add runtime code via AddSource for IDE incremental updates
             // Use a hash of the full path to ensure unique hint names across directories
@@ -363,8 +376,12 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
 
     class RawMapInfo
     {
-        public RawMapInfo(string filePath, string ns, string serializerName, string accessibility,
-            ITypeSymbol? returnType, ImmutableArray<ParameterInfo> parameters)
+        public RawMapInfo(string filePath,
+                          string ns,
+                          string serializerName,
+                          string accessibility,
+                          ITypeSymbol? returnType,
+                          ImmutableArray<ParameterInfo> parameters)
         {
             FilePath = filePath;
             Namespace = ns;
