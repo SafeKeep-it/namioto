@@ -338,6 +338,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine(
                     $"        var request = await {contextClassName}.DeserializeAsync(stream, ct).ConfigureAwait(false);");
                 sb.AppendLine(
+                    "        if (request != null && global::Comptatata.SpoolBus.MessageExpiryExtensions.IsExpired(request)) return false;");
+                sb.AppendLine(
                     $"        {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}? handler = null;");
                 sb.AppendLine("        var handled = false;");
                 sb.AppendLine();
