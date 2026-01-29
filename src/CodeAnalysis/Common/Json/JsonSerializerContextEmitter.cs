@@ -245,8 +245,9 @@ public static class JsonSerializerContextEmitter
                     return;
 
             foreach (var member in ns.GetMembers())
-                if (member is INamespaceOrTypeSymbol nested)
-                    CollectTypes(nested, types);
+            {
+                if (member is INamespaceOrTypeSymbol nested) CollectTypes(nested, types);
+            }
         }
         else if (symbol is INamedTypeSymbol type)
         {
@@ -507,6 +508,8 @@ public static class JsonSerializerContextEmitter
         sb.AppendLine($"{indent}        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,");
         sb.AppendLine($"{indent}        RespectNullableAnnotations = true,");
         sb.AppendLine($"{indent}        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,");
+        sb.AppendLine(
+            $"{indent}        Converters = {{ new global::Comptatata.SpoolDrop.Messages.SpanTraceConverter() }}");
         sb.AppendLine($"{indent}    }};");
         // Use fully qualified access to Default to allow resolution at runtime when STJ has generated it
         if (!string.IsNullOrEmpty(className))
