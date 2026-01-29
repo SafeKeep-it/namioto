@@ -325,13 +325,19 @@ public class HttpClientGenerator : IIncrementalGenerator
 
         sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
         sb.AppendLine(
-            $"file class {interfaceType.Name}Implementation : {interfaceType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}");
+            $"file class {interfaceType.Name}Implementation : {interfaceType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}, global::System.IAsyncDisposable");
         sb.AppendLine("{");
         sb.AppendLine("    private readonly HttpClient _client;");
         sb.AppendLine($"    public {interfaceType.Name}Implementation(HttpClient client)");
         sb.AppendLine("    {");
         sb.AppendLine("        _client = client;");
         sb.AppendLine($"        _ = {serializerClassName}.SerializerOptions;");
+        sb.AppendLine("    }");
+        sb.AppendLine();
+        sb.AppendLine("    public ValueTask DisposeAsync()");
+        sb.AppendLine("    {");
+        sb.AppendLine("        _client.Dispose();");
+        sb.AppendLine("        return ValueTask.CompletedTask;");
         sb.AppendLine("    }");
         sb.AppendLine();
 
