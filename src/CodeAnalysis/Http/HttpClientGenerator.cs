@@ -340,22 +340,38 @@ public class HttpClientGenerator : IIncrementalGenerator
             var parameters = string.Join(", ",
                                          method.Method.Parameters.Select(p =>
                                          {
-                                             var attr = method.IsStreaming &&
-                                                        p.Name == method.CancellationTokenParameterName
-                                                 ? "[global::System.Runtime.CompilerServices.EnumeratorCancellation] "
-                                                 : "";
+                                             var attr =
+                                                 method.IsStreaming && p.Name == method.CancellationTokenParameterName
+                                                     ? "[global::System.Runtime.CompilerServices.EnumeratorCancellation] "
+                                                     : "";
                                              return
                                                  $"{attr}{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {p.Name}";
                                          }));
             var asyncKeyword = method.IsAsync ? "async " : "";
 
+            var methodName = method.Method.Name;
+            var unwrappedReturn = JsonSerializerContextEmitter.UnwrapTask(method.Method.ReturnType);
+            var isHttpResponseMessage = unwrappedReturn is not null &&
+                                        IsHttpResponseMessage(unwrappedReturn, compilation);
+
+            ITypeSymbol? rawEntityType = null;
+            var isRawResponse = unwrappedReturn is not null &&
+                                TryGetHttpResponseEntityType(unwrappedReturn, compilation, out rawEntityType);
+
+            // Determine if we need a suffix
+            var hasBoth = info.Methods.Any(m => m != method && m.Method.Name == method.Method.Name);
+            if (hasBoth)
+            {
+                if (isRawResponse || isHttpResponseMessage)
+                    methodName += "Message";
+                else
+                    methodName += "Poco";
+            }
+
             sb.AppendLine(
-                $"    public {asyncKeyword}{method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {method.Method.Name}({parameters})");
+                $"    public {asyncKeyword}{method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {methodName}({parameters})");
             sb.AppendLine("    {");
 
-            var unwrappedReturn = JsonSerializerContextEmitter.UnwrapTask(method.Method.ReturnType);
-            var isHttpResponseMessage =
-                unwrappedReturn is not null && IsHttpResponseMessage(unwrappedReturn, compilation);
             var urlPath = GetUrlPath(method.Method.Name, out var httpMethod);
             var requestMethod = CommonMethods.Contains(httpMethod)
                 ? $"global::System.Net.Http.HttpMethod.{httpMethod}"
@@ -418,7 +434,7 @@ public class HttpClientGenerator : IIncrementalGenerator
                 sb.AppendLine("        if (!response.IsSuccessStatusCode)");
                 sb.AppendLine("        {");
                 sb.AppendLine(
-                    $"            await global::Comptatata.Http.HttpClientHelper.RequestVoidAsync(_client, currentUri, currentMethod, {contentFactory}, {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
+                    $"            await global::Comptatata.Http.HttpClientHelper.RequestPocoVoidAsync(_client, currentUri, currentMethod, {contentFactory}, {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
                 sb.AppendLine("        }");
                 sb.AppendLine();
                 sb.AppendLine(
@@ -449,10 +465,6 @@ public class HttpClientGenerator : IIncrementalGenerator
                 continue;
             }
 
-            ITypeSymbol? rawEntityType = null;
-            var isRawResponse = unwrappedReturn is not null &&
-                                TryGetHttpResponseEntityType(unwrappedReturn, compilation, out rawEntityType);
-
             sb.AppendLine(
                 $"        var currentUri = new global::System.Uri(\"{urlPath}\", global::System.UriKind.RelativeOrAbsolute);");
             sb.AppendLine($"        var currentMethod = {requestMethod};");
@@ -464,7 +476,7 @@ public class HttpClientGenerator : IIncrementalGenerator
 
                 if (isRawResponse)
                 {
-                    sb.AppendLine("        return await global::Comptatata.Http.HttpClientHelper.RequestRawAsync(");
+                    sb.AppendLine("        return await global::Comptatata.Http.HttpClientHelper.RequestMessageAsync(");
                     sb.AppendLine($"            _client, currentUri, currentMethod, {contentFactory},");
                     sb.AppendLine(
                         $"            {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(rawEntityType!)},");
@@ -473,7 +485,7 @@ public class HttpClientGenerator : IIncrementalGenerator
                 }
                 else
                 {
-                    sb.AppendLine("        return await global::Comptatata.Http.HttpClientHelper.RequestAsync(");
+                    sb.AppendLine("        return await global::Comptatata.Http.HttpClientHelper.RequestPocoAsync(");
                     sb.AppendLine($"            _client, currentUri, currentMethod, {contentFactory},");
                     sb.AppendLine(
                         $"            {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(resultType)},");
@@ -483,7 +495,7 @@ public class HttpClientGenerator : IIncrementalGenerator
             }
             else
             {
-                sb.AppendLine("        await global::Comptatata.Http.HttpClientHelper.RequestVoidAsync(");
+                sb.AppendLine("        await global::Comptatata.Http.HttpClientHelper.RequestPocoVoidAsync(");
                 sb.AppendLine($"            _client, currentUri, currentMethod, {contentFactory},");
                 sb.AppendLine(
                     $"            {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
@@ -522,6 +534,12 @@ public class HttpClientGenerator : IIncrementalGenerator
         // Strip "Async" suffix if present
         if (methodName.EndsWith("Async", StringComparison.Ordinal))
             methodName = methodName.Substring(0, methodName.Length - 5);
+
+        if (methodName.EndsWith("Message", StringComparison.Ordinal))
+            methodName = methodName.Substring(0, methodName.Length - 7);
+
+        if (methodName.EndsWith("Poco", StringComparison.Ordinal))
+            methodName = methodName.Substring(0, methodName.Length - 4);
 
         if (string.IsNullOrEmpty(methodName) || methodName == "Async") return "/";
 
