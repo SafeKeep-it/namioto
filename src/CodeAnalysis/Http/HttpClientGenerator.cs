@@ -438,15 +438,9 @@ public class HttpClientGenerator : IIncrementalGenerator
                 sb.AppendLine(
                     "        if (contentType is not null && contentType.Contains(\"ndjson\", global::System.StringComparison.OrdinalIgnoreCase))");
                 sb.AppendLine("        {");
-                sb.AppendLine("            using var reader = new global::System.IO.StreamReader(stream);");
                 sb.AppendLine(
-                    $"            while (await reader.ReadLineAsync({ctArg}).ConfigureAwait(false) is string line)");
-                sb.AppendLine("            {");
-                sb.AppendLine("                if (string.IsNullOrWhiteSpace(line)) continue;");
-                sb.AppendLine(
-                    $"                var item = global::System.Text.Json.JsonSerializer.Deserialize<{streamingTypeStr}>(line, {serializerClassName}.Generated.{streamingTypePropertyName});");
-                sb.AppendLine("                if (item is not null) yield return item;");
-                sb.AppendLine("            }");
+                    $"            await foreach (var item in global::Comptatata.Http.NdjsonReader.ReadAsync(stream, {serializerClassName}.Generated.{streamingTypePropertyName}, {ctArg}).ConfigureAwait(false))");
+                sb.AppendLine("                yield return item;");
                 sb.AppendLine("        }");
                 sb.AppendLine("        else");
                 sb.AppendLine("        {");
