@@ -54,7 +54,8 @@ public class HttpClientStreamingReturnAnalyzer : DiagnosticAnalyzer
         var wrappedType = taskType.TypeArguments[0];
         if (wrappedType is not INamedTypeSymbol { IsGenericType: true } asyncEnumerableType) return;
         if (asyncEnumerableType.OriginalDefinition.ToDisplayString() !=
-            "System.Collections.Generic.IAsyncEnumerable<T>") return;
+            "System.Collections.Generic.IAsyncEnumerable<T>")
+            return;
 
         // Get the element type for the diagnostic message
         var elementType = asyncEnumerableType.TypeArguments[0];

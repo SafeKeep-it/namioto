@@ -12,20 +12,57 @@ public class HttpClientGenerator : IIncrementalGenerator
 {
     static readonly HashSet<string> CommonMethods = new(StringComparer.Ordinal)
                                                     {
-                                                        "Delete", "Get", "Head", "Options", "Patch", "Post", "Put",
+                                                        "Delete",
+                                                        "Get",
+                                                        "Head",
+                                                        "Options",
+                                                        "Patch",
+                                                        "Post",
+                                                        "Put",
                                                         "Trace"
                                                     };
 
     static readonly string[] KnownMethods = new[]
         {
-            "Acl", "BaselineControl", "Bind", "Checkin", "Checkout", "Connect",
-            "Copy", "Delete", "Get", "Head",
-            "Label", "Link", "Lock", "Merge", "MkActivity", "MkCalendar", "MkCol",
-            "MkRedirectRef", "MkWorkspace",
-            "Move", "Options", "OrderPatch", "Patch", "Post", "Pri", "PropFind",
-            "PropPatch", "Put", "Query", "Rebind",
-            "Report", "Search", "Trace", "Unbind", "Uncheckout", "Unlink", "Unlock",
-            "Update", "UpdateRedirectRef",
+            "Acl",
+            "BaselineControl",
+            "Bind",
+            "Checkin",
+            "Checkout",
+            "Connect",
+            "Copy",
+            "Delete",
+            "Get",
+            "Head",
+            "Label",
+            "Link",
+            "Lock",
+            "Merge",
+            "MkActivity",
+            "MkCalendar",
+            "MkCol",
+            "MkRedirectRef",
+            "MkWorkspace",
+            "Move",
+            "Options",
+            "OrderPatch",
+            "Patch",
+            "Post",
+            "Pri",
+            "PropFind",
+            "PropPatch",
+            "Put",
+            "Query",
+            "Rebind",
+            "Report",
+            "Search",
+            "Trace",
+            "Unbind",
+            "Uncheckout",
+            "Unlink",
+            "Unlock",
+            "Update",
+            "UpdateRedirectRef",
             "VersionControl"
         }.OrderByDescending(m => m.Length)
          .ToArray();
@@ -100,9 +137,8 @@ public class HttpClientGenerator : IIncrementalGenerator
         var distinctRegistrations = registrations.Distinct(RegistrationComparer.Instance).ToList();
         if (distinctRegistrations.Count == 0) return;
 
-        var firstSourcePath = distinctRegistrations
-                              .Select(r => r.SourceFilePath)
-                              .FirstOrDefault(p => !string.IsNullOrEmpty(p));
+        var firstSourcePath = distinctRegistrations.Select(r => r.SourceFilePath)
+                                                   .FirstOrDefault(p => !string.IsNullOrEmpty(p));
 
         var projectDirectory = GeneratorManifest.FindProjectRoot(firstSourcePath);
         if (projectDirectory == null) return;
@@ -125,9 +161,8 @@ public class HttpClientGenerator : IIncrementalGenerator
         // Group by source file path - each source file gets its own generated file
         // with its own uniquely-named serialization context.
         // NO deduplication - each usage site gets its own serializer.
-        var byOutputPath = distinctRegistrations
-                           .GroupBy(r => r.SourceFilePath)
-                           .Where(g => !string.IsNullOrEmpty(g.Key));
+        var byOutputPath = distinctRegistrations.GroupBy(r => r.SourceFilePath)
+                                                .Where(g => !string.IsNullOrEmpty(g.Key));
 
         foreach (var group in byOutputPath)
         {
@@ -466,8 +501,7 @@ public class HttpClientGenerator : IIncrementalGenerator
         var hintName = $"{sourceFileName}.{interfaceType.Name}.g.cs";
 
         // Only add if not already added (prevents duplicates when same interface used multiple times)
-        if (addedHintNames.Add(hintName))
-            context.AddSource(hintName, runtimeContent);
+        if (addedHintNames.Add(hintName)) context.AddSource(hintName, runtimeContent);
 
         return symbolNames;
     }
@@ -599,13 +633,7 @@ public class HttpClientGenerator : IIncrementalGenerator
             var isAsync = JsonSerializerContextEmitter.IsTask(member.ReturnType) || isStreaming;
             var streamingType = isStreaming ? ((INamedTypeSymbol)streamingReturnType).TypeArguments[0] : null;
 
-            methods.Add(new(member,
-                            paramType,
-                            paramName,
-                            ctName,
-                            isAsync || isStreaming,
-                            isStreaming,
-                            streamingType));
+            methods.Add(new(member, paramType, paramName, ctName, isAsync || isStreaming, isStreaming, streamingType));
 
             if (paramType != null)
                 JsonSerializerContextEmitter.AddSerializableTypes(graph,

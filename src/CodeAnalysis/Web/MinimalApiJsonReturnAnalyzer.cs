@@ -40,7 +40,8 @@ public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
 
         // Check if it's a call to .Json()
         if (invocation.Expression is not MemberAccessExpressionSyntax memberAccess ||
-            memberAccess.Name.Identifier.Text != "Json") return;
+            memberAccess.Name.Identifier.Text != "Json")
+            return;
 
         // Check if it's on TypedResults or Results
         var symbol = context.SemanticModel.GetSymbolInfo(invocation, context.CancellationToken).Symbol as IMethodSymbol;
@@ -48,7 +49,8 @@ public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
 
         var containingType = symbol.ContainingType.ToDisplayString();
         if (containingType != "Microsoft.AspNetCore.Http.TypedResults" &&
-            containingType != "Microsoft.AspNetCore.Http.Results") return;
+            containingType != "Microsoft.AspNetCore.Http.Results")
+            return;
 
         // Verify it's inside a MapGet/MapPost etc call (Minimal API handler)
         if (!IsInsideMinimalApiHandler(invocation)) return;
@@ -69,9 +71,10 @@ public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
                 if (parentInvocation != null)
                 {
                     if (parentInvocation.Expression is MemberAccessExpressionSyntax ma &&
-                        ma.Name.Identifier.Text.StartsWith("Map")) return true;
-                    if (parentInvocation.Expression is IdentifierNameSyntax id &&
-                        id.Identifier.Text.StartsWith("Map")) return true;
+                        ma.Name.Identifier.Text.StartsWith("Map"))
+                        return true;
+                    if (parentInvocation.Expression is IdentifierNameSyntax id && id.Identifier.Text.StartsWith("Map"))
+                        return true;
                 }
             }
 

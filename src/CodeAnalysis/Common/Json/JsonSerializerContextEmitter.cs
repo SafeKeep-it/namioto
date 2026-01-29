@@ -39,8 +39,7 @@ public static class JsonSerializerContextEmitter
         foreach (var b in Encoding.UTF8.GetBytes(discriminator))
         {
             crc ^= b;
-            for (var i = 0; i < 8; i++)
-                crc = (crc >> 1) ^ (0xEDB88320 & (uint)-(int)(crc & 1));
+            for (var i = 0; i < 8; i++) crc = (crc >> 1) ^ (0xEDB88320 & (uint)-(int)(crc & 1));
         }
 
         crc = ~crc;
@@ -149,8 +148,7 @@ public static class JsonSerializerContextEmitter
         var root = GetNearestPolymorphicRoot(candidate);
         if (root == null)
         {
-            if (filter == null || filter(candidate))
-                graph.AddNonPolymorphic(candidate);
+            if (filter == null || filter(candidate)) graph.AddNonPolymorphic(candidate);
             return;
         }
 
@@ -164,11 +162,11 @@ public static class JsonSerializerContextEmitter
                 // Check if root is an interface implemented by current
                 if (current.AllInterfaces.Any(i => SymbolEqualityComparer.Default.Equals(i, root)))
                     parent = root;
-                else break;
+                else
+                    break;
             }
 
-            if (filter == null || filter(current))
-                graph.AddPolymorphic(root, parent, current);
+            if (filter == null || filter(current)) graph.AddPolymorphic(root, parent, current);
 
             current = parent;
         }
@@ -176,8 +174,7 @@ public static class JsonSerializerContextEmitter
         // Ensure root is initialized in its family
         if (filter == null || filter(root))
             if (!graph.Families.ContainsKey(root))
-                graph.Families[root] =
-                    new(SymbolEqualityComparer.Default);
+                graph.Families[root] = new(SymbolEqualityComparer.Default);
 
         // 2. Downward fan-out: Only descendants of the starting type are registered and explored
         if (!candidate.IsSealed || candidate.TypeKind == TypeKind.Interface)
@@ -191,12 +188,14 @@ public static class JsonSerializerContextEmitter
                                Func<ITypeSymbol, bool>? filter)
     {
         // Find immediate children of 'parent' in the compilation
-        var immediateChildren = allTypesInCompilation
-                                .Where(t => !SymbolEqualityComparer.Default.Equals(t, parent))
-                                .Where(t => SymbolEqualityComparer.Default.Equals(t.BaseType, parent) ||
-                                            (parent.TypeKind == TypeKind.Interface &&
-                                             t.Interfaces.Any(i => SymbolEqualityComparer.Default.Equals(i, parent))))
-                                .ToList();
+        var immediateChildren = allTypesInCompilation.Where(t => !SymbolEqualityComparer.Default.Equals(t, parent))
+                                                     .Where(t =>
+                                                                SymbolEqualityComparer.Default.Equals(
+                                                                    t.BaseType,
+                                                                    parent) || (parent.TypeKind == TypeKind.Interface &&
+                                                                    t.Interfaces.Any(i => SymbolEqualityComparer.Default
+                                                                        .Equals(i, parent))))
+                                                     .ToList();
 
         foreach (var child in immediateChildren)
         {
@@ -241,14 +240,13 @@ public static class JsonSerializerContextEmitter
             // Further pruning for System sub-namespaces
             var fullNs = ns.ToDisplayString();
             if (fullNs.StartsWith("System."))
-                if (fullNs is "System.Text.Json" or "System.Threading.Tasks" or "System.Security" or "System.Reflection"
-                              or "System.Runtime" or "System.Net.Http" or "System.Collections")
+                if (fullNs is "System.Text.Json" or "System.Threading.Tasks" or "System.Security" or
+                              "System.Reflection" or "System.Runtime" or "System.Net.Http" or "System.Collections")
                     return;
 
             foreach (var member in ns.GetMembers())
             {
-                if (member is INamespaceOrTypeSymbol nested)
-                    CollectTypes(nested, types);
+                if (member is INamespaceOrTypeSymbol nested) CollectTypes(nested, types);
             }
         }
         else if (symbol is INamedTypeSymbol type)
@@ -256,19 +254,17 @@ public static class JsonSerializerContextEmitter
             if (IsRelevantType(type))
             {
                 types.Add(type);
-                foreach (var nested in type.GetTypeMembers())
-                    CollectTypes(nested, types);
+                foreach (var nested in type.GetTypeMembers()) CollectTypes(nested, types);
             }
         }
     }
 
-    public static void AddSerializableTypes(
-        SerializationGraph graph,
-        ITypeSymbol? type,
-        Compilation compilation,
-        IEnumerable<ITypeSymbol> allTypesInCompilation,
-        Action<Diagnostic>? reportError = null,
-        Func<ITypeSymbol, bool>? filter = null)
+    public static void AddSerializableTypes(SerializationGraph graph,
+                                            ITypeSymbol? type,
+                                            Compilation compilation,
+                                            IEnumerable<ITypeSymbol> allTypesInCompilation,
+                                            Action<Diagnostic>? reportError = null,
+                                            Func<ITypeSymbol, bool>? filter = null)
     {
         if (type == null || type.SpecialType == SpecialType.System_Object) return;
 
@@ -292,23 +288,16 @@ public static class JsonSerializerContextEmitter
 
     public static bool IsEnvelope(ITypeSymbol type)
     {
-        return type is INamedTypeSymbol named &&
-               named.GetAttributes().Any(a => a.AttributeClass?.Name == "Envelope");
+        return type is INamedTypeSymbol named && named.GetAttributes().Any(a => a.AttributeClass?.Name == "Envelope");
     }
 
-    public static bool IsTask(ITypeSymbol type)
-    {
-        return type is INamedTypeSymbol named &&
-               (named.Name == "Task" || named.Name == "ValueTask") &&
-               named.ContainingNamespace?.ToDisplayString() == "System.Threading.Tasks";
-    }
+    public static bool IsTask(ITypeSymbol type) =>
+        type is INamedTypeSymbol named && (named.Name == "Task" || named.Name == "ValueTask") &&
+        named.ContainingNamespace?.ToDisplayString() == "System.Threading.Tasks";
 
-    public static bool IsAsyncEnumerable(ITypeSymbol type)
-    {
-        return type is INamedTypeSymbol named &&
-               named.Name == "IAsyncEnumerable" &&
-               named.ContainingNamespace?.ToDisplayString() == "System.Collections.Generic";
-    }
+    public static bool IsAsyncEnumerable(ITypeSymbol type) =>
+        type is INamedTypeSymbol named && named.Name == "IAsyncEnumerable" &&
+        named.ContainingNamespace?.ToDisplayString() == "System.Collections.Generic";
 
     public static ITypeSymbol? UnwrapTask(ITypeSymbol type)
     {
@@ -360,7 +349,8 @@ public static class JsonSerializerContextEmitter
         // Exclude compiler-generated types and open generics
         if (type.Name.Contains("<") || type.Name.Contains("__")) return false;
         if (type is INamedTypeSymbol named && named.IsGenericType &&
-            named.TypeArguments.Any(t => t.TypeKind == TypeKind.TypeParameter)) return false;
+            named.TypeArguments.Any(t => t.TypeKind == TypeKind.TypeParameter))
+            return false;
 
         // Don't register serializer contexts themselves
         var current = type;
@@ -388,12 +378,12 @@ public static class JsonSerializerContextEmitter
 
         if (ns == "System")
         {
-            if (type.Name is "IServiceProvider" or "CancellationToken" or "ValueType" or "Enum" or "Guid"
-                             or "DateTimeOffset" or "TimeSpan" or "Uri" or "Version" or "Type" or "RuntimeTypeHandle" or
-                             "Delegate"
-                             or "MulticastDelegate") return false;
-            if (type.Name is "Func" or "Action" || type.Name.StartsWith("Func`") ||
-                type.Name.StartsWith("Action`")) return false;
+            if (type.Name is "IServiceProvider" or "CancellationToken" or "ValueType" or "Enum" or "Guid" or
+                             "DateTimeOffset" or "TimeSpan" or "Uri" or "Version" or "Type" or "RuntimeTypeHandle" or
+                             "Delegate" or "MulticastDelegate")
+                return false;
+            if (type.Name is "Func" or "Action" || type.Name.StartsWith("Func`") || type.Name.StartsWith("Action`"))
+                return false;
         }
 
         return true;
@@ -436,9 +426,7 @@ public static class JsonSerializerContextEmitter
         return $"GetTokenChain_{name}";
     }
 
-    public static void EmitDiscriminatorMethods(StringBuilder sb,
-                                                SerializationGraph graph,
-                                                string indent = "    ")
+    public static void EmitDiscriminatorMethods(StringBuilder sb, SerializationGraph graph, string indent = "    ")
     {
         foreach (var family in graph.Families.OrderBy(f => f.Key.ToDisplayString()))
         {
@@ -471,9 +459,7 @@ public static class JsonSerializerContextEmitter
             sb.AppendLine($"{indent}public static string GetDiscriminator(object value) => \"unknown\";");
     }
 
-    public static void EmitTokenChainMethods(StringBuilder sb,
-                                             SerializationGraph graph,
-                                             string indent = "    ")
+    public static void EmitTokenChainMethods(StringBuilder sb, SerializationGraph graph, string indent = "    ")
     {
         foreach (var family in graph.Families.OrderBy(f => f.Key.ToDisplayString()))
         {
@@ -546,9 +532,8 @@ public static class JsonSerializerContextEmitter
             var hierarchy = familyEntry.Value;
 
             var polyAttr = root.GetAttributes()
-                               .FirstOrDefault(a =>
-                                                   a.AttributeClass?.Name is "JsonPolymorphicAttribute" or
-                                                                             "JsonPolymorphic");
+                               .FirstOrDefault(a => a.AttributeClass?.Name is "JsonPolymorphicAttribute" or
+                                                                              "JsonPolymorphic");
             var discriminatorName = "type";
             if (polyAttr != null)
             {
@@ -594,20 +579,18 @@ public static class JsonSerializerContextEmitter
         if (hierarchy.TryGetValue(parent, out var children))
             foreach (var child in children)
             {
-                if (!child.IsAbstract && child.TypeKind != TypeKind.Interface)
-                    result.Add(child);
+                if (!child.IsAbstract && child.TypeKind != TypeKind.Interface) result.Add(child);
                 CollectConcreteDescendants(hierarchy, child, result);
             }
     }
 
-    public static void EmitContext(
-        StringBuilder sb,
-        string className,
-        string accessibility,
-        SerializationGraph graph,
-        string optionsPropertyName = "Options",
-        string optionsMethodName = "ConstructOptions",
-        Action<StringBuilder>? additionalMembers = null)
+    public static void EmitContext(StringBuilder sb,
+                                   string className,
+                                   string accessibility,
+                                   SerializationGraph graph,
+                                   string optionsPropertyName = "Options",
+                                   string optionsMethodName = "ConstructOptions",
+                                   Action<StringBuilder>? additionalMembers = null)
     {
         var typeList = graph.GetAllTypes().OrderBy(t => t.ToDisplayString()).ToList();
 
@@ -646,11 +629,10 @@ public static class JsonSerializerContextEmitter
         sb.AppendLine("}");
     }
 
-    public static void EmitAttributesOnly(
-        StringBuilder sb,
-        string className,
-        string accessibility,
-        SerializationGraph graph)
+    public static void EmitAttributesOnly(StringBuilder sb,
+                                          string className,
+                                          string accessibility,
+                                          SerializationGraph graph)
     {
         var typeList = graph.GetAllTypes().OrderBy(t => t.ToDisplayString()).ToList();
 
@@ -668,14 +650,13 @@ public static class JsonSerializerContextEmitter
         sb.AppendLine("}");
     }
 
-    public static void EmitRuntimeMembers(
-        StringBuilder sb,
-        string className,
-        string accessibility,
-        SerializationGraph graph,
-        string optionsPropertyName = "Options",
-        string optionsMethodName = "ConstructOptions",
-        Action<StringBuilder>? additionalMembers = null)
+    public static void EmitRuntimeMembers(StringBuilder sb,
+                                          string className,
+                                          string accessibility,
+                                          SerializationGraph graph,
+                                          string optionsPropertyName = "Options",
+                                          string optionsMethodName = "ConstructOptions",
+                                          Action<StringBuilder>? additionalMembers = null)
     {
         var typeList = graph.GetAllTypes().OrderBy(t => t.ToDisplayString()).ToList();
 
@@ -748,8 +729,7 @@ public static class JsonSerializerContextEmitter
 
             children.Add(child);
 
-            if (!hierarchy.ContainsKey(child))
-                hierarchy[child] = new(SymbolEqualityComparer.Default);
+            if (!hierarchy.ContainsKey(child)) hierarchy[child] = new(SymbolEqualityComparer.Default);
         }
 
         public HashSet<ITypeSymbol> GetAllTypes()

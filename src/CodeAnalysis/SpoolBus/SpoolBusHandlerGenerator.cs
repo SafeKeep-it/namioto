@@ -25,8 +25,7 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                                  .Where(static r => r is not null)
                                  .Select(static (r, _) => r!);
 
-        var allRegistrations = handlerTypes.Collect()
-                                           .Combine(clientTypes.Collect());
+        var allRegistrations = handlerTypes.Collect().Combine(clientTypes.Collect());
 
         context.RegisterSourceOutput(allRegistrations.Combine(context.CompilationProvider),
                                      static (spc, source) => Execute(source.Left.Left.AddRange(source.Left.Right),
@@ -41,14 +40,11 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         return new(type, kind, context.Node.SyntaxTree.FilePath);
     }
 
-    static bool IsAddHandlerInvocation(SyntaxNode node)
-    {
-        return node is InvocationExpressionSyntax invocation &&
-               ((invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
-                 memberAccess.Name.Identifier.Text == "AddHandler") ||
-                (invocation.Expression is IdentifierNameSyntax identifier &&
-                 identifier.Identifier.Text == "AddHandler"));
-    }
+    static bool IsAddHandlerInvocation(SyntaxNode node) =>
+        node is InvocationExpressionSyntax invocation &&
+        ((invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
+          memberAccess.Name.Identifier.Text == "AddHandler") ||
+         (invocation.Expression is IdentifierNameSyntax identifier && identifier.Identifier.Text == "AddHandler"));
 
     static ITypeSymbol? GetHandlerType(GeneratorSyntaxContext context)
     {
@@ -65,14 +61,11 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         return symbol.TypeArguments.FirstOrDefault();
     }
 
-    static bool IsCreateClientInvocation(SyntaxNode node)
-    {
-        return node is InvocationExpressionSyntax invocation &&
-               ((invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
-                 memberAccess.Name.Identifier.Text == "CreateClient") ||
-                (invocation.Expression is IdentifierNameSyntax identifier &&
-                 identifier.Identifier.Text == "CreateClient"));
-    }
+    static bool IsCreateClientInvocation(SyntaxNode node) =>
+        node is InvocationExpressionSyntax invocation &&
+        ((invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
+          memberAccess.Name.Identifier.Text == "CreateClient") ||
+         (invocation.Expression is IdentifierNameSyntax identifier && identifier.Identifier.Text == "CreateClient"));
 
     static ITypeSymbol? GetClientType(GeneratorSyntaxContext context)
     {
@@ -96,9 +89,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         var distinctRegistrations = registrations.Distinct(RegistrationComparer.Instance).ToList();
         if (distinctRegistrations.Count == 0) return;
 
-        var firstSourcePath = distinctRegistrations
-                              .Select(r => r.SourceFilePath)
-                              .FirstOrDefault(p => !string.IsNullOrEmpty(p));
+        var firstSourcePath = distinctRegistrations.Select(r => r.SourceFilePath)
+                                                   .FirstOrDefault(p => !string.IsNullOrEmpty(p));
 
         var projectDirectory = GeneratorManifest.FindProjectRoot(firstSourcePath);
         if (projectDirectory == null) return;
@@ -109,9 +101,7 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         // Group by source file path - each source file gets its own generated file
         // with its own uniquely-named serialization context.
         // NO deduplication - each usage site gets its own serializer.
-        var groups = distinctRegistrations
-                     .GroupBy(r => r.SourceFilePath)
-                     .ToList();
+        var groups = distinctRegistrations.GroupBy(r => r.SourceFilePath).ToList();
 
         // Load manifest for tracking
         var manifest = GeneratorManifest.LoadOrCreate("SpoolBus",
@@ -291,10 +281,9 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"    public void Serialize(global::System.IO.Stream stream, global::Comptatata.SpoolDrop.Messages.Message message) => {contextClassName}.Serialize(stream, message);");
 
                 var allMessageTypes = info.MessageGraph.GetAllTypes();
-                var messageType = allMessageTypes.FirstOrDefault(t =>
-                                                                     t.Name == "Message" &&
-                                                                     t.ContainingNamespace?.ToDisplayString() ==
-                                                                     "Comptatata.SpoolDrop.Messages");
+                var messageType = allMessageTypes.FirstOrDefault(t => t.Name == "Message" &&
+                                                                      t.ContainingNamespace?.ToDisplayString() ==
+                                                                      "Comptatata.SpoolDrop.Messages");
                 var messageRoot = messageType != null
                     ? JsonSerializerContextEmitter.GetNearestPolymorphicRoot(messageType)
                     : null;
@@ -303,11 +292,10 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 var tokenChainExpr =
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetTokenChainMethodName(messageRoot)}(message)";
                 var tokenChains = info.Methods
-                                      .Select(m =>
-                                                  JsonSerializerContextEmitter.GetTokenChain(
-                                                      m.ParameterType,
-                                                      info.MessageGraph,
-                                                      messageRoot!))
+                                      .Select(m => JsonSerializerContextEmitter.GetTokenChain(
+                                                  m.ParameterType,
+                                                  info.MessageGraph,
+                                                  messageRoot!))
                                       .Distinct()
                                       .ToList();
                 var tokenChainInitializer = BuildTokenChainSetInitializer(tokenChains);
@@ -427,10 +415,9 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"    public void Serialize(global::System.IO.Stream stream, global::Comptatata.SpoolDrop.Messages.Message message) => {contextClassName}.Serialize(stream, message);");
 
                 var allMessageTypes = info.MessageGraph.GetAllTypes();
-                var messageType = allMessageTypes.FirstOrDefault(t =>
-                                                                     t.Name == "Message" &&
-                                                                     t.ContainingNamespace?.ToDisplayString() ==
-                                                                     "Comptatata.SpoolDrop.Messages");
+                var messageType = allMessageTypes.FirstOrDefault(t => t.Name == "Message" &&
+                                                                      t.ContainingNamespace?.ToDisplayString() ==
+                                                                      "Comptatata.SpoolDrop.Messages");
                 var messageRoot = messageType != null
                     ? JsonSerializerContextEmitter.GetNearestPolymorphicRoot(messageType)
                     : null;
@@ -438,12 +425,11 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetDiscriminatorMethodName(messageRoot)}(message)";
                 var tokenChainExpr =
                     $"{contextClassName}.{JsonSerializerContextEmitter.GetTokenChainMethodName(messageRoot)}(message)";
-                var tokenChains = info.Methods
-                                      .Where(m => m.MessageResultType != null)
-                                      .Select(m =>
-                                                  JsonSerializerContextEmitter.GetTokenChain(m.MessageResultType!,
-                                                      info.MessageGraph,
-                                                      messageRoot!))
+                var tokenChains = info.Methods.Where(m => m.MessageResultType != null)
+                                      .Select(m => JsonSerializerContextEmitter.GetTokenChain(
+                                                  m.MessageResultType!,
+                                                  info.MessageGraph,
+                                                  messageRoot!))
                                       .Distinct()
                                       .ToList();
                 var tokenChainInitializer = BuildTokenChainSetInitializer(tokenChains);
@@ -625,8 +611,7 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         var methods = handler.GetMembers()
                              .OfType<IMethodSymbol>()
                              .Where(m => m.MethodKind == MethodKind.Ordinary &&
-                                         m.DeclaredAccessibility == Accessibility.Public &&
-                                         !m.IsStatic)
+                                         m.DeclaredAccessibility == Accessibility.Public && !m.IsStatic)
                              .ToList();
 
         var handlerMethods = new List<HandlerMethodInfo>();
@@ -673,12 +658,7 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
 
             if (isOneWay || messageResultType != null)
             {
-                handlerMethods.Add(new(method,
-                                       paramType,
-                                       messageResultType,
-                                       isAsync,
-                                       isOneWay,
-                                       hasCancellationToken));
+                handlerMethods.Add(new(method, paramType, messageResultType, isAsync, isOneWay, hasCancellationToken));
                 if (messageResultType != null)
                     JsonSerializerContextEmitter.AddSerializableTypes(graph,
                                                                       messageResultType,
@@ -712,8 +692,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         while (current != null)
         {
             var ns = current.ContainingNamespace?.ToDisplayString();
-            if (ns == "Comptatata.SpoolDrop.Messages" &&
-                (current.Name == "Message" || current.Name == "Event")) return true;
+            if (ns == "Comptatata.SpoolDrop.Messages" && (current.Name == "Message" || current.Name == "Event"))
+                return true;
             current = current.BaseType;
         }
 

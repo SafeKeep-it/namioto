@@ -24,9 +24,7 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
                           .Where(static m => m is not null)
                           .Select(static (m, _) => m!);
 
-        var compilationAndMaps = context.CompilationProvider
-                                        .Combine(maps.Collect())
-                                        .Combine(services.Collect());
+        var compilationAndMaps = context.CompilationProvider.Combine(maps.Collect()).Combine(services.Collect());
 
         context.RegisterSourceOutput(compilationAndMaps,
                                      static (spc, source) =>
@@ -37,8 +35,8 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
     {
         if (node is not InvocationExpressionSyntax invocation) return false;
         var name = GetMethodName(invocation);
-        return name is "AddSingleton" or "AddScoped" or "AddTransient" or "AddHttpClient" or "AddKeyedSingleton"
-                       or "AddKeyedScoped" or "AddKeyedTransient";
+        return name is "AddSingleton" or "AddScoped" or "AddTransient" or "AddHttpClient" or "AddKeyedSingleton" or
+                       "AddKeyedScoped" or "AddKeyedTransient";
     }
 
     static ImmutableArray<ITypeSymbol> GetServiceTypes(GeneratorSyntaxContext context, CancellationToken ct)
@@ -107,8 +105,7 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         if (!isTopLevel && containingClass != null)
         {
             var classSymbol = context.SemanticModel.GetDeclaredSymbol(containingClass, ct);
-            if (classSymbol?.DeclaredAccessibility == Accessibility.Public)
-                accessibility = "public";
+            if (classSymbol?.DeclaredAccessibility == Accessibility.Public) accessibility = "public";
         }
 
         if (invocation.ArgumentList.Arguments.Count < 2) return null;
@@ -135,17 +132,13 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
             if (genericUnwrapped.TypeArguments.Any(ImplementsIResult))
                 returnType = null;
 
-        var parameters = handlerSymbol.Parameters.Select(p => new ParameterInfo(p.Type,
-                                                             IsExplicitBodyParameter(p),
-                                                             IsCandidateBodyParameter(p)))
+        var parameters = handlerSymbol.Parameters
+                                      .Select(p => new ParameterInfo(p.Type,
+                                                                     IsExplicitBodyParameter(p),
+                                                                     IsCandidateBodyParameter(p)))
                                       .ToImmutableArray();
 
-        return new(invocation.SyntaxTree.FilePath,
-                   ns,
-                   serializerName,
-                   accessibility,
-                   returnType,
-                   parameters);
+        return new(invocation.SyntaxTree.FilePath, ns, serializerName, accessibility, returnType, parameters);
     }
 
     static bool IsMapInvocation(SyntaxNode node)
@@ -159,8 +152,7 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
     {
         if (invocation.Expression is MemberAccessExpressionSyntax memberAccess)
             return memberAccess.Name.Identifier.Text;
-        if (invocation.Expression is IdentifierNameSyntax identifier)
-            return identifier.Identifier.Text;
+        if (invocation.Expression is IdentifierNameSyntax identifier) return identifier.Identifier.Text;
         return null;
     }
 
@@ -181,9 +173,9 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
     static bool IsExplicitBodyParameter(IParameterSymbol param)
     {
         return param.GetAttributes()
-                    .Any(attr =>
-                             attr.AttributeClass?.Name == "FromBodyAttribute" &&
-                             attr.AttributeClass?.ContainingNamespace?.ToDisplayString() == "Microsoft.AspNetCore.Mvc");
+                    .Any(attr => attr.AttributeClass?.Name == "FromBodyAttribute" &&
+                                 attr.AttributeClass?.ContainingNamespace?.ToDisplayString() ==
+                                 "Microsoft.AspNetCore.Mvc");
     }
 
     static bool IsCandidateBodyParameter(IParameterSymbol param)
@@ -193,7 +185,8 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
 
         var ns = type.ContainingNamespace?.ToDisplayString() ?? "";
         if (ns == "Microsoft.AspNetCore.Http" || ns == "Microsoft.AspNetCore.Mvc" ||
-            ns == "Microsoft.AspNetCore.Builder") return false;
+            ns == "Microsoft.AspNetCore.Builder")
+            return false;
         if (ns == "System.Threading" && type.Name == "CancellationToken") return false;
         if (ns == "System.Security.Claims" && type.Name == "ClaimsPrincipal") return false;
         if (ns == "System" && type.Name == "IServiceProvider") return false;
@@ -202,9 +195,9 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         foreach (var attr in param.GetAttributes())
         {
             var attrName = attr.AttributeClass?.Name;
-            if (attrName is "FromServicesAttribute" or "FromRouteAttribute" or "FromQueryAttribute"
-                            or "FromHeaderAttribute" or "AsParametersAttribute" or "FromKeyedServicesAttribute"
-                            or "FromFormAttribute")
+            if (attrName is "FromServicesAttribute" or "FromRouteAttribute" or "FromQueryAttribute" or
+                            "FromHeaderAttribute" or "AsParametersAttribute" or "FromKeyedServicesAttribute" or
+                            "FromFormAttribute")
                 return false;
         }
 
@@ -217,9 +210,8 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
         if (type.Name == "IResult" && type.ContainingNamespace?.ToDisplayString() == "Microsoft.AspNetCore.Http")
             return true;
 
-        return type.AllInterfaces.Any(i =>
-                                          i.Name == "IResult" && i.ContainingNamespace?.ToDisplayString() ==
-                                          "Microsoft.AspNetCore.Http");
+        return type.AllInterfaces.Any(i => i.Name == "IResult" &&
+                                           i.ContainingNamespace?.ToDisplayString() == "Microsoft.AspNetCore.Http");
     }
 
     static bool IsRelevantType(ITypeSymbol type)
