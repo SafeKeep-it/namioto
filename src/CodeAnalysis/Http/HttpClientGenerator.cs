@@ -349,7 +349,6 @@ public class HttpClientGenerator : IIncrementalGenerator
                                          }));
             var asyncKeyword = method.IsAsync ? "async " : "";
 
-            var methodName = method.Method.Name;
             var unwrappedReturn = JsonSerializerContextEmitter.UnwrapTask(method.Method.ReturnType);
             var isHttpResponseMessage = unwrappedReturn is not null &&
                                         IsHttpResponseMessage(unwrappedReturn, compilation);
@@ -358,18 +357,8 @@ public class HttpClientGenerator : IIncrementalGenerator
             var isRawResponse = unwrappedReturn is not null &&
                                 TryGetHttpResponseEntityType(unwrappedReturn, compilation, out rawEntityType);
 
-            // Determine if we need a suffix
-            var hasBoth = info.Methods.Any(m => m != method && m.Method.Name == method.Method.Name);
-            if (hasBoth)
-            {
-                if (isRawResponse || isHttpResponseMessage)
-                    methodName += "Message";
-                else
-                    methodName += "Poco";
-            }
-
             sb.AppendLine(
-                $"    public {asyncKeyword}{method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {methodName}({parameters})");
+                $"    public {asyncKeyword}{method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {method.Method.Name}({parameters})");
             sb.AppendLine("    {");
 
             var urlPath = GetUrlPath(method.Method.Name, out var httpMethod);
