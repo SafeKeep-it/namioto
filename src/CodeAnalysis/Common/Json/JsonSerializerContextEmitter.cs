@@ -373,7 +373,14 @@ public static class JsonSerializerContextEmitter
         if (ns.StartsWith("JetBrains.Annotations")) return false;
         if (ns.StartsWith("OpenAI")) return false;
         if (ns.StartsWith("System.ClientModel")) return false;
-        if (ns.StartsWith("System.Collections")) return false;
+        // Allow IAsyncEnumerable<T> when T is a relevant type (needed for AOT streaming endpoints)
+        if (ns.StartsWith("System.Collections"))
+        {
+            if (type is INamedTypeSymbol { IsGenericType: true, Name: "IAsyncEnumerable" } asyncEnum &&
+                asyncEnum.TypeArguments.Length == 1)
+                return IsRelevantType(asyncEnum.TypeArguments[0]);
+            return false;
+        }
 
         if (ns == "System")
         {
