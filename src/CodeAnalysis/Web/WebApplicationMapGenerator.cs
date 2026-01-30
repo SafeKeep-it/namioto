@@ -124,9 +124,12 @@ public class WebApplicationMapGenerator : IIncrementalGenerator
 
         var returnType = handlerSymbol.ReturnType;
         var unwrapped = JsonSerializerContextEmitter.UnwrapEnvelope(returnType);
-        if (unwrapped != null && ImplementsIResult(unwrapped)) returnType = null;
+        if (unwrapped == null || ImplementsIResult(unwrapped) || unwrapped.IsAnonymousType)
+            returnType = null;
+        else
+            returnType = unwrapped;
 
-        if (unwrapped is INamedTypeSymbol { IsGenericType: true } genericUnwrapped &&
+        if (returnType is INamedTypeSymbol { IsGenericType: true } genericUnwrapped &&
             (genericUnwrapped.Name == "Func" || genericUnwrapped.Name.StartsWith("Func`")))
             // If the return type is Func<IResult> or similar, exclude it
             if (genericUnwrapped.TypeArguments.Any(ImplementsIResult))

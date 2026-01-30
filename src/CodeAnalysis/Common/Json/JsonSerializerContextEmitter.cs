@@ -245,8 +245,9 @@ public static class JsonSerializerContextEmitter
                     return;
 
             foreach (var member in ns.GetMembers())
-                if (member is INamespaceOrTypeSymbol nested)
-                    CollectTypes(nested, types);
+            {
+                if (member is INamespaceOrTypeSymbol nested) CollectTypes(nested, types);
+            }
         }
         else if (symbol is INamedTypeSymbol type)
         {
@@ -294,6 +295,10 @@ public static class JsonSerializerContextEmitter
         type is INamedTypeSymbol named && (named.Name == "Task" || named.Name == "ValueTask") &&
         named.ContainingNamespace?.ToDisplayString() == "System.Threading.Tasks";
 
+    public static bool IsTypedHttpResult(ITypeSymbol type) =>
+        type is INamedTypeSymbol named && named.IsGenericType && named.ContainingNamespace?.ToDisplayString() ==
+        "Microsoft.AspNetCore.Http.HttpResults";
+
     public static bool IsAsyncEnumerable(ITypeSymbol type) =>
         type is INamedTypeSymbol named && named.Name == "IAsyncEnumerable" &&
         named.ContainingNamespace?.ToDisplayString() == "System.Collections.Generic";
@@ -311,7 +316,7 @@ public static class JsonSerializerContextEmitter
         var current = type;
         while (current != null && current.SpecialType != SpecialType.System_Object)
         {
-            if (current is INamedTypeSymbol named && (IsEnvelope(named) || IsTask(named)))
+            if (current is INamedTypeSymbol named && (IsEnvelope(named) || IsTask(named) || IsTypedHttpResult(named)))
             {
                 if (IsEnvelope(named) && named.TypeParameters.Length != 1)
                     reportError?.Invoke(Diagnostic.Create(InvalidEnvelopeDescriptor,
@@ -600,7 +605,7 @@ public static class JsonSerializerContextEmitter
                                    string optionsMethodName = "ConstructOptions",
                                    Action<StringBuilder>? additionalMembers = null)
     {
-        var typeList = graph.GetAllTypes().OrderBy(t => t.ToDisplayString()).ToList();
+        var typeList = graph.GetAllTypes().Where(t => !t.IsAnonymousType).OrderBy(t => t.ToDisplayString()).ToList();
 
         foreach (var type in typeList)
         {
@@ -642,7 +647,7 @@ public static class JsonSerializerContextEmitter
                                           string accessibility,
                                           SerializationGraph graph)
     {
-        var typeList = graph.GetAllTypes().OrderBy(t => t.ToDisplayString()).ToList();
+        var typeList = graph.GetAllTypes().Where(t => !t.IsAnonymousType).OrderBy(t => t.ToDisplayString()).ToList();
 
         foreach (var type in typeList)
         {
@@ -666,7 +671,7 @@ public static class JsonSerializerContextEmitter
                                           string optionsMethodName = "ConstructOptions",
                                           Action<StringBuilder>? additionalMembers = null)
     {
-        var typeList = graph.GetAllTypes().OrderBy(t => t.ToDisplayString()).ToList();
+        var typeList = graph.GetAllTypes().Where(t => !t.IsAnonymousType).OrderBy(t => t.ToDisplayString()).ToList();
 
         sb.AppendLine($"{accessibility} partial class {className}");
         sb.AppendLine("{");
