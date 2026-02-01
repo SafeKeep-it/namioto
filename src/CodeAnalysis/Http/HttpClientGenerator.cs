@@ -185,31 +185,34 @@ public class HttpClientGenerator : IIncrementalGenerator
             currentSourceFiles.Add(Path.GetFullPath(sourcePath));
 
             var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
-            var outputPath = Path.Combine(directory, $"{sourceFileName}.Http.generated.cs");
 
-            // Check if file was renamed (old path in manifest with different output)
-            var previousPath = manifest.GetPreviousGeneratedPath(sourcePath);
-            if (previousPath != null && previousPath != outputPath)
-                manifest.HandleFileRename(sourcePath, sourcePath, outputPath);
+            // Process all registrations for each source file
+            foreach (var reg in group)
+            {
+                try
+                {
+                    var interfaceType = (INamedTypeSymbol)reg.InterfaceType;
+                    var outputPath = Path.Combine(directory,
+                                                  $"{sourceFileName}.{interfaceType.Name}.Http.generated.cs");
 
-            // Take only the first registration for each source file
-            var reg = group.First();
-            try
-            {
-                var symbolNames =
-                    GenerateFileForInterface(reg, compilation, context, manifest, sourcePath, addedHintNames);
-                manifest.RecordGeneration(sourcePath, outputPath, symbolNames);
-            }
-            catch (Exception ex)
-            {
-                // Report diagnostic for generator errors
-                var descriptor = new DiagnosticDescriptor("HTTPGEN001",
-                                                          "HTTP Client Generator Error",
-                                                          "Error generating HTTP client: {0}",
-                                                          "CodeGeneration",
-                                                          DiagnosticSeverity.Error,
-                                                          true);
-                context.ReportDiagnostic(Diagnostic.Create(descriptor, Location.None, ex.Message));
+                    // Check if file was renamed (old path in manifest with different output)
+                    // ... (wait, manifest might need update if we change output path format)
+
+                    var symbolNames =
+                        GenerateFileForInterface(reg, compilation, context, manifest, sourcePath, addedHintNames);
+                    manifest.RecordGeneration(sourcePath, outputPath, symbolNames);
+                }
+                catch (Exception ex)
+                {
+                    // Report diagnostic for generator errors
+                    var descriptor = new DiagnosticDescriptor("HTTPGEN001",
+                                                              "HTTP Client Generator Error",
+                                                              "Error generating HTTP client: {0}",
+                                                              "CodeGeneration",
+                                                              DiagnosticSeverity.Error,
+                                                              true);
+                    context.ReportDiagnostic(Diagnostic.Create(descriptor, Location.None, ex.Message));
+                }
             }
         }
 
@@ -253,9 +256,15 @@ public class HttpClientGenerator : IIncrementalGenerator
 
         var info = GetInterfaceInfo(interfaceType, compilation, context);
 
-        // Use source file name + interface name for unique serializer class name.
-        // Each source file gets its own serialization context to avoid STJ hintName conflicts.
-        var serializerClassName = $"{sourceFileName}{interfaceType.Name}Serializer";
+        // Generate a unique suffix based on the source file path to avoid STJ hintName conflicts.
+        // We use a simple hash of the relative path.
+        var relativePath = sourcePath;
+        var projectRoot = GeneratorManifest.FindProjectRoot(sourcePath);
+        if (projectRoot != null)
+            relativePath = sourcePath.Substring(projectRoot.Length).TrimStart(Path.DirectorySeparatorChar, '/');
+
+        var sanitizedPath = relativePath.Replace(Path.DirectorySeparatorChar, '_').Replace('.', '_').Replace('-', '_');
+        var serializerClassName = $"{sanitizedPath}_{interfaceType.Name}Serializer";
 
         // === DISK FILE: Attributes only for STJ source generator ===
         var diskSb = new StringBuilder();
@@ -497,11 +506,10 @@ public class HttpClientGenerator : IIncrementalGenerator
         sb.AppendLine();
 
         // Add runtime code via AddSource for IDE incremental updates
-        // Use source file name + interface name to ensure uniqueness across projects
         var runtimeContent = sb.ToString();
-        var hintName = $"{sourceFileName}.{interfaceType.Name}.g.cs";
+        var hintName = $"{serializerClassName}.g.cs";
 
-        // Only add if not already added (prevents duplicates when same interface used multiple times)
+        // Only add if not already added
         if (addedHintNames.Add(hintName)) context.AddSource(hintName, runtimeContent);
 
         return symbolNames;
@@ -713,9 +721,17 @@ public class HttpClientGenerator : IIncrementalGenerator
         public static RegistrationComparer Instance { get; } = new();
 
         public bool Equals(Registration x, Registration y) =>
-            SymbolEqualityComparer.Default.Equals(x?.InterfaceType, y?.InterfaceType);
+            SymbolEqualityComparer.Default.Equals(x?.InterfaceType, y?.InterfaceType) &&
+            x?.SourceFilePath == y?.SourceFilePath;
 
-        public int GetHashCode(Registration obj) => SymbolEqualityComparer.Default.GetHashCode(obj.InterfaceType);
+        public int GetHashCode(Registration obj)
+        {
+            unchecked
+            {
+                return (SymbolEqualityComparer.Default.GetHashCode(obj.InterfaceType) * 397) ^
+                       (obj.SourceFilePath?.GetHashCode() ?? 0);
+            }
+        }
     }
 
     class InterfaceInfo
