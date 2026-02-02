@@ -245,9 +245,8 @@ public static class JsonSerializerContextEmitter
                     return;
 
             foreach (var member in ns.GetMembers())
-            {
-                if (member is INamespaceOrTypeSymbol nested) CollectTypes(nested, types);
-            }
+                if (member is INamespaceOrTypeSymbol nested)
+                    CollectTypes(nested, types);
         }
         else if (symbol is INamedTypeSymbol type)
         {
