@@ -1,0 +1,5 @@
+<Project>
+    <Target Name="GenOntology" AfterTargets="CoreCompile">
+        <Exec Command='bash "$(MSBuildThisFileDirectory)../sh/ontology-project-build.sh" "$(MSBuildProjectFullPath)" "$(RootNamespace)" "@(ProjectReference->&apos;%(FullPath)&apos;, &apos;;&apos;)" "$(AssemblyName)"' />
+    </Target>
+</Project>
