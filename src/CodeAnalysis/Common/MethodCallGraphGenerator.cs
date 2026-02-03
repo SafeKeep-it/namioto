@@ -204,9 +204,7 @@ public class MethodCallGraphGenerator : IIncrementalGenerator
         {
             var relativePath = s.FilePath;
             if (relativePath.StartsWith(projectRoot))
-            {
                 relativePath = relativePath.Substring(projectRoot.Length).TrimStart(Path.DirectorySeparatorChar);
-            }
 
             var depsJson = string.Join(",", s.Dependencies.Select(d => $"\"{Escape(d)}\""));
             var argsJson = string.Join(",", s.TypeArguments.Select(d => $"\"{Escape(d)}\""));
