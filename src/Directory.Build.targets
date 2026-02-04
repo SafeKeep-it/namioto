@@ -1,4 +1,15 @@
 <Project>
+    <PropertyGroup>
+        <_BalorHeartbeat>$(MSBuildThisFileDirectory).ontology/.heartbeat</_BalorHeartbeat>
+    </PropertyGroup>
+    
+    <!-- Touch heartbeat file quickly (one bash call per project but minimal work) -->
+    <Target Name="EnsureBalorHeartbeat" BeforeTargets="CoreCompile" 
+            Condition="'$(DesignTimeBuild)' != 'true'">
+        <Touch Files="$(_BalorHeartbeat)" AlwaysCreate="true" ContinueOnError="true" />
+    </Target>
+    
+    <!-- GenOntology runs per project after compile (needed for each project's symbols) -->
     <Target Name="GenOntology" AfterTargets="CoreCompile">
         <Exec Command='bash "$(MSBuildThisFileDirectory)../sh/ontology-project-build.sh" "$(MSBuildProjectFullPath)" "$(RootNamespace)" "@(ProjectReference->&apos;%(FullPath)&apos;, &apos;;&apos;)" "$(AssemblyName)"' />
     </Target>
