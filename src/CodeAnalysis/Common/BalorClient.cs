@@ -26,17 +26,86 @@ static class BalorClient
         _consumerThread.Start();
     }
 
+    static void Enqueue(string notification)
+    {
+        // Non-blocking write to channel (lock-free)
+        _channel.Writer.TryWrite(notification);
+    }
+
+    static void EnqueueTouch(string symbolId, string projectName, long timestamp)
+    {
+        // Format: TOUCH|symbolId|timestamp|projectName
+        var notification = $"TOUCH|{symbolId}|{timestamp}|{projectName}\n";
+        Enqueue(notification);
+    }
+
     /// <summary>
     /// Sends a lightweight touch notification to the daemon (fire-and-forget).
     /// Format: TOUCH|symbolId|timestamp|projectName
     /// </summary>
     public static void Touch(string symbolId, string projectName)
     {
-        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        var notification = $"TOUCH|{symbolId}|{timestamp}|{projectName}\n";
+        EnqueueTouch(symbolId, projectName, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+    }
 
-        // Non-blocking write to channel (lock-free)
-        _channel.Writer.TryWrite(notification);
+    /// <summary>
+    /// Enqueues a touch notification using the provided timestamp.
+    /// Use this when another artifact (e.g., a shape file) is named with the same timestamp.
+    /// </summary>
+    public static void Touch(string symbolId, string projectName, long timestamp)
+    {
+        EnqueueTouch(symbolId, projectName, timestamp);
+    }
+
+    /// <summary>
+    /// Attempts to send a touch notification, returning true if daemon is available.
+    /// Waits briefly to confirm connection before returning.
+    /// </summary>
+    public static bool TryTouch(string symbolId, string projectName)
+    {
+        try
+        {
+            using var testClient = new NamedPipeClientStream(".", PipeName, PipeDirection.Out);
+            testClient.Connect(ConnectTimeoutMs);
+            if (!testClient.IsConnected) return false;
+
+            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var notification = $"TOUCH|{symbolId}|{timestamp}|{projectName}\n";
+
+            var bytes = Encoding.UTF8.GetBytes(notification);
+            testClient.Write(bytes, 0, bytes.Length);
+            testClient.Flush();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Attempts to send a touch notification with an explicit timestamp.
+    /// The timestamp MUST match the emitted shape file timestamp.
+    /// </summary>
+    public static bool TryTouch(string symbolId, string projectName, long timestamp)
+    {
+        try
+        {
+            using var testClient = new NamedPipeClientStream(".", PipeName, PipeDirection.Out);
+            testClient.Connect(ConnectTimeoutMs);
+            if (!testClient.IsConnected) return false;
+
+            var notification = $"TOUCH|{symbolId}|{timestamp}|{projectName}\n";
+
+            var bytes = Encoding.UTF8.GetBytes(notification);
+            testClient.Write(bytes, 0, bytes.Length);
+            testClient.Flush();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -44,7 +113,7 @@ static class BalorClient
     /// </summary>
     public static void Flush()
     {
-        _channel.Writer.TryWrite("__FLUSH__");
+        Enqueue("__FLUSH__");
     }
 
     static void ConsumerLoop()
@@ -75,7 +144,7 @@ static class BalorClient
                     continue;
                 }
 
-                // Ensure connection
+                // Ensure connection; if connect fails, re-enqueue and retry later.
                 if (client == null || !client.IsConnected)
                 {
                     client?.Dispose();
@@ -86,14 +155,23 @@ static class BalorClient
                     }
                     catch
                     {
+                        client?.Dispose();
                         client = null;
                         continue;
                     }
                 }
 
-                // Write message
-                var bytes = Encoding.UTF8.GetBytes(msg);
-                client.Write(bytes, 0, bytes.Length);
+                // Write message; if it fails, re-enqueue and retry later.
+                try
+                {
+                    var bytes = Encoding.UTF8.GetBytes(msg);
+                    client.Write(bytes, 0, bytes.Length);
+                }
+                catch
+                {
+                    client?.Dispose();
+                    client = null;
+                }
             }
             catch
             {

@@ -450,9 +450,10 @@ public class MethodCallGraphGenerator : IIncrementalGenerator
         if (projectRoot == null) return;
 
         var ontologyDir = Path.Combine(projectRoot, "src", "dotnet", ".ontology");
-        var symbolsDir = Path.Combine(ontologyDir, "symbols");
+        var docsDir = Path.Combine(ontologyDir, "docs");
+        var tmpDir = Path.Combine(docsDir, ".tmp");
 
-        if (!Directory.Exists(symbolsDir)) Directory.CreateDirectory(symbolsDir);
+        if (!Directory.Exists(tmpDir)) Directory.CreateDirectory(tmpDir);
 
         var projectName = compilation.AssemblyName ?? "UnknownProject";
 
@@ -471,9 +472,10 @@ public class MethodCallGraphGenerator : IIncrementalGenerator
             symbolIds.Add(s.Symbol);
         }
 
-        // Always write symbols to file (daemon reads from here)
-        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
-        var filePath = Path.Combine(symbolsDir, $"{projectName}.{timestamp}.json");
+        // Write symbols to timestamped shape file in docs/.tmp
+        // Format: <projectName>.<timestamp>.shape.ndjson (compacted to <projectName>.doc.ndjson)
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var filePath = Path.Combine(tmpDir, $"{projectName}.{timestamp}.shape.ndjson");
 
         try
         {
@@ -484,11 +486,11 @@ public class MethodCallGraphGenerator : IIncrementalGenerator
             return;
         }
 
-        // Send lightweight touch notification to daemon (just project name)
-        // Daemon will read the actual symbol data from files
-        // Fire-and-forget via channel - no contention between parallel builds
-        BalorClient.Touch($"PROJECT:{projectName}", projectName);
-        BalorClient.Flush();
+        // Try to notify daemon; if unavailable, leave file for later pickup.
+        // IMPORTANT: daemon expects the timestamp to match the shape file timestamp.
+        // Generator must stay fast: single best-effort touch only.
+        BalorClient.TryTouch($"PROJECT:{projectName}", projectName, timestamp);
+        // No separate inbox file needed - .tmp shape files serve as inbox
     }
 
     static string BuildSymbolJson(SymbolMetadata s, string relativePath)
@@ -539,8 +541,9 @@ public class MethodCallGraphGenerator : IIncrementalGenerator
         var synthesizedFromField =
             s.SynthesizedFrom != null ? $",\"synthesizedFrom\":\"{Escape(s.SynthesizedFrom)}\"" : "";
 
+        // "change":"modified" indicates this symbol was (re)compiled - delta detection determines actual status
         return
-            $"{{\"symbol\":\"{Escape(s.Symbol)}\",\"kind\":\"{Escape(s.Kind)}\",\"modifiers\":\"{Escape(s.Modifiers)}\",\"file\":\"{Escape(relativePath)}\",\"startLine\":{s.StartLine},\"endLine\":{s.EndLine}{signatureField}{returnTypeField}{paramsField}{containingField}{attrsField}{baseTypeField}{interfacesField}{extensionField}{extendedTypeField}{generatedField}{generatorField}{ctorKindField}{nullableField}{usingsField}{operatorsField}{synthesizedField}{synthesizedKindField}{synthesizedFromField},\"dependencies\":[{depsJson}],\"typeArguments\":[{argsJson}]}}";
+            $"{{\"symbol\":\"{Escape(s.Symbol)}\",\"change\":\"modified\",\"kind\":\"{Escape(s.Kind)}\",\"modifiers\":\"{Escape(s.Modifiers)}\",\"file\":\"{Escape(relativePath)}\",\"startLine\":{s.StartLine},\"endLine\":{s.EndLine}{signatureField}{returnTypeField}{paramsField}{containingField}{attrsField}{baseTypeField}{interfacesField}{extensionField}{extendedTypeField}{generatedField}{generatorField}{ctorKindField}{nullableField}{usingsField}{operatorsField}{synthesizedField}{synthesizedKindField}{synthesizedFromField},\"dependencies\":[{depsJson}],\"typeArguments\":[{argsJson}]}}";
     }
 
     static string? FindSolutionRoot(string filePath)
