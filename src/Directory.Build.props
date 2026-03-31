@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
-        <AssemblyName Condition="'$(AssemblyName)'==''">Comptatata.$(MSBuildProjectName)</AssemblyName>
-        <RootNamespace Condition="'$(RootNamespace)'==''">Comptatata.$(MSBuildProjectName)</RootNamespace>
+        <AssemblyName Condition="'$(AssemblyName)'==''">$(MSBuildProjectName)</AssemblyName>
+        <RootNamespace Condition="'$(RootNamespace)'==''">$(MSBuildProjectName)</RootNamespace>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -24,7 +24,8 @@
 
     <ItemGroup>
         <CompilerVisibleProperty Include="AssemblyName"/>
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory).ontology/assemblies.txt"/>
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory).ontology/assemblies.txt"
+                         Condition="Exists('$(MSBuildThisFileDirectory).ontology/assemblies.txt')"/>
     </ItemGroup>
 
     <ItemGroup Condition="'$(MSBuildProjectName)' != 'CodeAnalysis' and '$(PublishAot)' != 'true'">

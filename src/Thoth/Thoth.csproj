@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Comptatata.Thoth.Tests"/>
+        <InternalsVisibleTo Include="Thoth.Tests"/>
     </ItemGroup>
 
     <ItemGroup>

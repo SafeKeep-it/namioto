@@ -1,0 +1,6 @@
+<Solution>
+    <Project Path="Thoth/Thoth.csproj" />
+    <Project Path="Thoth.Tests/Thoth.Tests.csproj" />
+    <Project Path="Thoth.StressTest/Thoth.StressTest.csproj" />
+    <Project Path="CodeAnalysis/CodeAnalysis.csproj" />
+</Solution>
