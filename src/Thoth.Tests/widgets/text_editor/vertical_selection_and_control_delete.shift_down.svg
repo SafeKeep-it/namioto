@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="72" viewBox="0 0 200 72">
+  <metadata id="thoth-snapshot" type="application/json"><![CDATA[
+{"Width":20,"Height":4,"Cells":[{"X":0,"Y":0,"GlyphId":111,"StyleIndex":1,"Width":1,"Glyph":"o"},{"X":1,"Y":0,"GlyphId":110,"StyleIndex":1,"Width":1,"Glyph":"n"},{"X":2,"Y":0,"GlyphId":101,"StyleIndex":1,"Width":1,"Glyph":"e"},{"X":3,"Y":0,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":4,"Y":0,"GlyphId":116,"StyleIndex":1,"Width":1,"Glyph":"t"},{"X":5,"Y":0,"GlyphId":119,"StyleIndex":1,"Width":1,"Glyph":"w"},{"X":6,"Y":0,"GlyphId":111,"StyleIndex":1,"Width":1,"Glyph":"o"},{"X":7,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":8,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":9,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":10,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":11,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":12,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":13,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":14,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":15,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":16,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":17,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":18,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":19,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":0,"Y":1,"GlyphId":116,"StyleIndex":1,"Width":1,"Glyph":"t"},{"X":1,"Y":1,"GlyphId":104,"StyleIndex":0,"Width":1,"Glyph":"h"},{"X":2,"Y":1,"GlyphId":114,"StyleIndex":0,"Width":1,"Glyph":"r"},{"X":3,"Y":1,"GlyphId":101,"StyleIndex":0,"Width":1,"Glyph":"e"},{"X":4,"Y":1,"GlyphId":101,"StyleIndex":0,"Width":1,"Glyph":"e"},{"X":5,"Y":1,"GlyphId":32,"StyleIndex":0,"Width":1,"Glyph":" "},{"X":6,"Y":1,"GlyphId":102,"StyleIndex":0,"Width":1,"Glyph":"f"},{"X":7,"Y":1,"GlyphId":111,"StyleIndex":0,"Width":1,"Glyph":"o"},{"X":8,"Y":1,"GlyphId":117,"StyleIndex":0,"Width":1,"Glyph":"u"},{"X":9,"Y":1,"GlyphId":114,"StyleIndex":0,"Width":1,"Glyph":"r"},{"X":10,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":11,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":12,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":13,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":14,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":15,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":16,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":17,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":18,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":19,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":0,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":1,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":2,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":3,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":4,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":5,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":6,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":7,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":8,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":9,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":10,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":11,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":12,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":13,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":14,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":15,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":16,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":17,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":18,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":19,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":0,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":1,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":2,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":3,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":4,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":5,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":6,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":7,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":8,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":9,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":10,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":11,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":12,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":13,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":14,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":15,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":16,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":17,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":18,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":19,"Y":3,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null}]}
+  ]]></metadata>
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <rect x="0" y="0" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="1" y="13" fill="#111111">o</text>
+    <rect x="10" y="0" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="11" y="13" fill="#111111">n</text>
+    <rect x="20" y="0" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="21" y="13" fill="#111111">e</text>
+    <rect x="30" y="0" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="40" y="0" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="41" y="13" fill="#111111">t</text>
+    <rect x="50" y="0" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="51" y="13" fill="#111111">w</text>
+    <rect x="60" y="0" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="61" y="13" fill="#111111">o</text>
+    <rect x="0" y="18" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="1" y="31" fill="#111111">t</text>
+    <rect x="10" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="31" fill="#111111">h</text>
+    <rect x="20" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="31" fill="#111111">r</text>
+    <rect x="30" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="31" fill="#111111">e</text>
+    <rect x="40" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="31" fill="#111111">e</text>
+    <rect x="50" y="18" width="10" height="18" fill="#ffffff" />
+    <rect x="60" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="31" fill="#111111">f</text>
+    <rect x="70" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="31" fill="#111111">o</text>
+    <rect x="80" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="31" fill="#111111">u</text>
+    <rect x="90" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="31" fill="#111111">r</text>
+  </g>
+</svg>

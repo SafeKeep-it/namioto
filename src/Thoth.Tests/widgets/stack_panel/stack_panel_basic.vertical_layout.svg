@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="54" viewBox="0 0 80 54">
+  <metadata id="thoth-snapshot" type="application/json"><![CDATA[
+{"Width":8,"Height":3,"Cells":[{"X":0,"Y":0,"GlyphId":65,"StyleIndex":0,"Width":1,"Glyph":"A"},{"X":1,"Y":0,"GlyphId":65,"StyleIndex":0,"Width":1,"Glyph":"A"},{"X":2,"Y":0,"GlyphId":65,"StyleIndex":0,"Width":1,"Glyph":"A"},{"X":3,"Y":0,"GlyphId":65,"StyleIndex":0,"Width":1,"Glyph":"A"},{"X":4,"Y":0,"GlyphId":65,"StyleIndex":0,"Width":1,"Glyph":"A"},{"X":5,"Y":0,"GlyphId":65,"StyleIndex":0,"Width":1,"Glyph":"A"},{"X":6,"Y":0,"GlyphId":65,"StyleIndex":0,"Width":1,"Glyph":"A"},{"X":7,"Y":0,"GlyphId":65,"StyleIndex":0,"Width":1,"Glyph":"A"},{"X":0,"Y":1,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":1,"Y":1,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":2,"Y":1,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":3,"Y":1,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":4,"Y":1,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":5,"Y":1,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":6,"Y":1,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":7,"Y":1,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":0,"Y":2,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":1,"Y":2,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":2,"Y":2,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":3,"Y":2,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":4,"Y":2,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":5,"Y":2,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":6,"Y":2,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":7,"Y":2,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"}]}
+  ]]></metadata>
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <rect x="0" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="13" fill="#111111">A</text>
+    <rect x="10" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="13" fill="#111111">A</text>
+    <rect x="20" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="13" fill="#111111">A</text>
+    <rect x="30" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="13" fill="#111111">A</text>
+    <rect x="40" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="13" fill="#111111">A</text>
+    <rect x="50" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="13" fill="#111111">A</text>
+    <rect x="60" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="13" fill="#111111">A</text>
+    <rect x="70" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="13" fill="#111111">A</text>
+    <rect x="0" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="31" fill="#111111">B</text>
+    <rect x="10" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="31" fill="#111111">B</text>
+    <rect x="20" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="31" fill="#111111">B</text>
+    <rect x="30" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="31" fill="#111111">B</text>
+    <rect x="40" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="31" fill="#111111">B</text>
+    <rect x="50" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="31" fill="#111111">B</text>
+    <rect x="60" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="31" fill="#111111">B</text>
+    <rect x="70" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="31" fill="#111111">B</text>
+    <rect x="0" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="49" fill="#111111">B</text>
+    <rect x="10" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="49" fill="#111111">B</text>
+    <rect x="20" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="49" fill="#111111">B</text>
+    <rect x="30" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="49" fill="#111111">B</text>
+    <rect x="40" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="49" fill="#111111">B</text>
+    <rect x="50" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="49" fill="#111111">B</text>
+    <rect x="60" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="49" fill="#111111">B</text>
+    <rect x="70" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="49" fill="#111111">B</text>
+  </g>
+</svg>

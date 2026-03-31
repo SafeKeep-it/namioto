@@ -1,0 +1,1578 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="288" viewBox="0 0 500 288">
+  <metadata id="thoth-snapshot" type="application/json"><![CDATA[
+{"Width":50,"Height":16,"Cells":[{"X":0,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":9,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":42,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":0,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":9,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":42,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":1,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":9,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":42,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":2,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":3,"GlyphId":9556,"StyleIndex":0,"Width":1,"Glyph":"\u2554"},{"X":9,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":10,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":11,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":12,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":13,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":14,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":15,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":16,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":17,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":18,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":19,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":20,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":21,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":22,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":23,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":24,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":25,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":26,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":27,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":28,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":29,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":30,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":31,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":32,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":33,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":34,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":35,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":36,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":37,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":38,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":39,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":40,"Y":3,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":41,"Y":3,"GlyphId":9559,"StyleIndex":0,"Width":1,"Glyph":"\u2557"},{"X":42,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":3,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":4,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":9,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":10,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":11,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":12,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":13,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":14,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":15,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":16,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":17,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":18,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":19,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":20,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":21,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":22,"Y":4,"GlyphId":78,"StyleIndex":1,"Width":1,"Glyph":"N"},{"X":23,"Y":4,"GlyphId":111,"StyleIndex":1,"Width":1,"Glyph":"o"},{"X":24,"Y":4,"GlyphId":116,"StyleIndex":1,"Width":1,"Glyph":"t"},{"X":25,"Y":4,"GlyphId":105,"StyleIndex":1,"Width":1,"Glyph":"i"},{"X":26,"Y":4,"GlyphId":99,"StyleIndex":1,"Width":1,"Glyph":"c"},{"X":27,"Y":4,"GlyphId":101,"StyleIndex":1,"Width":1,"Glyph":"e"},{"X":28,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":29,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":30,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":31,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":32,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":33,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":34,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":35,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":36,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":37,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":38,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":39,"Y":4,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":40,"Y":4,"GlyphId":215,"StyleIndex":3,"Width":1,"Glyph":"\u00D7"},{"X":41,"Y":4,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":42,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":4,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":5,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":9,"Y":5,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"},{"X":10,"Y":5,"GlyphId":111,"StyleIndex":0,"Width":1,"Glyph":"o"},{"X":11,"Y":5,"GlyphId":100,"StyleIndex":0,"Width":1,"Glyph":"d"},{"X":12,"Y":5,"GlyphId":121,"StyleIndex":0,"Width":1,"Glyph":"y"},{"X":13,"Y":5,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":14,"Y":5,"GlyphId":111,"StyleIndex":0,"Width":1,"Glyph":"o"},{"X":15,"Y":5,"GlyphId":110,"StyleIndex":0,"Width":1,"Glyph":"n"},{"X":16,"Y":5,"GlyphId":108,"StyleIndex":0,"Width":1,"Glyph":"l"},{"X":17,"Y":5,"GlyphId":121,"StyleIndex":0,"Width":1,"Glyph":"y"},{"X":18,"Y":5,"GlyphId":32,"StyleIndex":0,"Width":1,"Glyph":" "},{"X":19,"Y":5,"GlyphId":109,"StyleIndex":0,"Width":1,"Glyph":"m"},{"X":20,"Y":5,"GlyphId":111,"StyleIndex":0,"Width":1,"Glyph":"o"},{"X":21,"Y":5,"GlyphId":100,"StyleIndex":0,"Width":1,"Glyph":"d"},{"X":22,"Y":5,"GlyphId":97,"StyleIndex":0,"Width":1,"Glyph":"a"},{"X":23,"Y":5,"GlyphId":108,"StyleIndex":0,"Width":1,"Glyph":"l"},{"X":24,"Y":5,"GlyphId":32,"StyleIndex":0,"Width":1,"Glyph":" "},{"X":25,"Y":5,"GlyphId":115,"StyleIndex":0,"Width":1,"Glyph":"s"},{"X":26,"Y":5,"GlyphId":116,"StyleIndex":0,"Width":1,"Glyph":"t"},{"X":27,"Y":5,"GlyphId":105,"StyleIndex":0,"Width":1,"Glyph":"i"},{"X":28,"Y":5,"GlyphId":108,"StyleIndex":0,"Width":1,"Glyph":"l"},{"X":29,"Y":5,"GlyphId":108,"StyleIndex":0,"Width":1,"Glyph":"l"},{"X":30,"Y":5,"GlyphId":32,"StyleIndex":0,"Width":1,"Glyph":" "},{"X":31,"Y":5,"GlyphId":114,"StyleIndex":0,"Width":1,"Glyph":"r"},{"X":32,"Y":5,"GlyphId":101,"StyleIndex":0,"Width":1,"Glyph":"e"},{"X":33,"Y":5,"GlyphId":110,"StyleIndex":0,"Width":1,"Glyph":"n"},{"X":34,"Y":5,"GlyphId":100,"StyleIndex":0,"Width":1,"Glyph":"d"},{"X":35,"Y":5,"GlyphId":101,"StyleIndex":0,"Width":1,"Glyph":"e"},{"X":36,"Y":5,"GlyphId":114,"StyleIndex":0,"Width":1,"Glyph":"r"},{"X":37,"Y":5,"GlyphId":115,"StyleIndex":0,"Width":1,"Glyph":"s"},{"X":38,"Y":5,"GlyphId":32,"StyleIndex":0,"Width":1,"Glyph":" "},{"X":39,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":5,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":42,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":5,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":6,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":9,"Y":6,"GlyphId":119,"StyleIndex":0,"Width":1,"Glyph":"w"},{"X":10,"Y":6,"GlyphId":114,"StyleIndex":0,"Width":1,"Glyph":"r"},{"X":11,"Y":6,"GlyphId":97,"StyleIndex":0,"Width":1,"Glyph":"a"},{"X":12,"Y":6,"GlyphId":112,"StyleIndex":0,"Width":1,"Glyph":"p"},{"X":13,"Y":6,"GlyphId":112,"StyleIndex":0,"Width":1,"Glyph":"p"},{"X":14,"Y":6,"GlyphId":101,"StyleIndex":0,"Width":1,"Glyph":"e"},{"X":15,"Y":6,"GlyphId":100,"StyleIndex":0,"Width":1,"Glyph":"d"},{"X":16,"Y":6,"GlyphId":32,"StyleIndex":0,"Width":1,"Glyph":" "},{"X":17,"Y":6,"GlyphId":99,"StyleIndex":0,"Width":1,"Glyph":"c"},{"X":18,"Y":6,"GlyphId":111,"StyleIndex":0,"Width":1,"Glyph":"o"},{"X":19,"Y":6,"GlyphId":110,"StyleIndex":0,"Width":1,"Glyph":"n"},{"X":20,"Y":6,"GlyphId":116,"StyleIndex":0,"Width":1,"Glyph":"t"},{"X":21,"Y":6,"GlyphId":101,"StyleIndex":0,"Width":1,"Glyph":"e"},{"X":22,"Y":6,"GlyphId":110,"StyleIndex":0,"Width":1,"Glyph":"n"},{"X":23,"Y":6,"GlyphId":116,"StyleIndex":0,"Width":1,"Glyph":"t"},{"X":24,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":6,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":42,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":6,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":7,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":9,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":7,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":42,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":7,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":8,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":9,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":8,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":42,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":8,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":9,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":9,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":9,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":42,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":9,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":10,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":9,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":10,"GlyphId":9553,"StyleIndex":0,"Width":1,"Glyph":"\u2551"},{"X":42,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":10,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":11,"GlyphId":9562,"StyleIndex":0,"Width":1,"Glyph":"\u255A"},{"X":9,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":10,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":11,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":12,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":13,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":14,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":15,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":16,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":17,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":18,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":19,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":20,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":21,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":22,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":23,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":24,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":25,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":26,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":27,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":28,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":29,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":30,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":31,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":32,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":33,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":34,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":35,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":36,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":37,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":38,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":39,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":40,"Y":11,"GlyphId":9552,"StyleIndex":0,"Width":1,"Glyph":"\u2550"},{"X":41,"Y":11,"GlyphId":9565,"StyleIndex":0,"Width":1,"Glyph":"\u255D"},{"X":42,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":11,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":9,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":42,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":12,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":9,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":42,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":13,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":9,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":42,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":14,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":0,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":1,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":2,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":3,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":4,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":5,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":6,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":7,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":8,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":9,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":10,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":11,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":12,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":13,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":14,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":15,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":16,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":17,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":18,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":19,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":20,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":21,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":22,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":23,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":24,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":25,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":26,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":27,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":28,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":29,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":30,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":31,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":32,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":33,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":34,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":35,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":36,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":37,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":38,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":39,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":40,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":41,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":42,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":43,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":44,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":45,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":46,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":47,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":48,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."},{"X":49,"Y":15,"GlyphId":46,"StyleIndex":0,"Width":1,"Glyph":"."}]}
+  ]]></metadata>
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <rect x="0" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="13" fill="#111111">.</text>
+    <rect x="10" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="13" fill="#111111">.</text>
+    <rect x="20" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="13" fill="#111111">.</text>
+    <rect x="30" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="13" fill="#111111">.</text>
+    <rect x="40" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="13" fill="#111111">.</text>
+    <rect x="50" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="13" fill="#111111">.</text>
+    <rect x="60" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="13" fill="#111111">.</text>
+    <rect x="70" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="13" fill="#111111">.</text>
+    <rect x="80" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="13" fill="#111111">.</text>
+    <rect x="90" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="13" fill="#111111">.</text>
+    <rect x="100" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="13" fill="#111111">.</text>
+    <rect x="110" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="13" fill="#111111">.</text>
+    <rect x="120" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="13" fill="#111111">.</text>
+    <rect x="130" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="13" fill="#111111">.</text>
+    <rect x="140" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="13" fill="#111111">.</text>
+    <rect x="150" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="13" fill="#111111">.</text>
+    <rect x="160" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="13" fill="#111111">.</text>
+    <rect x="170" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="13" fill="#111111">.</text>
+    <rect x="180" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="13" fill="#111111">.</text>
+    <rect x="190" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="13" fill="#111111">.</text>
+    <rect x="200" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="13" fill="#111111">.</text>
+    <rect x="210" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="13" fill="#111111">.</text>
+    <rect x="220" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="13" fill="#111111">.</text>
+    <rect x="230" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="13" fill="#111111">.</text>
+    <rect x="240" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="13" fill="#111111">.</text>
+    <rect x="250" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="13" fill="#111111">.</text>
+    <rect x="260" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="13" fill="#111111">.</text>
+    <rect x="270" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="13" fill="#111111">.</text>
+    <rect x="280" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="13" fill="#111111">.</text>
+    <rect x="290" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="13" fill="#111111">.</text>
+    <rect x="300" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="13" fill="#111111">.</text>
+    <rect x="310" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="13" fill="#111111">.</text>
+    <rect x="320" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="13" fill="#111111">.</text>
+    <rect x="330" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="13" fill="#111111">.</text>
+    <rect x="340" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="13" fill="#111111">.</text>
+    <rect x="350" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="13" fill="#111111">.</text>
+    <rect x="360" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="13" fill="#111111">.</text>
+    <rect x="370" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="13" fill="#111111">.</text>
+    <rect x="380" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="13" fill="#111111">.</text>
+    <rect x="390" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="13" fill="#111111">.</text>
+    <rect x="400" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="13" fill="#111111">.</text>
+    <rect x="410" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="13" fill="#111111">.</text>
+    <rect x="420" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="13" fill="#111111">.</text>
+    <rect x="430" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="13" fill="#111111">.</text>
+    <rect x="440" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="13" fill="#111111">.</text>
+    <rect x="450" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="13" fill="#111111">.</text>
+    <rect x="460" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="13" fill="#111111">.</text>
+    <rect x="470" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="13" fill="#111111">.</text>
+    <rect x="480" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="13" fill="#111111">.</text>
+    <rect x="490" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="13" fill="#111111">.</text>
+    <rect x="0" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="31" fill="#111111">.</text>
+    <rect x="10" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="31" fill="#111111">.</text>
+    <rect x="20" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="31" fill="#111111">.</text>
+    <rect x="30" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="31" fill="#111111">.</text>
+    <rect x="40" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="31" fill="#111111">.</text>
+    <rect x="50" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="31" fill="#111111">.</text>
+    <rect x="60" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="31" fill="#111111">.</text>
+    <rect x="70" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="31" fill="#111111">.</text>
+    <rect x="80" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="31" fill="#111111">.</text>
+    <rect x="90" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="31" fill="#111111">.</text>
+    <rect x="100" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="31" fill="#111111">.</text>
+    <rect x="110" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="31" fill="#111111">.</text>
+    <rect x="120" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="31" fill="#111111">.</text>
+    <rect x="130" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="31" fill="#111111">.</text>
+    <rect x="140" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="31" fill="#111111">.</text>
+    <rect x="150" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="31" fill="#111111">.</text>
+    <rect x="160" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="31" fill="#111111">.</text>
+    <rect x="170" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="31" fill="#111111">.</text>
+    <rect x="180" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="31" fill="#111111">.</text>
+    <rect x="190" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="31" fill="#111111">.</text>
+    <rect x="200" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="31" fill="#111111">.</text>
+    <rect x="210" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="31" fill="#111111">.</text>
+    <rect x="220" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="31" fill="#111111">.</text>
+    <rect x="230" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="31" fill="#111111">.</text>
+    <rect x="240" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="31" fill="#111111">.</text>
+    <rect x="250" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="31" fill="#111111">.</text>
+    <rect x="260" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="31" fill="#111111">.</text>
+    <rect x="270" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="31" fill="#111111">.</text>
+    <rect x="280" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="31" fill="#111111">.</text>
+    <rect x="290" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="31" fill="#111111">.</text>
+    <rect x="300" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="31" fill="#111111">.</text>
+    <rect x="310" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="31" fill="#111111">.</text>
+    <rect x="320" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="31" fill="#111111">.</text>
+    <rect x="330" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="31" fill="#111111">.</text>
+    <rect x="340" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="31" fill="#111111">.</text>
+    <rect x="350" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="31" fill="#111111">.</text>
+    <rect x="360" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="31" fill="#111111">.</text>
+    <rect x="370" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="31" fill="#111111">.</text>
+    <rect x="380" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="31" fill="#111111">.</text>
+    <rect x="390" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="31" fill="#111111">.</text>
+    <rect x="400" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="31" fill="#111111">.</text>
+    <rect x="410" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="31" fill="#111111">.</text>
+    <rect x="420" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="31" fill="#111111">.</text>
+    <rect x="430" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="31" fill="#111111">.</text>
+    <rect x="440" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="31" fill="#111111">.</text>
+    <rect x="450" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="31" fill="#111111">.</text>
+    <rect x="460" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="31" fill="#111111">.</text>
+    <rect x="470" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="31" fill="#111111">.</text>
+    <rect x="480" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="31" fill="#111111">.</text>
+    <rect x="490" y="18" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="31" fill="#111111">.</text>
+    <rect x="0" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="49" fill="#111111">.</text>
+    <rect x="10" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="49" fill="#111111">.</text>
+    <rect x="20" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="49" fill="#111111">.</text>
+    <rect x="30" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="49" fill="#111111">.</text>
+    <rect x="40" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="49" fill="#111111">.</text>
+    <rect x="50" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="49" fill="#111111">.</text>
+    <rect x="60" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="49" fill="#111111">.</text>
+    <rect x="70" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="49" fill="#111111">.</text>
+    <rect x="80" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="49" fill="#111111">.</text>
+    <rect x="90" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="49" fill="#111111">.</text>
+    <rect x="100" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="49" fill="#111111">.</text>
+    <rect x="110" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="49" fill="#111111">.</text>
+    <rect x="120" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="49" fill="#111111">.</text>
+    <rect x="130" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="49" fill="#111111">.</text>
+    <rect x="140" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="49" fill="#111111">.</text>
+    <rect x="150" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="49" fill="#111111">.</text>
+    <rect x="160" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="49" fill="#111111">.</text>
+    <rect x="170" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="49" fill="#111111">.</text>
+    <rect x="180" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="49" fill="#111111">.</text>
+    <rect x="190" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="49" fill="#111111">.</text>
+    <rect x="200" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="49" fill="#111111">.</text>
+    <rect x="210" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="49" fill="#111111">.</text>
+    <rect x="220" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="49" fill="#111111">.</text>
+    <rect x="230" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="49" fill="#111111">.</text>
+    <rect x="240" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="49" fill="#111111">.</text>
+    <rect x="250" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="49" fill="#111111">.</text>
+    <rect x="260" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="49" fill="#111111">.</text>
+    <rect x="270" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="49" fill="#111111">.</text>
+    <rect x="280" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="49" fill="#111111">.</text>
+    <rect x="290" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="49" fill="#111111">.</text>
+    <rect x="300" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="49" fill="#111111">.</text>
+    <rect x="310" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="49" fill="#111111">.</text>
+    <rect x="320" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="49" fill="#111111">.</text>
+    <rect x="330" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="49" fill="#111111">.</text>
+    <rect x="340" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="49" fill="#111111">.</text>
+    <rect x="350" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="49" fill="#111111">.</text>
+    <rect x="360" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="49" fill="#111111">.</text>
+    <rect x="370" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="49" fill="#111111">.</text>
+    <rect x="380" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="49" fill="#111111">.</text>
+    <rect x="390" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="49" fill="#111111">.</text>
+    <rect x="400" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="49" fill="#111111">.</text>
+    <rect x="410" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="49" fill="#111111">.</text>
+    <rect x="420" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="49" fill="#111111">.</text>
+    <rect x="430" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="49" fill="#111111">.</text>
+    <rect x="440" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="49" fill="#111111">.</text>
+    <rect x="450" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="49" fill="#111111">.</text>
+    <rect x="460" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="49" fill="#111111">.</text>
+    <rect x="470" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="49" fill="#111111">.</text>
+    <rect x="480" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="49" fill="#111111">.</text>
+    <rect x="490" y="36" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="49" fill="#111111">.</text>
+    <rect x="0" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="67" fill="#111111">.</text>
+    <rect x="10" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="67" fill="#111111">.</text>
+    <rect x="20" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="67" fill="#111111">.</text>
+    <rect x="30" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="67" fill="#111111">.</text>
+    <rect x="40" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="67" fill="#111111">.</text>
+    <rect x="50" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="67" fill="#111111">.</text>
+    <rect x="60" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="67" fill="#111111">.</text>
+    <rect x="70" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="67" fill="#111111">.</text>
+    <rect x="80" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="67" fill="#111111">╔</text>
+    <rect x="90" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="67" fill="#111111">═</text>
+    <rect x="100" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="67" fill="#111111">═</text>
+    <rect x="110" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="67" fill="#111111">═</text>
+    <rect x="120" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="67" fill="#111111">═</text>
+    <rect x="130" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="67" fill="#111111">═</text>
+    <rect x="140" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="67" fill="#111111">═</text>
+    <rect x="150" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="67" fill="#111111">═</text>
+    <rect x="160" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="67" fill="#111111">═</text>
+    <rect x="170" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="67" fill="#111111">═</text>
+    <rect x="180" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="67" fill="#111111">═</text>
+    <rect x="190" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="67" fill="#111111">═</text>
+    <rect x="200" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="67" fill="#111111">═</text>
+    <rect x="210" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="67" fill="#111111">═</text>
+    <rect x="220" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="67" fill="#111111">═</text>
+    <rect x="230" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="67" fill="#111111">═</text>
+    <rect x="240" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="67" fill="#111111">═</text>
+    <rect x="250" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="67" fill="#111111">═</text>
+    <rect x="260" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="67" fill="#111111">═</text>
+    <rect x="270" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="67" fill="#111111">═</text>
+    <rect x="280" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="67" fill="#111111">═</text>
+    <rect x="290" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="67" fill="#111111">═</text>
+    <rect x="300" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="67" fill="#111111">═</text>
+    <rect x="310" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="67" fill="#111111">═</text>
+    <rect x="320" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="67" fill="#111111">═</text>
+    <rect x="330" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="67" fill="#111111">═</text>
+    <rect x="340" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="67" fill="#111111">═</text>
+    <rect x="350" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="67" fill="#111111">═</text>
+    <rect x="360" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="67" fill="#111111">═</text>
+    <rect x="370" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="67" fill="#111111">═</text>
+    <rect x="380" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="67" fill="#111111">═</text>
+    <rect x="390" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="67" fill="#111111">═</text>
+    <rect x="400" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="67" fill="#111111">═</text>
+    <rect x="410" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="67" fill="#111111">╗</text>
+    <rect x="420" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="67" fill="#111111">.</text>
+    <rect x="430" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="67" fill="#111111">.</text>
+    <rect x="440" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="67" fill="#111111">.</text>
+    <rect x="450" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="67" fill="#111111">.</text>
+    <rect x="460" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="67" fill="#111111">.</text>
+    <rect x="470" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="67" fill="#111111">.</text>
+    <rect x="480" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="67" fill="#111111">.</text>
+    <rect x="490" y="54" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="67" fill="#111111">.</text>
+    <rect x="0" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="85" fill="#111111">.</text>
+    <rect x="10" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="85" fill="#111111">.</text>
+    <rect x="20" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="85" fill="#111111">.</text>
+    <rect x="30" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="85" fill="#111111">.</text>
+    <rect x="40" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="85" fill="#111111">.</text>
+    <rect x="50" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="85" fill="#111111">.</text>
+    <rect x="60" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="85" fill="#111111">.</text>
+    <rect x="70" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="85" fill="#111111">.</text>
+    <rect x="80" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="85" fill="#111111">║</text>
+    <rect x="90" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="100" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="110" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="120" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="130" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="140" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="150" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="160" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="170" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="180" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="190" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="200" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="210" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="220" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="221" y="85" fill="#111111">N</text>
+    <rect x="230" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="231" y="85" fill="#111111">o</text>
+    <rect x="240" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="241" y="85" fill="#111111">t</text>
+    <rect x="250" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="251" y="85" fill="#111111">i</text>
+    <rect x="260" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="261" y="85" fill="#111111">c</text>
+    <rect x="270" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="271" y="85" fill="#111111">e</text>
+    <rect x="280" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="290" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="300" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="310" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="320" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="330" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="340" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="350" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="360" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="370" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="380" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="390" y="72" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <rect x="400" y="72" width="10" height="18" fill="hsl(141, 62%, 82%)" />
+    <text x="401" y="85" fill="#111111">×</text>
+    <rect x="410" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="85" fill="#111111">║</text>
+    <rect x="420" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="85" fill="#111111">.</text>
+    <rect x="430" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="85" fill="#111111">.</text>
+    <rect x="440" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="85" fill="#111111">.</text>
+    <rect x="450" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="85" fill="#111111">.</text>
+    <rect x="460" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="85" fill="#111111">.</text>
+    <rect x="470" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="85" fill="#111111">.</text>
+    <rect x="480" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="85" fill="#111111">.</text>
+    <rect x="490" y="72" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="85" fill="#111111">.</text>
+    <rect x="0" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="103" fill="#111111">.</text>
+    <rect x="10" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="103" fill="#111111">.</text>
+    <rect x="20" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="103" fill="#111111">.</text>
+    <rect x="30" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="103" fill="#111111">.</text>
+    <rect x="40" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="103" fill="#111111">.</text>
+    <rect x="50" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="103" fill="#111111">.</text>
+    <rect x="60" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="103" fill="#111111">.</text>
+    <rect x="70" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="103" fill="#111111">.</text>
+    <rect x="80" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="103" fill="#111111">║</text>
+    <rect x="90" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="103" fill="#111111">B</text>
+    <rect x="100" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="103" fill="#111111">o</text>
+    <rect x="110" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="103" fill="#111111">d</text>
+    <rect x="120" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="103" fill="#111111">y</text>
+    <rect x="130" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="103" fill="#111111">-</text>
+    <rect x="140" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="103" fill="#111111">o</text>
+    <rect x="150" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="103" fill="#111111">n</text>
+    <rect x="160" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="103" fill="#111111">l</text>
+    <rect x="170" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="103" fill="#111111">y</text>
+    <rect x="180" y="90" width="10" height="18" fill="#ffffff" />
+    <rect x="190" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="103" fill="#111111">m</text>
+    <rect x="200" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="103" fill="#111111">o</text>
+    <rect x="210" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="103" fill="#111111">d</text>
+    <rect x="220" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="103" fill="#111111">a</text>
+    <rect x="230" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="103" fill="#111111">l</text>
+    <rect x="240" y="90" width="10" height="18" fill="#ffffff" />
+    <rect x="250" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="103" fill="#111111">s</text>
+    <rect x="260" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="103" fill="#111111">t</text>
+    <rect x="270" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="103" fill="#111111">i</text>
+    <rect x="280" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="103" fill="#111111">l</text>
+    <rect x="290" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="103" fill="#111111">l</text>
+    <rect x="300" y="90" width="10" height="18" fill="#ffffff" />
+    <rect x="310" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="103" fill="#111111">r</text>
+    <rect x="320" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="103" fill="#111111">e</text>
+    <rect x="330" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="103" fill="#111111">n</text>
+    <rect x="340" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="103" fill="#111111">d</text>
+    <rect x="350" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="103" fill="#111111">e</text>
+    <rect x="360" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="103" fill="#111111">r</text>
+    <rect x="370" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="103" fill="#111111">s</text>
+    <rect x="380" y="90" width="10" height="18" fill="#ffffff" />
+    <rect x="390" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="103" fill="#111111">.</text>
+    <rect x="400" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="103" fill="#111111">.</text>
+    <rect x="410" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="103" fill="#111111">║</text>
+    <rect x="420" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="103" fill="#111111">.</text>
+    <rect x="430" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="103" fill="#111111">.</text>
+    <rect x="440" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="103" fill="#111111">.</text>
+    <rect x="450" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="103" fill="#111111">.</text>
+    <rect x="460" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="103" fill="#111111">.</text>
+    <rect x="470" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="103" fill="#111111">.</text>
+    <rect x="480" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="103" fill="#111111">.</text>
+    <rect x="490" y="90" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="103" fill="#111111">.</text>
+    <rect x="0" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="121" fill="#111111">.</text>
+    <rect x="10" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="121" fill="#111111">.</text>
+    <rect x="20" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="121" fill="#111111">.</text>
+    <rect x="30" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="121" fill="#111111">.</text>
+    <rect x="40" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="121" fill="#111111">.</text>
+    <rect x="50" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="121" fill="#111111">.</text>
+    <rect x="60" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="121" fill="#111111">.</text>
+    <rect x="70" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="121" fill="#111111">.</text>
+    <rect x="80" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="121" fill="#111111">║</text>
+    <rect x="90" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="121" fill="#111111">w</text>
+    <rect x="100" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="121" fill="#111111">r</text>
+    <rect x="110" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="121" fill="#111111">a</text>
+    <rect x="120" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="121" fill="#111111">p</text>
+    <rect x="130" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="121" fill="#111111">p</text>
+    <rect x="140" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="121" fill="#111111">e</text>
+    <rect x="150" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="121" fill="#111111">d</text>
+    <rect x="160" y="108" width="10" height="18" fill="#ffffff" />
+    <rect x="170" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="121" fill="#111111">c</text>
+    <rect x="180" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="121" fill="#111111">o</text>
+    <rect x="190" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="121" fill="#111111">n</text>
+    <rect x="200" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="121" fill="#111111">t</text>
+    <rect x="210" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="121" fill="#111111">e</text>
+    <rect x="220" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="121" fill="#111111">n</text>
+    <rect x="230" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="121" fill="#111111">t</text>
+    <rect x="240" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="121" fill="#111111">.</text>
+    <rect x="250" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="121" fill="#111111">.</text>
+    <rect x="260" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="121" fill="#111111">.</text>
+    <rect x="270" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="121" fill="#111111">.</text>
+    <rect x="280" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="121" fill="#111111">.</text>
+    <rect x="290" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="121" fill="#111111">.</text>
+    <rect x="300" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="121" fill="#111111">.</text>
+    <rect x="310" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="121" fill="#111111">.</text>
+    <rect x="320" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="121" fill="#111111">.</text>
+    <rect x="330" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="121" fill="#111111">.</text>
+    <rect x="340" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="121" fill="#111111">.</text>
+    <rect x="350" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="121" fill="#111111">.</text>
+    <rect x="360" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="121" fill="#111111">.</text>
+    <rect x="370" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="121" fill="#111111">.</text>
+    <rect x="380" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="121" fill="#111111">.</text>
+    <rect x="390" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="121" fill="#111111">.</text>
+    <rect x="400" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="121" fill="#111111">.</text>
+    <rect x="410" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="121" fill="#111111">║</text>
+    <rect x="420" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="121" fill="#111111">.</text>
+    <rect x="430" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="121" fill="#111111">.</text>
+    <rect x="440" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="121" fill="#111111">.</text>
+    <rect x="450" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="121" fill="#111111">.</text>
+    <rect x="460" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="121" fill="#111111">.</text>
+    <rect x="470" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="121" fill="#111111">.</text>
+    <rect x="480" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="121" fill="#111111">.</text>
+    <rect x="490" y="108" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="121" fill="#111111">.</text>
+    <rect x="0" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="139" fill="#111111">.</text>
+    <rect x="10" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="139" fill="#111111">.</text>
+    <rect x="20" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="139" fill="#111111">.</text>
+    <rect x="30" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="139" fill="#111111">.</text>
+    <rect x="40" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="139" fill="#111111">.</text>
+    <rect x="50" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="139" fill="#111111">.</text>
+    <rect x="60" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="139" fill="#111111">.</text>
+    <rect x="70" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="139" fill="#111111">.</text>
+    <rect x="80" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="139" fill="#111111">║</text>
+    <rect x="90" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="139" fill="#111111">.</text>
+    <rect x="100" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="139" fill="#111111">.</text>
+    <rect x="110" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="139" fill="#111111">.</text>
+    <rect x="120" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="139" fill="#111111">.</text>
+    <rect x="130" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="139" fill="#111111">.</text>
+    <rect x="140" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="139" fill="#111111">.</text>
+    <rect x="150" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="139" fill="#111111">.</text>
+    <rect x="160" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="139" fill="#111111">.</text>
+    <rect x="170" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="139" fill="#111111">.</text>
+    <rect x="180" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="139" fill="#111111">.</text>
+    <rect x="190" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="139" fill="#111111">.</text>
+    <rect x="200" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="139" fill="#111111">.</text>
+    <rect x="210" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="139" fill="#111111">.</text>
+    <rect x="220" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="139" fill="#111111">.</text>
+    <rect x="230" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="139" fill="#111111">.</text>
+    <rect x="240" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="139" fill="#111111">.</text>
+    <rect x="250" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="139" fill="#111111">.</text>
+    <rect x="260" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="139" fill="#111111">.</text>
+    <rect x="270" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="139" fill="#111111">.</text>
+    <rect x="280" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="139" fill="#111111">.</text>
+    <rect x="290" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="139" fill="#111111">.</text>
+    <rect x="300" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="139" fill="#111111">.</text>
+    <rect x="310" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="139" fill="#111111">.</text>
+    <rect x="320" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="139" fill="#111111">.</text>
+    <rect x="330" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="139" fill="#111111">.</text>
+    <rect x="340" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="139" fill="#111111">.</text>
+    <rect x="350" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="139" fill="#111111">.</text>
+    <rect x="360" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="139" fill="#111111">.</text>
+    <rect x="370" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="139" fill="#111111">.</text>
+    <rect x="380" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="139" fill="#111111">.</text>
+    <rect x="390" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="139" fill="#111111">.</text>
+    <rect x="400" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="139" fill="#111111">.</text>
+    <rect x="410" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="139" fill="#111111">║</text>
+    <rect x="420" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="139" fill="#111111">.</text>
+    <rect x="430" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="139" fill="#111111">.</text>
+    <rect x="440" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="139" fill="#111111">.</text>
+    <rect x="450" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="139" fill="#111111">.</text>
+    <rect x="460" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="139" fill="#111111">.</text>
+    <rect x="470" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="139" fill="#111111">.</text>
+    <rect x="480" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="139" fill="#111111">.</text>
+    <rect x="490" y="126" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="139" fill="#111111">.</text>
+    <rect x="0" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="157" fill="#111111">.</text>
+    <rect x="10" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="157" fill="#111111">.</text>
+    <rect x="20" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="157" fill="#111111">.</text>
+    <rect x="30" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="157" fill="#111111">.</text>
+    <rect x="40" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="157" fill="#111111">.</text>
+    <rect x="50" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="157" fill="#111111">.</text>
+    <rect x="60" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="157" fill="#111111">.</text>
+    <rect x="70" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="157" fill="#111111">.</text>
+    <rect x="80" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="157" fill="#111111">║</text>
+    <rect x="90" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="157" fill="#111111">.</text>
+    <rect x="100" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="157" fill="#111111">.</text>
+    <rect x="110" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="157" fill="#111111">.</text>
+    <rect x="120" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="157" fill="#111111">.</text>
+    <rect x="130" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="157" fill="#111111">.</text>
+    <rect x="140" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="157" fill="#111111">.</text>
+    <rect x="150" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="157" fill="#111111">.</text>
+    <rect x="160" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="157" fill="#111111">.</text>
+    <rect x="170" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="157" fill="#111111">.</text>
+    <rect x="180" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="157" fill="#111111">.</text>
+    <rect x="190" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="157" fill="#111111">.</text>
+    <rect x="200" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="157" fill="#111111">.</text>
+    <rect x="210" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="157" fill="#111111">.</text>
+    <rect x="220" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="157" fill="#111111">.</text>
+    <rect x="230" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="157" fill="#111111">.</text>
+    <rect x="240" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="157" fill="#111111">.</text>
+    <rect x="250" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="157" fill="#111111">.</text>
+    <rect x="260" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="157" fill="#111111">.</text>
+    <rect x="270" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="157" fill="#111111">.</text>
+    <rect x="280" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="157" fill="#111111">.</text>
+    <rect x="290" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="157" fill="#111111">.</text>
+    <rect x="300" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="157" fill="#111111">.</text>
+    <rect x="310" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="157" fill="#111111">.</text>
+    <rect x="320" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="157" fill="#111111">.</text>
+    <rect x="330" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="157" fill="#111111">.</text>
+    <rect x="340" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="157" fill="#111111">.</text>
+    <rect x="350" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="157" fill="#111111">.</text>
+    <rect x="360" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="157" fill="#111111">.</text>
+    <rect x="370" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="157" fill="#111111">.</text>
+    <rect x="380" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="157" fill="#111111">.</text>
+    <rect x="390" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="157" fill="#111111">.</text>
+    <rect x="400" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="157" fill="#111111">.</text>
+    <rect x="410" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="157" fill="#111111">║</text>
+    <rect x="420" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="157" fill="#111111">.</text>
+    <rect x="430" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="157" fill="#111111">.</text>
+    <rect x="440" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="157" fill="#111111">.</text>
+    <rect x="450" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="157" fill="#111111">.</text>
+    <rect x="460" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="157" fill="#111111">.</text>
+    <rect x="470" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="157" fill="#111111">.</text>
+    <rect x="480" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="157" fill="#111111">.</text>
+    <rect x="490" y="144" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="157" fill="#111111">.</text>
+    <rect x="0" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="175" fill="#111111">.</text>
+    <rect x="10" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="175" fill="#111111">.</text>
+    <rect x="20" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="175" fill="#111111">.</text>
+    <rect x="30" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="175" fill="#111111">.</text>
+    <rect x="40" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="175" fill="#111111">.</text>
+    <rect x="50" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="175" fill="#111111">.</text>
+    <rect x="60" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="175" fill="#111111">.</text>
+    <rect x="70" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="175" fill="#111111">.</text>
+    <rect x="80" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="175" fill="#111111">║</text>
+    <rect x="90" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="175" fill="#111111">.</text>
+    <rect x="100" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="175" fill="#111111">.</text>
+    <rect x="110" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="175" fill="#111111">.</text>
+    <rect x="120" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="175" fill="#111111">.</text>
+    <rect x="130" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="175" fill="#111111">.</text>
+    <rect x="140" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="175" fill="#111111">.</text>
+    <rect x="150" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="175" fill="#111111">.</text>
+    <rect x="160" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="175" fill="#111111">.</text>
+    <rect x="170" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="175" fill="#111111">.</text>
+    <rect x="180" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="175" fill="#111111">.</text>
+    <rect x="190" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="175" fill="#111111">.</text>
+    <rect x="200" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="175" fill="#111111">.</text>
+    <rect x="210" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="175" fill="#111111">.</text>
+    <rect x="220" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="175" fill="#111111">.</text>
+    <rect x="230" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="175" fill="#111111">.</text>
+    <rect x="240" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="175" fill="#111111">.</text>
+    <rect x="250" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="175" fill="#111111">.</text>
+    <rect x="260" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="175" fill="#111111">.</text>
+    <rect x="270" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="175" fill="#111111">.</text>
+    <rect x="280" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="175" fill="#111111">.</text>
+    <rect x="290" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="175" fill="#111111">.</text>
+    <rect x="300" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="175" fill="#111111">.</text>
+    <rect x="310" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="175" fill="#111111">.</text>
+    <rect x="320" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="175" fill="#111111">.</text>
+    <rect x="330" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="175" fill="#111111">.</text>
+    <rect x="340" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="175" fill="#111111">.</text>
+    <rect x="350" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="175" fill="#111111">.</text>
+    <rect x="360" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="175" fill="#111111">.</text>
+    <rect x="370" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="175" fill="#111111">.</text>
+    <rect x="380" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="175" fill="#111111">.</text>
+    <rect x="390" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="175" fill="#111111">.</text>
+    <rect x="400" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="175" fill="#111111">.</text>
+    <rect x="410" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="175" fill="#111111">║</text>
+    <rect x="420" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="175" fill="#111111">.</text>
+    <rect x="430" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="175" fill="#111111">.</text>
+    <rect x="440" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="175" fill="#111111">.</text>
+    <rect x="450" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="175" fill="#111111">.</text>
+    <rect x="460" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="175" fill="#111111">.</text>
+    <rect x="470" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="175" fill="#111111">.</text>
+    <rect x="480" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="175" fill="#111111">.</text>
+    <rect x="490" y="162" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="175" fill="#111111">.</text>
+    <rect x="0" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="193" fill="#111111">.</text>
+    <rect x="10" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="193" fill="#111111">.</text>
+    <rect x="20" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="193" fill="#111111">.</text>
+    <rect x="30" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="193" fill="#111111">.</text>
+    <rect x="40" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="193" fill="#111111">.</text>
+    <rect x="50" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="193" fill="#111111">.</text>
+    <rect x="60" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="193" fill="#111111">.</text>
+    <rect x="70" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="193" fill="#111111">.</text>
+    <rect x="80" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="193" fill="#111111">║</text>
+    <rect x="90" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="193" fill="#111111">.</text>
+    <rect x="100" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="193" fill="#111111">.</text>
+    <rect x="110" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="193" fill="#111111">.</text>
+    <rect x="120" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="193" fill="#111111">.</text>
+    <rect x="130" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="193" fill="#111111">.</text>
+    <rect x="140" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="193" fill="#111111">.</text>
+    <rect x="150" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="193" fill="#111111">.</text>
+    <rect x="160" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="193" fill="#111111">.</text>
+    <rect x="170" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="193" fill="#111111">.</text>
+    <rect x="180" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="193" fill="#111111">.</text>
+    <rect x="190" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="193" fill="#111111">.</text>
+    <rect x="200" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="193" fill="#111111">.</text>
+    <rect x="210" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="193" fill="#111111">.</text>
+    <rect x="220" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="193" fill="#111111">.</text>
+    <rect x="230" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="193" fill="#111111">.</text>
+    <rect x="240" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="193" fill="#111111">.</text>
+    <rect x="250" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="193" fill="#111111">.</text>
+    <rect x="260" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="193" fill="#111111">.</text>
+    <rect x="270" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="193" fill="#111111">.</text>
+    <rect x="280" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="193" fill="#111111">.</text>
+    <rect x="290" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="193" fill="#111111">.</text>
+    <rect x="300" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="193" fill="#111111">.</text>
+    <rect x="310" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="193" fill="#111111">.</text>
+    <rect x="320" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="193" fill="#111111">.</text>
+    <rect x="330" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="193" fill="#111111">.</text>
+    <rect x="340" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="193" fill="#111111">.</text>
+    <rect x="350" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="193" fill="#111111">.</text>
+    <rect x="360" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="193" fill="#111111">.</text>
+    <rect x="370" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="193" fill="#111111">.</text>
+    <rect x="380" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="193" fill="#111111">.</text>
+    <rect x="390" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="193" fill="#111111">.</text>
+    <rect x="400" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="193" fill="#111111">.</text>
+    <rect x="410" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="193" fill="#111111">║</text>
+    <rect x="420" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="193" fill="#111111">.</text>
+    <rect x="430" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="193" fill="#111111">.</text>
+    <rect x="440" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="193" fill="#111111">.</text>
+    <rect x="450" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="193" fill="#111111">.</text>
+    <rect x="460" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="193" fill="#111111">.</text>
+    <rect x="470" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="193" fill="#111111">.</text>
+    <rect x="480" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="193" fill="#111111">.</text>
+    <rect x="490" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="193" fill="#111111">.</text>
+    <rect x="0" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="211" fill="#111111">.</text>
+    <rect x="10" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="211" fill="#111111">.</text>
+    <rect x="20" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="211" fill="#111111">.</text>
+    <rect x="30" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="211" fill="#111111">.</text>
+    <rect x="40" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="211" fill="#111111">.</text>
+    <rect x="50" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="211" fill="#111111">.</text>
+    <rect x="60" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="211" fill="#111111">.</text>
+    <rect x="70" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="211" fill="#111111">.</text>
+    <rect x="80" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="211" fill="#111111">╚</text>
+    <rect x="90" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="211" fill="#111111">═</text>
+    <rect x="100" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="211" fill="#111111">═</text>
+    <rect x="110" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="211" fill="#111111">═</text>
+    <rect x="120" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="211" fill="#111111">═</text>
+    <rect x="130" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="211" fill="#111111">═</text>
+    <rect x="140" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="211" fill="#111111">═</text>
+    <rect x="150" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="211" fill="#111111">═</text>
+    <rect x="160" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="211" fill="#111111">═</text>
+    <rect x="170" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="211" fill="#111111">═</text>
+    <rect x="180" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="211" fill="#111111">═</text>
+    <rect x="190" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="211" fill="#111111">═</text>
+    <rect x="200" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="211" fill="#111111">═</text>
+    <rect x="210" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="211" fill="#111111">═</text>
+    <rect x="220" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="211" fill="#111111">═</text>
+    <rect x="230" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="211" fill="#111111">═</text>
+    <rect x="240" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="211" fill="#111111">═</text>
+    <rect x="250" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="211" fill="#111111">═</text>
+    <rect x="260" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="211" fill="#111111">═</text>
+    <rect x="270" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="211" fill="#111111">═</text>
+    <rect x="280" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="211" fill="#111111">═</text>
+    <rect x="290" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="211" fill="#111111">═</text>
+    <rect x="300" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="211" fill="#111111">═</text>
+    <rect x="310" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="211" fill="#111111">═</text>
+    <rect x="320" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="211" fill="#111111">═</text>
+    <rect x="330" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="211" fill="#111111">═</text>
+    <rect x="340" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="211" fill="#111111">═</text>
+    <rect x="350" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="211" fill="#111111">═</text>
+    <rect x="360" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="211" fill="#111111">═</text>
+    <rect x="370" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="211" fill="#111111">═</text>
+    <rect x="380" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="211" fill="#111111">═</text>
+    <rect x="390" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="211" fill="#111111">═</text>
+    <rect x="400" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="211" fill="#111111">═</text>
+    <rect x="410" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="211" fill="#111111">╝</text>
+    <rect x="420" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="211" fill="#111111">.</text>
+    <rect x="430" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="211" fill="#111111">.</text>
+    <rect x="440" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="211" fill="#111111">.</text>
+    <rect x="450" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="211" fill="#111111">.</text>
+    <rect x="460" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="211" fill="#111111">.</text>
+    <rect x="470" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="211" fill="#111111">.</text>
+    <rect x="480" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="211" fill="#111111">.</text>
+    <rect x="490" y="198" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="211" fill="#111111">.</text>
+    <rect x="0" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="229" fill="#111111">.</text>
+    <rect x="10" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="229" fill="#111111">.</text>
+    <rect x="20" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="229" fill="#111111">.</text>
+    <rect x="30" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="229" fill="#111111">.</text>
+    <rect x="40" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="229" fill="#111111">.</text>
+    <rect x="50" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="229" fill="#111111">.</text>
+    <rect x="60" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="229" fill="#111111">.</text>
+    <rect x="70" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="229" fill="#111111">.</text>
+    <rect x="80" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="229" fill="#111111">.</text>
+    <rect x="90" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="229" fill="#111111">.</text>
+    <rect x="100" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="229" fill="#111111">.</text>
+    <rect x="110" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="229" fill="#111111">.</text>
+    <rect x="120" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="229" fill="#111111">.</text>
+    <rect x="130" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="229" fill="#111111">.</text>
+    <rect x="140" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="229" fill="#111111">.</text>
+    <rect x="150" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="229" fill="#111111">.</text>
+    <rect x="160" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="229" fill="#111111">.</text>
+    <rect x="170" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="229" fill="#111111">.</text>
+    <rect x="180" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="229" fill="#111111">.</text>
+    <rect x="190" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="229" fill="#111111">.</text>
+    <rect x="200" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="229" fill="#111111">.</text>
+    <rect x="210" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="229" fill="#111111">.</text>
+    <rect x="220" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="229" fill="#111111">.</text>
+    <rect x="230" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="229" fill="#111111">.</text>
+    <rect x="240" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="229" fill="#111111">.</text>
+    <rect x="250" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="229" fill="#111111">.</text>
+    <rect x="260" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="229" fill="#111111">.</text>
+    <rect x="270" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="229" fill="#111111">.</text>
+    <rect x="280" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="229" fill="#111111">.</text>
+    <rect x="290" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="229" fill="#111111">.</text>
+    <rect x="300" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="229" fill="#111111">.</text>
+    <rect x="310" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="229" fill="#111111">.</text>
+    <rect x="320" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="229" fill="#111111">.</text>
+    <rect x="330" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="229" fill="#111111">.</text>
+    <rect x="340" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="229" fill="#111111">.</text>
+    <rect x="350" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="229" fill="#111111">.</text>
+    <rect x="360" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="229" fill="#111111">.</text>
+    <rect x="370" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="229" fill="#111111">.</text>
+    <rect x="380" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="229" fill="#111111">.</text>
+    <rect x="390" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="229" fill="#111111">.</text>
+    <rect x="400" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="229" fill="#111111">.</text>
+    <rect x="410" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="229" fill="#111111">.</text>
+    <rect x="420" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="229" fill="#111111">.</text>
+    <rect x="430" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="229" fill="#111111">.</text>
+    <rect x="440" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="229" fill="#111111">.</text>
+    <rect x="450" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="229" fill="#111111">.</text>
+    <rect x="460" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="229" fill="#111111">.</text>
+    <rect x="470" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="229" fill="#111111">.</text>
+    <rect x="480" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="229" fill="#111111">.</text>
+    <rect x="490" y="216" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="229" fill="#111111">.</text>
+    <rect x="0" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="247" fill="#111111">.</text>
+    <rect x="10" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="247" fill="#111111">.</text>
+    <rect x="20" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="247" fill="#111111">.</text>
+    <rect x="30" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="247" fill="#111111">.</text>
+    <rect x="40" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="247" fill="#111111">.</text>
+    <rect x="50" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="247" fill="#111111">.</text>
+    <rect x="60" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="247" fill="#111111">.</text>
+    <rect x="70" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="247" fill="#111111">.</text>
+    <rect x="80" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="247" fill="#111111">.</text>
+    <rect x="90" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="247" fill="#111111">.</text>
+    <rect x="100" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="247" fill="#111111">.</text>
+    <rect x="110" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="247" fill="#111111">.</text>
+    <rect x="120" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="247" fill="#111111">.</text>
+    <rect x="130" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="247" fill="#111111">.</text>
+    <rect x="140" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="247" fill="#111111">.</text>
+    <rect x="150" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="247" fill="#111111">.</text>
+    <rect x="160" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="247" fill="#111111">.</text>
+    <rect x="170" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="247" fill="#111111">.</text>
+    <rect x="180" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="247" fill="#111111">.</text>
+    <rect x="190" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="247" fill="#111111">.</text>
+    <rect x="200" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="247" fill="#111111">.</text>
+    <rect x="210" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="247" fill="#111111">.</text>
+    <rect x="220" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="247" fill="#111111">.</text>
+    <rect x="230" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="247" fill="#111111">.</text>
+    <rect x="240" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="247" fill="#111111">.</text>
+    <rect x="250" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="247" fill="#111111">.</text>
+    <rect x="260" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="247" fill="#111111">.</text>
+    <rect x="270" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="247" fill="#111111">.</text>
+    <rect x="280" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="247" fill="#111111">.</text>
+    <rect x="290" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="247" fill="#111111">.</text>
+    <rect x="300" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="247" fill="#111111">.</text>
+    <rect x="310" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="247" fill="#111111">.</text>
+    <rect x="320" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="247" fill="#111111">.</text>
+    <rect x="330" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="247" fill="#111111">.</text>
+    <rect x="340" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="247" fill="#111111">.</text>
+    <rect x="350" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="247" fill="#111111">.</text>
+    <rect x="360" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="247" fill="#111111">.</text>
+    <rect x="370" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="247" fill="#111111">.</text>
+    <rect x="380" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="247" fill="#111111">.</text>
+    <rect x="390" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="247" fill="#111111">.</text>
+    <rect x="400" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="247" fill="#111111">.</text>
+    <rect x="410" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="247" fill="#111111">.</text>
+    <rect x="420" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="247" fill="#111111">.</text>
+    <rect x="430" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="247" fill="#111111">.</text>
+    <rect x="440" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="247" fill="#111111">.</text>
+    <rect x="450" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="247" fill="#111111">.</text>
+    <rect x="460" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="247" fill="#111111">.</text>
+    <rect x="470" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="247" fill="#111111">.</text>
+    <rect x="480" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="247" fill="#111111">.</text>
+    <rect x="490" y="234" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="247" fill="#111111">.</text>
+    <rect x="0" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="265" fill="#111111">.</text>
+    <rect x="10" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="265" fill="#111111">.</text>
+    <rect x="20" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="265" fill="#111111">.</text>
+    <rect x="30" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="265" fill="#111111">.</text>
+    <rect x="40" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="265" fill="#111111">.</text>
+    <rect x="50" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="265" fill="#111111">.</text>
+    <rect x="60" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="265" fill="#111111">.</text>
+    <rect x="70" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="265" fill="#111111">.</text>
+    <rect x="80" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="265" fill="#111111">.</text>
+    <rect x="90" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="265" fill="#111111">.</text>
+    <rect x="100" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="265" fill="#111111">.</text>
+    <rect x="110" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="265" fill="#111111">.</text>
+    <rect x="120" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="265" fill="#111111">.</text>
+    <rect x="130" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="265" fill="#111111">.</text>
+    <rect x="140" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="265" fill="#111111">.</text>
+    <rect x="150" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="265" fill="#111111">.</text>
+    <rect x="160" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="265" fill="#111111">.</text>
+    <rect x="170" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="265" fill="#111111">.</text>
+    <rect x="180" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="265" fill="#111111">.</text>
+    <rect x="190" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="265" fill="#111111">.</text>
+    <rect x="200" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="265" fill="#111111">.</text>
+    <rect x="210" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="265" fill="#111111">.</text>
+    <rect x="220" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="265" fill="#111111">.</text>
+    <rect x="230" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="265" fill="#111111">.</text>
+    <rect x="240" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="265" fill="#111111">.</text>
+    <rect x="250" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="265" fill="#111111">.</text>
+    <rect x="260" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="265" fill="#111111">.</text>
+    <rect x="270" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="265" fill="#111111">.</text>
+    <rect x="280" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="265" fill="#111111">.</text>
+    <rect x="290" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="265" fill="#111111">.</text>
+    <rect x="300" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="265" fill="#111111">.</text>
+    <rect x="310" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="265" fill="#111111">.</text>
+    <rect x="320" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="265" fill="#111111">.</text>
+    <rect x="330" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="265" fill="#111111">.</text>
+    <rect x="340" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="265" fill="#111111">.</text>
+    <rect x="350" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="265" fill="#111111">.</text>
+    <rect x="360" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="265" fill="#111111">.</text>
+    <rect x="370" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="265" fill="#111111">.</text>
+    <rect x="380" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="265" fill="#111111">.</text>
+    <rect x="390" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="265" fill="#111111">.</text>
+    <rect x="400" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="265" fill="#111111">.</text>
+    <rect x="410" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="265" fill="#111111">.</text>
+    <rect x="420" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="265" fill="#111111">.</text>
+    <rect x="430" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="265" fill="#111111">.</text>
+    <rect x="440" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="265" fill="#111111">.</text>
+    <rect x="450" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="265" fill="#111111">.</text>
+    <rect x="460" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="265" fill="#111111">.</text>
+    <rect x="470" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="265" fill="#111111">.</text>
+    <rect x="480" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="265" fill="#111111">.</text>
+    <rect x="490" y="252" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="265" fill="#111111">.</text>
+    <rect x="0" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="283" fill="#111111">.</text>
+    <rect x="10" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="283" fill="#111111">.</text>
+    <rect x="20" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="283" fill="#111111">.</text>
+    <rect x="30" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="283" fill="#111111">.</text>
+    <rect x="40" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="283" fill="#111111">.</text>
+    <rect x="50" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="283" fill="#111111">.</text>
+    <rect x="60" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="283" fill="#111111">.</text>
+    <rect x="70" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="283" fill="#111111">.</text>
+    <rect x="80" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="283" fill="#111111">.</text>
+    <rect x="90" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="283" fill="#111111">.</text>
+    <rect x="100" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="283" fill="#111111">.</text>
+    <rect x="110" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="283" fill="#111111">.</text>
+    <rect x="120" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="283" fill="#111111">.</text>
+    <rect x="130" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="283" fill="#111111">.</text>
+    <rect x="140" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="283" fill="#111111">.</text>
+    <rect x="150" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="283" fill="#111111">.</text>
+    <rect x="160" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="283" fill="#111111">.</text>
+    <rect x="170" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="283" fill="#111111">.</text>
+    <rect x="180" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="283" fill="#111111">.</text>
+    <rect x="190" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="283" fill="#111111">.</text>
+    <rect x="200" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="283" fill="#111111">.</text>
+    <rect x="210" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="283" fill="#111111">.</text>
+    <rect x="220" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="283" fill="#111111">.</text>
+    <rect x="230" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="283" fill="#111111">.</text>
+    <rect x="240" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="283" fill="#111111">.</text>
+    <rect x="250" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="283" fill="#111111">.</text>
+    <rect x="260" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="283" fill="#111111">.</text>
+    <rect x="270" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="283" fill="#111111">.</text>
+    <rect x="280" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="283" fill="#111111">.</text>
+    <rect x="290" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="283" fill="#111111">.</text>
+    <rect x="300" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="283" fill="#111111">.</text>
+    <rect x="310" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="283" fill="#111111">.</text>
+    <rect x="320" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="283" fill="#111111">.</text>
+    <rect x="330" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="331" y="283" fill="#111111">.</text>
+    <rect x="340" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="341" y="283" fill="#111111">.</text>
+    <rect x="350" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="351" y="283" fill="#111111">.</text>
+    <rect x="360" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="361" y="283" fill="#111111">.</text>
+    <rect x="370" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="371" y="283" fill="#111111">.</text>
+    <rect x="380" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="381" y="283" fill="#111111">.</text>
+    <rect x="390" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="391" y="283" fill="#111111">.</text>
+    <rect x="400" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="401" y="283" fill="#111111">.</text>
+    <rect x="410" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="411" y="283" fill="#111111">.</text>
+    <rect x="420" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="421" y="283" fill="#111111">.</text>
+    <rect x="430" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="431" y="283" fill="#111111">.</text>
+    <rect x="440" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="441" y="283" fill="#111111">.</text>
+    <rect x="450" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="451" y="283" fill="#111111">.</text>
+    <rect x="460" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="461" y="283" fill="#111111">.</text>
+    <rect x="470" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="471" y="283" fill="#111111">.</text>
+    <rect x="480" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="481" y="283" fill="#111111">.</text>
+    <rect x="490" y="270" width="10" height="18" fill="#ffffff" />
+    <text x="491" y="283" fill="#111111">.</text>
+  </g>
+</svg>

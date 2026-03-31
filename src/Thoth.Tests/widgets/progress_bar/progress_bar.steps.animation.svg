@@ -1,0 +1,371 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="330" height="220" viewBox="0 0 330 220">
+  <metadata id="thoth-animation" type="application/json"><![CDATA[
+{"kind":"thoth.animation.steps","steps":[{"index":0,"label":"step 00 progress=0.0","width":16,"height":1},{"index":1,"label":"step 01 progress=0.1","width":16,"height":1},{"index":2,"label":"step 02 progress=0.2","width":16,"height":1},{"index":3,"label":"step 03 progress=0.3","width":16,"height":1},{"index":4,"label":"step 04 progress=0.4","width":16,"height":1},{"index":5,"label":"step 05 progress=0.5","width":16,"height":1},{"index":6,"label":"step 06 progress=0.6","width":16,"height":1},{"index":7,"label":"step 07 progress=0.7","width":16,"height":1},{"index":8,"label":"step 08 progress=0.8","width":16,"height":1},{"index":9,"label":"step 09 progress=0.9","width":16,"height":1},{"index":10,"label":"step 10 progress=1.0","width":16,"height":1}],"metadata":{"control":"ProgressBar","style":"Solid","width":16,"fillGlyph":"\u2588","trackGlyph":"\u2591"}}
+  ]]></metadata>
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <text x="4" y="13" fill="#2c3e50">step 00 progress=0.0</text>
+    <rect x="170" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="13" fill="#111111">░</text>
+    <rect x="180" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="13" fill="#111111">░</text>
+    <rect x="190" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="13" fill="#111111">░</text>
+    <rect x="200" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="13" fill="#111111">░</text>
+    <rect x="210" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="13" fill="#111111">░</text>
+    <rect x="220" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="13" fill="#111111">░</text>
+    <rect x="230" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="13" fill="#111111">░</text>
+    <rect x="240" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="13" fill="#111111">░</text>
+    <rect x="250" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="13" fill="#111111">░</text>
+    <rect x="260" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="13" fill="#111111">░</text>
+    <rect x="270" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="13" fill="#111111">░</text>
+    <rect x="280" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="13" fill="#111111">░</text>
+    <rect x="290" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="13" fill="#111111">░</text>
+    <rect x="300" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="13" fill="#111111">░</text>
+    <rect x="310" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="13" fill="#111111">░</text>
+    <rect x="320" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="13" fill="#111111">░</text>
+    <text x="4" y="33" fill="#2c3e50">step 01 progress=0.1</text>
+    <rect x="170" y="20" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="33" fill="#111111">█</text>
+    <rect x="180" y="20" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="33" fill="#111111">█</text>
+    <rect x="190" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="33" fill="#111111">░</text>
+    <rect x="200" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="33" fill="#111111">░</text>
+    <rect x="210" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="33" fill="#111111">░</text>
+    <rect x="220" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="33" fill="#111111">░</text>
+    <rect x="230" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="33" fill="#111111">░</text>
+    <rect x="240" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="33" fill="#111111">░</text>
+    <rect x="250" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="33" fill="#111111">░</text>
+    <rect x="260" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="33" fill="#111111">░</text>
+    <rect x="270" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="33" fill="#111111">░</text>
+    <rect x="280" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="33" fill="#111111">░</text>
+    <rect x="290" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="33" fill="#111111">░</text>
+    <rect x="300" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="33" fill="#111111">░</text>
+    <rect x="310" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="33" fill="#111111">░</text>
+    <rect x="320" y="20" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="33" fill="#111111">░</text>
+    <text x="4" y="53" fill="#2c3e50">step 02 progress=0.2</text>
+    <rect x="170" y="40" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="53" fill="#111111">█</text>
+    <rect x="180" y="40" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="53" fill="#111111">█</text>
+    <rect x="190" y="40" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="191" y="53" fill="#111111">█</text>
+    <rect x="200" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="201" y="53" fill="#111111">░</text>
+    <rect x="210" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="211" y="53" fill="#111111">░</text>
+    <rect x="220" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="53" fill="#111111">░</text>
+    <rect x="230" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="53" fill="#111111">░</text>
+    <rect x="240" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="53" fill="#111111">░</text>
+    <rect x="250" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="53" fill="#111111">░</text>
+    <rect x="260" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="53" fill="#111111">░</text>
+    <rect x="270" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="53" fill="#111111">░</text>
+    <rect x="280" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="53" fill="#111111">░</text>
+    <rect x="290" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="53" fill="#111111">░</text>
+    <rect x="300" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="53" fill="#111111">░</text>
+    <rect x="310" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="53" fill="#111111">░</text>
+    <rect x="320" y="40" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="53" fill="#111111">░</text>
+    <text x="4" y="73" fill="#2c3e50">step 03 progress=0.3</text>
+    <rect x="170" y="60" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="73" fill="#111111">█</text>
+    <rect x="180" y="60" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="73" fill="#111111">█</text>
+    <rect x="190" y="60" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="191" y="73" fill="#111111">█</text>
+    <rect x="200" y="60" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="201" y="73" fill="#111111">█</text>
+    <rect x="210" y="60" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="211" y="73" fill="#111111">█</text>
+    <rect x="220" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="221" y="73" fill="#111111">░</text>
+    <rect x="230" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="73" fill="#111111">░</text>
+    <rect x="240" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="73" fill="#111111">░</text>
+    <rect x="250" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="73" fill="#111111">░</text>
+    <rect x="260" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="73" fill="#111111">░</text>
+    <rect x="270" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="73" fill="#111111">░</text>
+    <rect x="280" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="73" fill="#111111">░</text>
+    <rect x="290" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="73" fill="#111111">░</text>
+    <rect x="300" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="73" fill="#111111">░</text>
+    <rect x="310" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="73" fill="#111111">░</text>
+    <rect x="320" y="60" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="73" fill="#111111">░</text>
+    <text x="4" y="93" fill="#2c3e50">step 04 progress=0.4</text>
+    <rect x="170" y="80" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="93" fill="#111111">█</text>
+    <rect x="180" y="80" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="93" fill="#111111">█</text>
+    <rect x="190" y="80" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="191" y="93" fill="#111111">█</text>
+    <rect x="200" y="80" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="201" y="93" fill="#111111">█</text>
+    <rect x="210" y="80" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="211" y="93" fill="#111111">█</text>
+    <rect x="220" y="80" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="221" y="93" fill="#111111">█</text>
+    <rect x="230" y="80" width="10" height="18" fill="#ffffff" />
+    <text x="231" y="93" fill="#111111">░</text>
+    <rect x="240" y="80" width="10" height="18" fill="#ffffff" />
+    <text x="241" y="93" fill="#111111">░</text>
+    <rect x="250" y="80" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="93" fill="#111111">░</text>
+    <rect x="260" y="80" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="93" fill="#111111">░</text>
+    <rect x="270" y="80" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="93" fill="#111111">░</text>
+    <rect x="280" y="80" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="93" fill="#111111">░</text>
+    <rect x="290" y="80" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="93" fill="#111111">░</text>
+    <rect x="300" y="80" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="93" fill="#111111">░</text>
+    <rect x="310" y="80" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="93" fill="#111111">░</text>
+    <rect x="320" y="80" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="93" fill="#111111">░</text>
+    <text x="4" y="113" fill="#2c3e50">step 05 progress=0.5</text>
+    <rect x="170" y="100" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="113" fill="#111111">█</text>
+    <rect x="180" y="100" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="113" fill="#111111">█</text>
+    <rect x="190" y="100" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="191" y="113" fill="#111111">█</text>
+    <rect x="200" y="100" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="201" y="113" fill="#111111">█</text>
+    <rect x="210" y="100" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="211" y="113" fill="#111111">█</text>
+    <rect x="220" y="100" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="221" y="113" fill="#111111">█</text>
+    <rect x="230" y="100" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="231" y="113" fill="#111111">█</text>
+    <rect x="240" y="100" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="241" y="113" fill="#111111">█</text>
+    <rect x="250" y="100" width="10" height="18" fill="#ffffff" />
+    <text x="251" y="113" fill="#111111">░</text>
+    <rect x="260" y="100" width="10" height="18" fill="#ffffff" />
+    <text x="261" y="113" fill="#111111">░</text>
+    <rect x="270" y="100" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="113" fill="#111111">░</text>
+    <rect x="280" y="100" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="113" fill="#111111">░</text>
+    <rect x="290" y="100" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="113" fill="#111111">░</text>
+    <rect x="300" y="100" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="113" fill="#111111">░</text>
+    <rect x="310" y="100" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="113" fill="#111111">░</text>
+    <rect x="320" y="100" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="113" fill="#111111">░</text>
+    <text x="4" y="133" fill="#2c3e50">step 06 progress=0.6</text>
+    <rect x="170" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="133" fill="#111111">█</text>
+    <rect x="180" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="133" fill="#111111">█</text>
+    <rect x="190" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="191" y="133" fill="#111111">█</text>
+    <rect x="200" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="201" y="133" fill="#111111">█</text>
+    <rect x="210" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="211" y="133" fill="#111111">█</text>
+    <rect x="220" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="221" y="133" fill="#111111">█</text>
+    <rect x="230" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="231" y="133" fill="#111111">█</text>
+    <rect x="240" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="241" y="133" fill="#111111">█</text>
+    <rect x="250" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="251" y="133" fill="#111111">█</text>
+    <rect x="260" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="261" y="133" fill="#111111">█</text>
+    <rect x="270" y="120" width="10" height="18" fill="#ffffff" />
+    <text x="271" y="133" fill="#111111">░</text>
+    <rect x="280" y="120" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="133" fill="#111111">░</text>
+    <rect x="290" y="120" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="133" fill="#111111">░</text>
+    <rect x="300" y="120" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="133" fill="#111111">░</text>
+    <rect x="310" y="120" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="133" fill="#111111">░</text>
+    <rect x="320" y="120" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="133" fill="#111111">░</text>
+    <text x="4" y="153" fill="#2c3e50">step 07 progress=0.7</text>
+    <rect x="170" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="153" fill="#111111">█</text>
+    <rect x="180" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="153" fill="#111111">█</text>
+    <rect x="190" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="191" y="153" fill="#111111">█</text>
+    <rect x="200" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="201" y="153" fill="#111111">█</text>
+    <rect x="210" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="211" y="153" fill="#111111">█</text>
+    <rect x="220" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="221" y="153" fill="#111111">█</text>
+    <rect x="230" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="231" y="153" fill="#111111">█</text>
+    <rect x="240" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="241" y="153" fill="#111111">█</text>
+    <rect x="250" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="251" y="153" fill="#111111">█</text>
+    <rect x="260" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="261" y="153" fill="#111111">█</text>
+    <rect x="270" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="271" y="153" fill="#111111">█</text>
+    <rect x="280" y="140" width="10" height="18" fill="#ffffff" />
+    <text x="281" y="153" fill="#111111">░</text>
+    <rect x="290" y="140" width="10" height="18" fill="#ffffff" />
+    <text x="291" y="153" fill="#111111">░</text>
+    <rect x="300" y="140" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="153" fill="#111111">░</text>
+    <rect x="310" y="140" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="153" fill="#111111">░</text>
+    <rect x="320" y="140" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="153" fill="#111111">░</text>
+    <text x="4" y="173" fill="#2c3e50">step 08 progress=0.8</text>
+    <rect x="170" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="173" fill="#111111">█</text>
+    <rect x="180" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="173" fill="#111111">█</text>
+    <rect x="190" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="191" y="173" fill="#111111">█</text>
+    <rect x="200" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="201" y="173" fill="#111111">█</text>
+    <rect x="210" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="211" y="173" fill="#111111">█</text>
+    <rect x="220" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="221" y="173" fill="#111111">█</text>
+    <rect x="230" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="231" y="173" fill="#111111">█</text>
+    <rect x="240" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="241" y="173" fill="#111111">█</text>
+    <rect x="250" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="251" y="173" fill="#111111">█</text>
+    <rect x="260" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="261" y="173" fill="#111111">█</text>
+    <rect x="270" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="271" y="173" fill="#111111">█</text>
+    <rect x="280" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="281" y="173" fill="#111111">█</text>
+    <rect x="290" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="291" y="173" fill="#111111">█</text>
+    <rect x="300" y="160" width="10" height="18" fill="#ffffff" />
+    <text x="301" y="173" fill="#111111">░</text>
+    <rect x="310" y="160" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="173" fill="#111111">░</text>
+    <rect x="320" y="160" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="173" fill="#111111">░</text>
+    <text x="4" y="193" fill="#2c3e50">step 09 progress=0.9</text>
+    <rect x="170" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="193" fill="#111111">█</text>
+    <rect x="180" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="193" fill="#111111">█</text>
+    <rect x="190" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="191" y="193" fill="#111111">█</text>
+    <rect x="200" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="201" y="193" fill="#111111">█</text>
+    <rect x="210" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="211" y="193" fill="#111111">█</text>
+    <rect x="220" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="221" y="193" fill="#111111">█</text>
+    <rect x="230" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="231" y="193" fill="#111111">█</text>
+    <rect x="240" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="241" y="193" fill="#111111">█</text>
+    <rect x="250" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="251" y="193" fill="#111111">█</text>
+    <rect x="260" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="261" y="193" fill="#111111">█</text>
+    <rect x="270" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="271" y="193" fill="#111111">█</text>
+    <rect x="280" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="281" y="193" fill="#111111">█</text>
+    <rect x="290" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="291" y="193" fill="#111111">█</text>
+    <rect x="300" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="301" y="193" fill="#111111">█</text>
+    <rect x="310" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="311" y="193" fill="#111111">░</text>
+    <rect x="320" y="180" width="10" height="18" fill="#ffffff" />
+    <text x="321" y="193" fill="#111111">░</text>
+    <text x="4" y="213" fill="#2c3e50">step 10 progress=1.0</text>
+    <rect x="170" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="213" fill="#111111">█</text>
+    <rect x="180" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="213" fill="#111111">█</text>
+    <rect x="190" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="191" y="213" fill="#111111">█</text>
+    <rect x="200" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="201" y="213" fill="#111111">█</text>
+    <rect x="210" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="211" y="213" fill="#111111">█</text>
+    <rect x="220" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="221" y="213" fill="#111111">█</text>
+    <rect x="230" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="231" y="213" fill="#111111">█</text>
+    <rect x="240" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="241" y="213" fill="#111111">█</text>
+    <rect x="250" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="251" y="213" fill="#111111">█</text>
+    <rect x="260" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="261" y="213" fill="#111111">█</text>
+    <rect x="270" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="271" y="213" fill="#111111">█</text>
+    <rect x="280" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="281" y="213" fill="#111111">█</text>
+    <rect x="290" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="291" y="213" fill="#111111">█</text>
+    <rect x="300" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="301" y="213" fill="#111111">█</text>
+    <rect x="310" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="311" y="213" fill="#111111">█</text>
+    <rect x="320" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="321" y="213" fill="#111111">█</text>
+  </g>
+</svg>

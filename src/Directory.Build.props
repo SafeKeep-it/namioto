@@ -23,12 +23,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <CompilerVisibleProperty Include="AssemblyName" />
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory).ontology/assemblies.txt" />
+        <CompilerVisibleProperty Include="AssemblyName"/>
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory).ontology/assemblies.txt"/>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(MSBuildProjectName)' != 'CodeAnalysis'">
-        <ProjectReference Include="$(MSBuildThisFileDirectory)CodeAnalysis/CodeAnalysis.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ItemGroup Condition="'$(MSBuildProjectName)' != 'CodeAnalysis' and '$(PublishAot)' != 'true'">
+        <ProjectReference Include="$(MSBuildThisFileDirectory)CodeAnalysis/CodeAnalysis.csproj"
+                          OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <PropertyGroup>
@@ -40,7 +41,8 @@
         <IsAotCompatible>true</IsAotCompatible>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(OutputType)'=='Exe' and '$(UsingMicrosoftNETWebSdk)'!='true' and '$(UsingAspireAppHostSdk)'!='true'">
+    <PropertyGroup
+        Condition="'$(OutputType)'=='Exe' and '$(UsingMicrosoftNETWebSdk)'!='true' and '$(UsingAspireAppHostSdk)'!='true'">
         <PublishAot>true</PublishAot>
         <PublishTrimmed>true</PublishTrimmed>
         <TrimMode>link</TrimMode>

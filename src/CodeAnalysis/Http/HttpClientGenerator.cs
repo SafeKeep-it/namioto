@@ -76,7 +76,8 @@ public class HttpClientGenerator : IIncrementalGenerator
                                     .Select(static (r, _) => r!);
 
         context.RegisterSourceOutput(interfaceTypes.Collect().Combine(context.CompilationProvider),
-                                     static (spc, source) => Execute(source.Left, source.Right, spc));
+                                     static (spc, source) =>
+                                         Execute(source.Left, source.Right, spc));
     }
 
     static bool IsCreateInvocation(SyntaxNode node)
@@ -86,8 +87,10 @@ public class HttpClientGenerator : IIncrementalGenerator
             var expression = invocation.Expression;
             if (expression is MemberAccessExpressionSyntax memberAccess)
                 return memberAccess.Name.Identifier.Text == "Create";
-            if (expression is IdentifierNameSyntax identifier) return identifier.Identifier.Text == "Create";
-            if (expression is GenericNameSyntax genericName) return genericName.Identifier.Text == "Create";
+            if (expression is IdentifierNameSyntax identifier)
+                return identifier.Identifier.Text == "Create";
+            if (expression is GenericNameSyntax genericName)
+                return genericName.Identifier.Text == "Create";
         }
 
         return false;
@@ -113,15 +116,20 @@ public class HttpClientGenerator : IIncrementalGenerator
         else
         {
             // Fallback: try to get it from the syntax if it's Create<T>
-            if (invocation.Expression is MemberAccessExpressionSyntax { Name: GenericNameSyntax g1 })
+            if (invocation.Expression is MemberAccessExpressionSyntax
+                {
+                    Name: GenericNameSyntax g1
+                })
             {
                 var typeSyntax = g1.TypeArgumentList.Arguments.FirstOrDefault();
-                if (typeSyntax != null) interfaceType = context.SemanticModel.GetTypeInfo(typeSyntax).Type;
+                if (typeSyntax != null)
+                    interfaceType = context.SemanticModel.GetTypeInfo(typeSyntax).Type;
             }
             else if (invocation.Expression is GenericNameSyntax g2)
             {
                 var typeSyntax = g2.TypeArgumentList.Arguments.FirstOrDefault();
-                if (typeSyntax != null) interfaceType = context.SemanticModel.GetTypeInfo(typeSyntax).Type;
+                if (typeSyntax != null)
+                    interfaceType = context.SemanticModel.GetTypeInfo(typeSyntax).Type;
             }
         }
 
@@ -199,7 +207,12 @@ public class HttpClientGenerator : IIncrementalGenerator
                     // ... (wait, manifest might need update if we change output path format)
 
                     var symbolNames =
-                        GenerateFileForInterface(reg, compilation, context, manifest, sourcePath, addedHintNames);
+                        GenerateFileForInterface(reg,
+                                                 compilation,
+                                                 context,
+                                                 manifest,
+                                                 sourcePath,
+                                                 addedHintNames);
                     manifest.RecordGeneration(sourcePath, outputPath, symbolNames);
                 }
                 catch (Exception ex)
@@ -211,7 +224,8 @@ public class HttpClientGenerator : IIncrementalGenerator
                                                               "CodeGeneration",
                                                               DiagnosticSeverity.Error,
                                                               true);
-                    context.ReportDiagnostic(Diagnostic.Create(descriptor, Location.None, ex.Message));
+                    context.ReportDiagnostic(
+                        Diagnostic.Create(descriptor, Location.None, ex.Message));
                 }
             }
         }
@@ -247,7 +261,9 @@ public class HttpClientGenerator : IIncrementalGenerator
         if (syntaxTree != null)
         {
             var root = syntaxTree.GetRoot();
-            var namespaceDecl = root.DescendantNodes().OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
+            var namespaceDecl = root.DescendantNodes()
+                                    .OfType<BaseNamespaceDeclarationSyntax>()
+                                    .FirstOrDefault();
             if (namespaceDecl != null)
                 ns = namespaceDecl.Name.ToString();
             else
@@ -261,15 +277,19 @@ public class HttpClientGenerator : IIncrementalGenerator
         var relativePath = sourcePath;
         var projectRoot = GeneratorManifest.FindProjectRoot(sourcePath);
         if (projectRoot != null)
-            relativePath = sourcePath.Substring(projectRoot.Length).TrimStart(Path.DirectorySeparatorChar, '/');
+            relativePath = sourcePath.Substring(projectRoot.Length)
+                                     .TrimStart(Path.DirectorySeparatorChar, '/');
 
-        var sanitizedPath = relativePath.Replace(Path.DirectorySeparatorChar, '_').Replace('.', '_').Replace('-', '_');
+        var sanitizedPath = relativePath.Replace(Path.DirectorySeparatorChar, '_')
+                                        .Replace('.', '_')
+                                        .Replace('-', '_');
         var serializerClassName = $"{sanitizedPath}_{interfaceType.Name}Serializer";
 
         // === DISK FILE: Attributes only for STJ source generator ===
         var diskSb = new StringBuilder();
         diskSb.AppendLine("// <auto-generated by=\"Comptatata.CodeAnalysis.Http\" />");
-        diskSb.AppendLine("// This file contains only STJ attributes. Runtime code is in the .g.cs file.");
+        diskSb.AppendLine(
+            "// This file contains only STJ attributes. Runtime code is in the .g.cs file.");
         diskSb.AppendLine("#nullable enable");
         diskSb.AppendLine();
         diskSb.AppendLine("using System.Text.Json.Serialization;");
@@ -281,7 +301,10 @@ public class HttpClientGenerator : IIncrementalGenerator
             diskSb.AppendLine();
         }
 
-        JsonSerializerContextEmitter.EmitAttributesOnly(diskSb, serializerClassName, "internal", info.MessageGraph);
+        JsonSerializerContextEmitter.EmitAttributesOnly(diskSb,
+                                                        serializerClassName,
+                                                        "internal",
+                                                        info.MessageGraph);
 
         var diskContent = diskSb.ToString();
         try
@@ -356,7 +379,8 @@ public class HttpClientGenerator : IIncrementalGenerator
                                          method.Method.Parameters.Select(p =>
                                          {
                                              var attr =
-                                                 method.IsStreaming && p.Name == method.CancellationTokenParameterName
+                                                 method.IsStreaming && p.Name ==
+                                                 method.CancellationTokenParameterName
                                                      ? "[global::System.Runtime.CompilerServices.EnumeratorCancellation] "
                                                      : "";
                                              return
@@ -370,7 +394,10 @@ public class HttpClientGenerator : IIncrementalGenerator
 
             ITypeSymbol? rawEntityType = null;
             var isRawResponse = unwrappedReturn is not null &&
-                                TryGetHttpResponseEntityType(unwrappedReturn, compilation, out rawEntityType);
+                                TryGetHttpResponseEntityType(
+                                    unwrappedReturn,
+                                    compilation,
+                                    out rawEntityType);
 
             sb.AppendLine(
                 $"    public {asyncKeyword}{method.Method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {method.Method.Name}({parameters})");
@@ -389,7 +416,8 @@ public class HttpClientGenerator : IIncrementalGenerator
             if (method.ParameterType != null)
             {
                 var paramName = method.ParameterName;
-                var paramTypeStr = method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                var paramTypeStr =
+                    method.ParameterType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                 contentFactory =
                     $"() => global::System.Net.Http.Json.JsonContent.Create<{paramTypeStr}>({paramName}, {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(method.ParameterType)})";
             }
@@ -416,8 +444,10 @@ public class HttpClientGenerator : IIncrementalGenerator
 
             if (method.IsStreaming)
             {
-                var streamingTypeStr = method.StreamingType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                var streamingTypePropertyName = JsonSerializerContextEmitter.GetPropertyName(method.StreamingType!);
+                var streamingTypeStr =
+                    method.StreamingType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                var streamingTypePropertyName =
+                    JsonSerializerContextEmitter.GetPropertyName(method.StreamingType!);
 
                 sb.AppendLine(
                     $"        var currentUri = new global::System.Uri(\"{urlPath}\", global::System.UriKind.RelativeOrAbsolute);");
@@ -430,7 +460,8 @@ public class HttpClientGenerator : IIncrementalGenerator
                 }
                 else
                 {
-                    sb.AppendLine("        using var request = new HttpRequestMessage(currentMethod, currentUri);");
+                    sb.AppendLine(
+                        "        using var request = new HttpRequestMessage(currentMethod, currentUri);");
                 }
 
                 sb.AppendLine(
@@ -443,7 +474,8 @@ public class HttpClientGenerator : IIncrementalGenerator
                 sb.AppendLine();
                 sb.AppendLine(
                     $"        var stream = await response.Content.ReadAsStreamAsync({ctArg}).ConfigureAwait(false);");
-                sb.AppendLine("        var contentType = response.Content.Headers.ContentType?.ToString();");
+                sb.AppendLine(
+                    "        var contentType = response.Content.Headers.ContentType?.ToString();");
                 sb.AppendLine(
                     "        if (contentType is not null && contentType.Contains(\"ndjson\", global::System.StringComparison.OrdinalIgnoreCase))");
                 sb.AppendLine("        {");
@@ -467,15 +499,17 @@ public class HttpClientGenerator : IIncrementalGenerator
                 $"        var currentUri = new global::System.Uri(\"{urlPath}\", global::System.UriKind.RelativeOrAbsolute);");
             sb.AppendLine($"        var currentMethod = {requestMethod};");
 
-            if (method.Method.ReturnType is INamedTypeSymbol returnType && returnType.IsGenericType &&
-                JsonSerializerContextEmitter.IsTask(returnType))
+            if (method.Method.ReturnType is INamedTypeSymbol returnType &&
+                returnType.IsGenericType && JsonSerializerContextEmitter.IsTask(returnType))
             {
                 var resultType = returnType.TypeArguments[0];
 
                 if (isRawResponse)
                 {
-                    sb.AppendLine("        return await global::Comptatata.Http.HttpClientHelper.RequestMessageAsync(");
-                    sb.AppendLine($"            _client, currentUri, currentMethod, {contentFactory},");
+                    sb.AppendLine(
+                        "        return await global::Comptatata.Http.HttpClientHelper.RequestMessageAsync(");
+                    sb.AppendLine(
+                        $"            _client, currentUri, currentMethod, {contentFactory},");
                     sb.AppendLine(
                         $"            {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(rawEntityType!)},");
                     sb.AppendLine(
@@ -483,8 +517,10 @@ public class HttpClientGenerator : IIncrementalGenerator
                 }
                 else
                 {
-                    sb.AppendLine("        return await global::Comptatata.Http.HttpClientHelper.RequestPocoAsync(");
-                    sb.AppendLine($"            _client, currentUri, currentMethod, {contentFactory},");
+                    sb.AppendLine(
+                        "        return await global::Comptatata.Http.HttpClientHelper.RequestPocoAsync(");
+                    sb.AppendLine(
+                        $"            _client, currentUri, currentMethod, {contentFactory},");
                     sb.AppendLine(
                         $"            {serializerClassName}.Generated.{JsonSerializerContextEmitter.GetPropertyName(resultType)},");
                     sb.AppendLine(
@@ -493,7 +529,8 @@ public class HttpClientGenerator : IIncrementalGenerator
             }
             else
             {
-                sb.AppendLine("        await global::Comptatata.Http.HttpClientHelper.RequestPocoVoidAsync(");
+                sb.AppendLine(
+                    "        await global::Comptatata.Http.HttpClientHelper.RequestPocoVoidAsync(");
                 sb.AppendLine($"            _client, currentUri, currentMethod, {contentFactory},");
                 sb.AppendLine(
                     $"            {serializerClassName}.Generated.ProblemDetails, {ctArg}).ConfigureAwait(false);");
@@ -576,7 +613,9 @@ public class HttpClientGenerator : IIncrementalGenerator
         return sb.ToString();
     }
 
-    static bool TryGetHttpResponseEntityType(ITypeSymbol type, Compilation compilation, out ITypeSymbol? entityType)
+    static bool TryGetHttpResponseEntityType(ITypeSymbol type,
+                                             Compilation compilation,
+                                             out ITypeSymbol? entityType)
     {
         entityType = null;
         if (type is not INamedTypeSymbol named || !named.IsGenericType) return false;
@@ -584,7 +623,8 @@ public class HttpClientGenerator : IIncrementalGenerator
         var httpResponseType = compilation.GetTypeByMetadataName("Comptatata.Http.HttpResponse`1");
         if (httpResponseType is null) return false;
 
-        if (!SymbolEqualityComparer.Default.Equals(named.OriginalDefinition, httpResponseType)) return false;
+        if (!SymbolEqualityComparer.Default.Equals(named.OriginalDefinition, httpResponseType))
+            return false;
 
         entityType = named.TypeArguments[0];
         return true;
@@ -603,7 +643,8 @@ public class HttpClientGenerator : IIncrementalGenerator
         var graph = new JsonSerializerContextEmitter.SerializationGraph();
         var methods = new List<MethodInfo>();
         var seenMethods = new HashSet<string>(StringComparer.Ordinal);
-        var allTypesInCompilation = JsonSerializerContextEmitter.GetAllTypesInCompilation(compilation);
+        var allTypesInCompilation =
+            JsonSerializerContextEmitter.GetAllTypesInCompilation(compilation);
 
         foreach (var member in interfaceType.GetMembers().OfType<IMethodSymbol>())
         {
@@ -646,16 +687,24 @@ public class HttpClientGenerator : IIncrementalGenerator
             }
 
             var isAsync = JsonSerializerContextEmitter.IsTask(member.ReturnType) || isStreaming;
-            var streamingType = isStreaming ? ((INamedTypeSymbol)streamingReturnType).TypeArguments[0] : null;
+            var streamingType = isStreaming
+                ? ((INamedTypeSymbol)streamingReturnType).TypeArguments[0]
+                : null;
 
-            methods.Add(new(member, paramType, paramName, ctName, isAsync || isStreaming, isStreaming, streamingType));
+            methods.Add(new(member,
+                            paramType,
+                            paramName,
+                            ctName,
+                            isAsync || isStreaming,
+                            isStreaming,
+                            streamingType));
 
             if (paramType != null)
                 JsonSerializerContextEmitter.AddSerializableTypes(graph,
-                                                                  paramType,
-                                                                  compilation,
-                                                                  allTypesInCompilation,
-                                                                  context.ReportDiagnostic);
+                    paramType,
+                    compilation,
+                    allTypesInCompilation,
+                    context.ReportDiagnostic);
 
             var unwrappedReturn = JsonSerializerContextEmitter.UnwrapTask(member.ReturnType);
             if (unwrappedReturn != null)
@@ -664,18 +713,18 @@ public class HttpClientGenerator : IIncrementalGenerator
                 if (JsonSerializerContextEmitter.IsAsyncEnumerable(serializableType))
                     serializableType = ((INamedTypeSymbol)serializableType).TypeArguments[0];
                 JsonSerializerContextEmitter.AddSerializableTypes(graph,
-                                                                  serializableType,
-                                                                  compilation,
-                                                                  allTypesInCompilation,
-                                                                  context.ReportDiagnostic);
+                    serializableType,
+                    compilation,
+                    allTypesInCompilation,
+                    context.ReportDiagnostic);
             }
             else if (isStreaming && streamingType != null)
             {
                 JsonSerializerContextEmitter.AddSerializableTypes(graph,
-                                                                  streamingType,
-                                                                  compilation,
-                                                                  allTypesInCompilation,
-                                                                  context.ReportDiagnostic);
+                    streamingType,
+                    compilation,
+                    allTypesInCompilation,
+                    context.ReportDiagnostic);
             }
         }
 
@@ -687,7 +736,8 @@ public class HttpClientGenerator : IIncrementalGenerator
                                                               allTypesInCompilation,
                                                               context.ReportDiagnostic);
 
-        var validationProblemDetails = compilation.GetTypeByMetadataName("Comptatata.Http.ValidationProblemDetails");
+        var validationProblemDetails =
+            compilation.GetTypeByMetadataName("Comptatata.Http.ValidationProblemDetails");
         if (validationProblemDetails != null)
             JsonSerializerContextEmitter.AddSerializableTypes(graph,
                                                               validationProblemDetails,
@@ -700,7 +750,8 @@ public class HttpClientGenerator : IIncrementalGenerator
 
     static bool IsHttpResponseMessage(ITypeSymbol type, Compilation compilation)
     {
-        var httpResponseMessageType = compilation.GetTypeByMetadataName("System.Net.Http.HttpResponseMessage");
+        var httpResponseMessageType =
+            compilation.GetTypeByMetadataName("System.Net.Http.HttpResponseMessage");
         return SymbolEqualityComparer.Default.Equals(type, httpResponseMessageType);
     }
 
@@ -736,7 +787,8 @@ public class HttpClientGenerator : IIncrementalGenerator
 
     class InterfaceInfo
     {
-        public InterfaceInfo(JsonSerializerContextEmitter.SerializationGraph messageGraph, List<MethodInfo> methods)
+        public InterfaceInfo(JsonSerializerContextEmitter.SerializationGraph messageGraph,
+                             List<MethodInfo> methods)
         {
             MessageGraph = messageGraph;
             Methods = methods;

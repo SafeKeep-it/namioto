@@ -1,0 +1,64 @@
+{
+  "name": "Thoth (Night)",
+  "id": "thoth-dark",
+  "description": "Underworld lapis, bright gold, and ruby palette.",
+  "author": "Comptatata",
+  "variant": "dark",
+  "version": 1,
+  "colors": {
+    "background": {
+      "rgb": "#070b17",
+      "xterm256": 233,
+      "ansi": "black",
+      "description": "Night chamber background."
+    },
+    "text": {
+      "rgb": "#e0d2ae",
+      "xterm256": 223,
+      "ansi": "white",
+      "description": "Primary text, gilded ivory."
+    },
+    "dim": {
+      "rgb": "#7a6e8f",
+      "xterm256": 103,
+      "ansi": "bright_black",
+      "description": "Secondary text with amethyst undertone."
+    },
+    "border": {
+      "rgb": "#4b3f76",
+      "xterm256": 61,
+      "ansi": "blue",
+      "description": "Structural borders and separators."
+    },
+    "accent": {
+      "rgb": "#3f7cff",
+      "xterm256": 69,
+      "ansi": "blue",
+      "description": "Focus and active controls."
+    },
+    "notify": {
+      "rgb": "#ffcc33",
+      "xterm256": 220,
+      "ansi": "yellow",
+      "description": "Notifications and highlights."
+    },
+    "success": {
+      "rgb": "#2e9b63",
+      "xterm256": 35,
+      "ansi": "green",
+      "description": "Success and positive states."
+    },
+    "warning": {
+      "rgb": "#e09a2f",
+      "xterm256": 179,
+      "ansi": "yellow",
+      "description": "Warning states."
+    },
+    "error": {
+      "rgb": "#b62f4b",
+      "xterm256": 125,
+      "ansi": "red",
+      "description": "Error and critical states."
+    }
+  }
+}

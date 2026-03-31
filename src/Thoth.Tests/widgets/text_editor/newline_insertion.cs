@@ -1,0 +1,1 @@
+namespace Comptatata.Tests.App.Cli.UI.Thoth.components;

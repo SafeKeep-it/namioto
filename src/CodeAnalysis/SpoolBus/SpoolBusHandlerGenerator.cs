@@ -15,27 +15,35 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         var handlerTypes = context.SyntaxProvider
                                   .CreateSyntaxProvider(static (s, _) => IsAddHandlerInvocation(s),
                                                         static (ctx, _) =>
-                                                            GetRegistration(ctx, RegistrationType.Handler))
+                                                            GetRegistration(
+                                                                ctx,
+                                                                RegistrationType.Handler))
                                   .Where(static r => r is not null)
                                   .Select(static (r, _) => r!);
 
         var clientTypes = context.SyntaxProvider
                                  .CreateSyntaxProvider(static (s, _) => IsCreateClientInvocation(s),
-                                                       static (ctx, _) => GetRegistration(ctx, RegistrationType.Client))
+                                                       static (ctx, _) =>
+                                                           GetRegistration(
+                                                               ctx,
+                                                               RegistrationType.Client))
                                  .Where(static r => r is not null)
                                  .Select(static (r, _) => r!);
 
         var allRegistrations = handlerTypes.Collect().Combine(clientTypes.Collect());
 
         context.RegisterSourceOutput(allRegistrations.Combine(context.CompilationProvider),
-                                     static (spc, source) => Execute(source.Left.Left.AddRange(source.Left.Right),
-                                                                     source.Right,
-                                                                     spc));
+                                     static (spc, source) =>
+                                         Execute(source.Left.Left.AddRange(source.Left.Right),
+                                                 source.Right,
+                                                 spc));
     }
 
     static Registration? GetRegistration(GeneratorSyntaxContext context, RegistrationType kind)
     {
-        var type = kind == RegistrationType.Handler ? GetHandlerType(context) : GetClientType(context);
+        var type = kind == RegistrationType.Handler
+            ? GetHandlerType(context)
+            : GetClientType(context);
         if (type == null) return null;
         return new(type, kind, context.Node.SyntaxTree.FilePath);
     }
@@ -44,7 +52,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         node is InvocationExpressionSyntax invocation &&
         ((invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
           memberAccess.Name.Identifier.Text == "AddHandler") ||
-         (invocation.Expression is IdentifierNameSyntax identifier && identifier.Identifier.Text == "AddHandler"));
+         (invocation.Expression is IdentifierNameSyntax identifier &&
+          identifier.Identifier.Text == "AddHandler"));
 
     static ITypeSymbol? GetHandlerType(GeneratorSyntaxContext context)
     {
@@ -65,7 +74,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         node is InvocationExpressionSyntax invocation &&
         ((invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
           memberAccess.Name.Identifier.Text == "CreateClient") ||
-         (invocation.Expression is IdentifierNameSyntax identifier && identifier.Identifier.Text == "CreateClient"));
+         (invocation.Expression is IdentifierNameSyntax identifier &&
+          identifier.Identifier.Text == "CreateClient"));
 
     static ITypeSymbol? GetClientType(GeneratorSyntaxContext context)
     {
@@ -135,7 +145,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
             if (previousPath != null && previousPath != outputPath)
                 manifest.HandleFileRename(sourcePath, sourcePath, outputPath);
 
-            var symbolNames = GenerateFileForGroup(sourcePath, group.ToList(), compilation, context);
+            var symbolNames =
+                GenerateFileForGroup(sourcePath, group.ToList(), compilation, context);
             manifest.RecordGeneration(sourcePath, outputPath, symbolNames);
         }
 
@@ -160,7 +171,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         if (sourceFileName.StartsWith("SpoolBus.Remote."))
             foreach (var reg in registrations)
             {
-                var oldPath = Path.Combine(directory, $"{sourceFileName}.{reg.Type.Name}.generated.cs");
+                var oldPath =
+                    Path.Combine(directory, $"{sourceFileName}.{reg.Type.Name}.generated.cs");
                 if (File.Exists(oldPath))
                     try
                     {
@@ -193,7 +205,9 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         if (syntaxTree != null)
         {
             var root = syntaxTree.GetRoot();
-            var namespaceDecl = root.DescendantNodes().OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
+            var namespaceDecl = root.DescendantNodes()
+                                    .OfType<BaseNamespaceDeclarationSyntax>()
+                                    .FirstOrDefault();
             if (namespaceDecl != null)
                 ns = namespaceDecl.Name.ToString();
             else
@@ -282,8 +296,9 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
 
                 var allMessageTypes = info.MessageGraph.GetAllTypes();
                 var messageType = allMessageTypes.FirstOrDefault(t => t.Name == "Message" &&
-                                                                      t.ContainingNamespace?.ToDisplayString() ==
-                                                                      "Comptatata.SpoolDrop.Messages");
+                                                                     t.ContainingNamespace
+                                                                         ?.ToDisplayString() ==
+                                                                     "Comptatata.SpoolDrop.Messages");
                 var messageRoot = messageType != null
                     ? JsonSerializerContextEmitter.GetNearestPolymorphicRoot(messageType)
                     : null;
@@ -312,7 +327,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine(
                     $"    public {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} CreateClient(global::Comptatata.SpoolBus.SpoolBusClientFactory factory) => throw new global::System.NotSupportedException();");
                 sb.AppendLine();
-                sb.AppendLine("    public global::System.Threading.Tasks.ValueTask<bool> DispatchAsync(");
+                sb.AppendLine(
+                    "    public global::System.Threading.Tasks.ValueTask<bool> DispatchAsync(");
                 sb.AppendLine(
                     $"        global::System.Func<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}> handlerFactory,");
                 sb.AppendLine("        global::System.IO.Stream stream,");
@@ -326,7 +342,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
                 sb.AppendLine($"file static class {type.Name}SpoolBusDispatcher");
                 sb.AppendLine("{");
-                sb.AppendLine("    public static async global::System.Threading.Tasks.ValueTask<bool> DispatchAsync(");
+                sb.AppendLine(
+                    "    public static async global::System.Threading.Tasks.ValueTask<bool> DispatchAsync(");
                 sb.AppendLine(
                     $"        global::System.Func<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}> handlerFactory,");
                 sb.AppendLine("        global::System.IO.Stream stream,");
@@ -380,9 +397,11 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                         $"            var response = await Invoke_{method.Method.Name}(m_{method.Method.Name}).ConfigureAwait(false);");
                     sb.AppendLine("            if (response != null)");
                     sb.AppendLine("            {");
-                    sb.AppendLine("                if (response is global::Comptatata.SpoolDrop.Messages.Event e)");
+                    sb.AppendLine(
+                        "                if (response is global::Comptatata.SpoolDrop.Messages.Event e)");
                     sb.AppendLine("                {");
-                    sb.AppendLine("                    response = e with { ReplyTo = request?.Id };");
+                    sb.AppendLine(
+                        "                    response = e with { ReplyTo = request?.Id };");
                     sb.AppendLine("                }");
                     sb.AppendLine(
                         $"                await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync(response, {contextClassName}.SerializeAsync, {contextClassName}.{JsonSerializerContextEmitter.GetDiscriminatorMethodName(messageRoot)}, {contextClassName}.{JsonSerializerContextEmitter.GetTokenChainMethodName(messageRoot)}, directory, ct, purgatoryPath).ConfigureAwait(false);");
@@ -403,7 +422,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 sb.AppendLine(
                     $"file class {type.Name}SpoolBusClient : {type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}, global::Comptatata.SpoolBus.ISpoolBusInfrastructure<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>");
                 sb.AppendLine("{");
-                sb.AppendLine("    private readonly global::Comptatata.SpoolBus.SpoolBusClientFactory _factory;");
+                sb.AppendLine(
+                    "    private readonly global::Comptatata.SpoolBus.SpoolBusClientFactory _factory;");
                 sb.AppendLine(
                     $"    public {type.Name}SpoolBusClient(global::Comptatata.SpoolBus.SpoolBusClientFactory factory) => _factory = factory;");
                 sb.AppendLine();
@@ -418,8 +438,9 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
 
                 var allMessageTypes = info.MessageGraph.GetAllTypes();
                 var messageType = allMessageTypes.FirstOrDefault(t => t.Name == "Message" &&
-                                                                      t.ContainingNamespace?.ToDisplayString() ==
-                                                                      "Comptatata.SpoolDrop.Messages");
+                                                                     t.ContainingNamespace
+                                                                         ?.ToDisplayString() ==
+                                                                     "Comptatata.SpoolDrop.Messages");
                 var messageRoot = messageType != null
                     ? JsonSerializerContextEmitter.GetNearestPolymorphicRoot(messageType)
                     : null;
@@ -457,7 +478,9 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                 {
                     implementedMethods.Add(method.Method);
                     var paramName = method.Method.Parameters[0].Name;
-                    var ctParam = method.HasCancellationToken ? ", global::System.Threading.CancellationToken ct" : "";
+                    var ctParam = method.HasCancellationToken
+                        ? ", global::System.Threading.CancellationToken ct"
+                        : "";
                     var ctArg = method.HasCancellationToken ? ", ct" : "";
                     var isAsync = method.IsAsync || !method.IsOneWay;
                     var asyncKeyword = isAsync ? "async " : "";
@@ -470,13 +493,16 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     {
                         if (!method.IsOneWay)
                         {
-                            var timeoutArg = method.HasCancellationToken ? "null, ct" : "null, default";
+                            var timeoutArg = method.HasCancellationToken
+                                ? "null, ct"
+                                : "null, default";
                             var ctArgPart = method.HasCancellationToken ? "ct" : "default";
                             sb.AppendLine(
                                 $"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, this, {timeoutArg});");
                             sb.AppendLine(
                                 $"        await global::Comptatata.SpoolBus.SpoolBusInfrastructure.SendAsync({paramName}, SerializeAsync, GetDiscriminator, GetTokenChain, _factory.Directory, {ctArgPart}, _factory.PurgatoryPath).ConfigureAwait(false);");
-                            sb.AppendLine("        return await responseTask.ConfigureAwait(false);");
+                            sb.AppendLine(
+                                "        return await responseTask.ConfigureAwait(false);");
                         }
                         else
                         {
@@ -486,22 +512,27 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                             var returnType = method.Method.ReturnType.ToDisplayString();
                             if (returnType == "global::System.Threading.Tasks.Task")
                             {
-                                sb.AppendLine("        return global::System.Threading.Tasks.Task.CompletedTask;");
+                                sb.AppendLine(
+                                    "        return global::System.Threading.Tasks.Task.CompletedTask;");
                             }
                             else if (returnType == "global::System.Threading.Tasks.ValueTask")
                             {
-                                sb.AppendLine("        return global::System.Threading.Tasks.ValueTask.CompletedTask;");
+                                sb.AppendLine(
+                                    "        return global::System.Threading.Tasks.ValueTask.CompletedTask;");
                             }
                             else if (method.Method.ReturnType is INamedTypeSymbol
                                      {
                                          IsGenericType: true
                                      } genericReturn &&
-                                     (genericReturn.Name == "Task" || genericReturn.Name == "ValueTask") &&
-                                     genericReturn.ContainingNamespace.ToDisplayString() == "System.Threading.Tasks")
+                                     (genericReturn.Name == "Task" ||
+                                      genericReturn.Name == "ValueTask") &&
+                                     genericReturn.ContainingNamespace.ToDisplayString() ==
+                                     "System.Threading.Tasks")
                             {
                                 var resultType = genericReturn.TypeArguments[0]
                                                               .ToDisplayString(
-                                                                  SymbolDisplayFormat.FullyQualifiedFormat);
+                                                                  SymbolDisplayFormat
+                                                                      .FullyQualifiedFormat);
                                 if (genericReturn.Name == "Task")
                                     sb.AppendLine(
                                         $"        return global::System.Threading.Tasks.Task.FromResult<{resultType}>(default!);");
@@ -515,7 +546,9 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     {
                         if (!method.IsOneWay)
                         {
-                            var timeoutArg = method.HasCancellationToken ? "null, ct" : "null, default";
+                            var timeoutArg = method.HasCancellationToken
+                                ? "null, ct"
+                                : "null, default";
                             var ctArgPart = method.HasCancellationToken ? "ct" : "default";
                             sb.AppendLine(
                                 $"        var responseTask = _factory.WaitForResponseAsync<{method.MessageResultType!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>({paramName}.Id, this, {timeoutArg});");
@@ -541,7 +574,7 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     {
                         var parameters = string.Join(", ",
                                                      m.Parameters.Select(p =>
-                                                                             $"{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {p.Name}"));
+                                                         $"{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {p.Name}"));
                         sb.AppendLine(
                             $"    public {m.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {m.Name}({parameters}) => throw new global::System.NotSupportedException();");
                     }
@@ -549,9 +582,11 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                     {
                         var accessors = "";
                         if (p.GetMethod != null)
-                            accessors += "get => throw new global::System.NotSupportedException(); ";
+                            accessors +=
+                                "get => throw new global::System.NotSupportedException(); ";
                         if (p.SetMethod != null)
-                            accessors += "set => throw new global::System.NotSupportedException(); ";
+                            accessors +=
+                                "set => throw new global::System.NotSupportedException(); ";
                         sb.AppendLine(
                             $"    public {p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {p.Name} {{ {accessors} }}");
                     }
@@ -574,7 +609,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
                                       SourceProductionContext context)
     {
         var graph = new JsonSerializerContextEmitter.SerializationGraph();
-        var allTypesInCompilation = JsonSerializerContextEmitter.GetAllTypesInCompilation(compilation);
+        var allTypesInCompilation =
+            JsonSerializerContextEmitter.GetAllTypesInCompilation(compilation);
 
         foreach (var syntaxRef in handler.DeclaringSyntaxReferences)
         {
@@ -603,17 +639,18 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
 
                 if (symbol != null && IsOrInheritsFromMessage(symbol))
                     JsonSerializerContextEmitter.AddSerializableTypes(graph,
-                                                                      symbol,
-                                                                      compilation,
-                                                                      allTypesInCompilation,
-                                                                      context.ReportDiagnostic);
+                        symbol,
+                        compilation,
+                        allTypesInCompilation,
+                        context.ReportDiagnostic);
             }
         }
 
         var methods = handler.GetMembers()
                              .OfType<IMethodSymbol>()
                              .Where(m => m.MethodKind == MethodKind.Ordinary &&
-                                         m.DeclaredAccessibility == Accessibility.Public && !m.IsStatic)
+                                         m.DeclaredAccessibility == Accessibility.Public &&
+                                         !m.IsStatic)
                              .ToList();
 
         var handlerMethods = new List<HandlerMethodInfo>();
@@ -660,18 +697,23 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
 
             if (isOneWay || messageResultType != null)
             {
-                handlerMethods.Add(new(method, paramType, messageResultType, isAsync, isOneWay, hasCancellationToken));
+                handlerMethods.Add(new(method,
+                                       paramType,
+                                       messageResultType,
+                                       isAsync,
+                                       isOneWay,
+                                       hasCancellationToken));
                 if (messageResultType != null)
                     JsonSerializerContextEmitter.AddSerializableTypes(graph,
-                                                                      messageResultType,
-                                                                      compilation,
-                                                                      allTypesInCompilation,
-                                                                      context.ReportDiagnostic);
+                        messageResultType,
+                        compilation,
+                        allTypesInCompilation,
+                        context.ReportDiagnostic);
                 JsonSerializerContextEmitter.AddSerializableTypes(graph,
-                                                                  paramType,
-                                                                  compilation,
-                                                                  allTypesInCompilation,
-                                                                  context.ReportDiagnostic);
+                    paramType,
+                    compilation,
+                    allTypesInCompilation,
+                    context.ReportDiagnostic);
             }
         }
 
@@ -681,11 +723,13 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
     static string BuildTokenChainSetInitializer(IReadOnlyCollection<string> chains)
     {
         if (chains.Count == 0)
-            return "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal)";
+            return
+                "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal)";
 
         var items = string.Join(", ", chains.Select(c => $"\"{c}\""));
-        return "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal) { " +
-               items + " }";
+        return
+            "new global::System.Collections.Generic.HashSet<string>(global::System.StringComparer.Ordinal) { " +
+            items + " }";
     }
 
     static bool IsOrInheritsFromMessage(ITypeSymbol type)
@@ -694,7 +738,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
         while (current != null)
         {
             var ns = current.ContainingNamespace?.ToDisplayString();
-            if (ns == "Comptatata.SpoolDrop.Messages" && (current.Name == "Message" || current.Name == "Event"))
+            if (ns == "Comptatata.SpoolDrop.Messages" &&
+                (current.Name == "Message" || current.Name == "Event"))
                 return true;
             current = current.BaseType;
         }
@@ -739,7 +784,8 @@ public class SpoolBusHandlerGenerator : IIncrementalGenerator
             string.Equals(x?.SourceFilePath, y?.SourceFilePath, StringComparison.Ordinal);
 
         public int GetHashCode(Registration obj) =>
-            (((SymbolEqualityComparer.Default.GetHashCode(obj.Type) * 397) ^ obj.Kind.GetHashCode()) * 397) ^
+            (((SymbolEqualityComparer.Default.GetHashCode(obj.Type) * 397) ^
+              obj.Kind.GetHashCode()) * 397) ^
             StringComparer.Ordinal.GetHashCode(obj.SourceFilePath);
     }
 

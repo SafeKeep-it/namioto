@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="18" viewBox="0 0 100 18">
+  <metadata id="thoth-snapshot" type="application/json"><![CDATA[
+{"Width":10,"Height":1,"Cells":[{"X":0,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":1,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":2,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":3,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":4,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":5,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":6,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":7,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":8,"Y":0,"GlyphId":65,"StyleIndex":0,"Width":1,"Glyph":"A"},{"X":9,"Y":0,"GlyphId":66,"StyleIndex":0,"Width":1,"Glyph":"B"}]}
+  ]]></metadata>
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <rect x="80" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="13" fill="#111111">A</text>
+    <rect x="90" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="13" fill="#111111">B</text>
+  </g>
+</svg>

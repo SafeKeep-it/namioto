@@ -11,7 +11,8 @@ public class HttpClientStreamingReturnAnalyzer : DiagnosticAnalyzer
 {
     public const string DiagnosticId = "COMP0003";
     const string Category = "Usage";
-    static readonly LocalizableString Title = "Use IAsyncEnumerable<T> instead of Task<IAsyncEnumerable<T>>";
+    static readonly LocalizableString Title =
+        "Use IAsyncEnumerable<T> instead of Task<IAsyncEnumerable<T>>";
     static readonly LocalizableString MessageFormat =
         "HTTP client method returns Task<IAsyncEnumerable<{0}>>. Return IAsyncEnumerable<{0}> directly instead.";
     static readonly LocalizableString Description =
@@ -25,7 +26,8 @@ public class HttpClientStreamingReturnAnalyzer : DiagnosticAnalyzer
                                                     true,
                                                     Description);
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+        ImmutableArray.Create(Rule);
 
     public override void Initialize(AnalysisContext context)
     {
@@ -41,14 +43,16 @@ public class HttpClientStreamingReturnAnalyzer : DiagnosticAnalyzer
         // Only analyze methods in interfaces
         if (methodDeclaration.Parent is not InterfaceDeclarationSyntax) return;
 
-        var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration, context.CancellationToken);
+        var methodSymbol =
+            context.SemanticModel.GetDeclaredSymbol(methodDeclaration, context.CancellationToken);
         if (methodSymbol == null) return;
 
         var returnType = methodSymbol.ReturnType;
 
         // Check if return type is Task<T>
         if (returnType is not INamedTypeSymbol { IsGenericType: true } taskType) return;
-        if (taskType.OriginalDefinition.ToDisplayString() != "System.Threading.Tasks.Task<TResult>") return;
+        if (taskType.OriginalDefinition.ToDisplayString() != "System.Threading.Tasks.Task<TResult>")
+            return;
 
         // Check if T is IAsyncEnumerable<U>
         var wrappedType = taskType.TypeArguments[0];
@@ -59,9 +63,11 @@ public class HttpClientStreamingReturnAnalyzer : DiagnosticAnalyzer
 
         // Get the element type for the diagnostic message
         var elementType = asyncEnumerableType.TypeArguments[0];
-        var elementTypeName = elementType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+        var elementTypeName =
+            elementType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
 
-        var diagnostic = Diagnostic.Create(Rule, methodDeclaration.ReturnType.GetLocation(), elementTypeName);
+        var diagnostic =
+            Diagnostic.Create(Rule, methodDeclaration.ReturnType.GetLocation(), elementTypeName);
         context.ReportDiagnostic(diagnostic);
     }
 }

@@ -1,0 +1,64 @@
+{
+  "name": "70s Ledger (Night)",
+  "id": "comptatata-70s-dark",
+  "description": "Warm 1970s-inspired night theme. Espresso background, off-white paper text, amber highlights. Optimized for long sessions.",
+  "author": "Comptatata",
+  "variant": "dark",
+  "version": 1,
+  "colors": {
+    "background": {
+      "rgb": "#1f1b16",
+      "xterm256": 233,
+      "ansi": "black",
+      "description": "Alt-screen background. Warm charcoal espresso tone."
+    },
+    "text": {
+      "rgb": "#e6dccf",
+      "xterm256": 254,
+      "ansi": "white",
+      "description": "Primary text. Off-white paper glow."
+    },
+    "dim": {
+      "rgb": "#9c9488",
+      "xterm256": 245,
+      "ansi": "bright_black",
+      "description": "Secondary text. Timestamps, hints."
+    },
+    "border": {
+      "rgb": "#3a2f27",
+      "xterm256": 235,
+      "ansi": "black",
+      "description": "Structural elements. Dark wood separators."
+    },
+    "accent": {
+      "rgb": "#d17a22",
+      "xterm256": 172,
+      "ansi": "yellow",
+      "description": "Focus, selection, links. Burnt orange accent."
+    },
+    "notify": {
+      "rgb": "#e39b3c",
+      "xterm256": 214,
+      "ansi": "bright_yellow",
+      "description": "Notifications and AI activity glow."
+    },
+    "success": {
+      "rgb": "#7d8f5b",
+      "xterm256": 101,
+      "ansi": "green",
+      "description": "Positive financial signals."
+    },
+    "warning": {
+      "rgb": "#c2a23a",
+      "xterm256": 178,
+      "ansi": "yellow",
+      "description": "Warnings and attention-required states."
+    },
+    "error": {
+      "rgb": "#b5533c",
+      "xterm256": 131,
+      "ansi": "red",
+      "description": "Errors and critical states."
+    }
+  }
+}

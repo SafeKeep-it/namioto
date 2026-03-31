@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="240" viewBox="0 0 280 240">
+  <metadata id="thoth-animation" type="application/json"><![CDATA[
+{"kind":"thoth.animation.steps","steps":[{"index":0,"label":"step 00","width":11,"height":1},{"index":1,"label":"step 01","width":11,"height":1},{"index":2,"label":"step 02","width":11,"height":1},{"index":3,"label":"step 03","width":11,"height":1},{"index":4,"label":"step 04","width":11,"height":1},{"index":5,"label":"step 05","width":11,"height":1},{"index":6,"label":"step 06","width":11,"height":1},{"index":7,"label":"step 07","width":11,"height":1},{"index":8,"label":"step 08","width":11,"height":1},{"index":9,"label":"step 09","width":11,"height":1},{"index":10,"label":"step 10","width":11,"height":1},{"index":11,"label":"step 11","width":11,"height":1}],"metadata":{"control":"Spinner","dial":"Kit","speed":2,"laneWidth":11,"trailRadius":2}}
+  ]]></metadata>
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <text x="4" y="13" fill="#2c3e50">step 00</text>
+    <rect x="170" y="0" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="171" y="13" fill="#111111">■</text>
+    <rect x="180" y="0" width="10" height="18" fill="#ffffff" />
+    <rect x="190" y="0" width="10" height="18" fill="#ffffff" />
+    <rect x="200" y="0" width="10" height="18" fill="#ffffff" />
+    <rect x="210" y="0" width="10" height="18" fill="#ffffff" />
+    <rect x="220" y="0" width="10" height="18" fill="#ffffff" />
+    <rect x="230" y="0" width="10" height="18" fill="#ffffff" />
+    <rect x="240" y="0" width="10" height="18" fill="#ffffff" />
+    <rect x="250" y="0" width="10" height="18" fill="#ffffff" />
+    <rect x="260" y="0" width="10" height="18" fill="#ffffff" />
+    <rect x="270" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="4" y="33" fill="#2c3e50">step 01</text>
+    <rect x="170" y="20" width="10" height="18" fill="#ffffff" />
+    <rect x="180" y="20" width="10" height="18" fill="hsl(141, 62%, 82%)" />
+    <text x="181" y="33" fill="#111111">■</text>
+    <rect x="190" y="20" width="10" height="18" fill="hsl(94, 62%, 82%)" />
+    <text x="191" y="33" fill="#111111">■</text>
+    <rect x="200" y="20" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="201" y="33" fill="#111111">■</text>
+    <text x="4" y="53" fill="#2c3e50">step 02</text>
+    <rect x="180" y="40" width="10" height="18" fill="#ffffff" />
+    <rect x="190" y="40" width="10" height="18" fill="#ffffff" />
+    <rect x="200" y="40" width="10" height="18" fill="#ffffff" />
+    <rect x="210" y="40" width="10" height="18" fill="hsl(141, 62%, 82%)" />
+    <text x="211" y="53" fill="#111111">■</text>
+    <rect x="220" y="40" width="10" height="18" fill="hsl(94, 62%, 82%)" />
+    <text x="221" y="53" fill="#111111">■</text>
+    <rect x="230" y="40" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="231" y="53" fill="#111111">■</text>
+    <text x="4" y="73" fill="#2c3e50">step 03</text>
+    <rect x="210" y="60" width="10" height="18" fill="#ffffff" />
+    <rect x="220" y="60" width="10" height="18" fill="#ffffff" />
+    <rect x="230" y="60" width="10" height="18" fill="#ffffff" />
+    <rect x="240" y="60" width="10" height="18" fill="hsl(141, 62%, 82%)" />
+    <text x="241" y="73" fill="#111111">■</text>
+    <rect x="250" y="60" width="10" height="18" fill="hsl(94, 62%, 82%)" />
+    <text x="251" y="73" fill="#111111">■</text>
+    <rect x="260" y="60" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="261" y="73" fill="#111111">■</text>
+    <text x="4" y="93" fill="#2c3e50">step 04</text>
+    <rect x="240" y="80" width="10" height="18" fill="#ffffff" />
+    <rect x="250" y="80" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="251" y="93" fill="#111111">■</text>
+    <rect x="260" y="80" width="10" height="18" fill="hsl(94, 62%, 82%)" />
+    <text x="261" y="93" fill="#111111">■</text>
+    <rect x="270" y="80" width="10" height="18" fill="hsl(141, 62%, 82%)" />
+    <text x="271" y="93" fill="#111111">■</text>
+    <text x="4" y="113" fill="#2c3e50">step 05</text>
+    <rect x="220" y="100" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="221" y="113" fill="#111111">■</text>
+    <rect x="230" y="100" width="10" height="18" fill="hsl(94, 62%, 82%)" />
+    <text x="231" y="113" fill="#111111">■</text>
+    <rect x="240" y="100" width="10" height="18" fill="hsl(141, 62%, 82%)" />
+    <text x="241" y="113" fill="#111111">■</text>
+    <rect x="250" y="100" width="10" height="18" fill="#ffffff" />
+    <rect x="260" y="100" width="10" height="18" fill="#ffffff" />
+    <rect x="270" y="100" width="10" height="18" fill="#ffffff" />
+    <text x="4" y="133" fill="#2c3e50">step 06</text>
+    <rect x="190" y="120" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="191" y="133" fill="#111111">■</text>
+    <rect x="200" y="120" width="10" height="18" fill="hsl(94, 62%, 82%)" />
+    <text x="201" y="133" fill="#111111">■</text>
+    <rect x="210" y="120" width="10" height="18" fill="hsl(141, 62%, 82%)" />
+    <text x="211" y="133" fill="#111111">■</text>
+    <rect x="220" y="120" width="10" height="18" fill="#ffffff" />
+    <rect x="230" y="120" width="10" height="18" fill="#ffffff" />
+    <rect x="240" y="120" width="10" height="18" fill="#ffffff" />
+    <text x="4" y="153" fill="#2c3e50">step 07</text>
+    <rect x="170" y="140" width="10" height="18" fill="hsl(94, 62%, 82%)" />
+    <text x="171" y="153" fill="#111111">■</text>
+    <rect x="180" y="140" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="181" y="153" fill="#111111">■</text>
+    <rect x="190" y="140" width="10" height="18" fill="#ffffff" />
+    <rect x="200" y="140" width="10" height="18" fill="#ffffff" />
+    <rect x="210" y="140" width="10" height="18" fill="#ffffff" />
+    <text x="4" y="173" fill="#2c3e50">step 08</text>
+    <rect x="170" y="160" width="10" height="18" fill="#ffffff" />
+    <rect x="180" y="160" width="10" height="18" fill="#ffffff" />
+    <rect x="190" y="160" width="10" height="18" fill="hsl(141, 62%, 82%)" />
+    <text x="191" y="173" fill="#111111">■</text>
+    <rect x="200" y="160" width="10" height="18" fill="hsl(94, 62%, 82%)" />
+    <text x="201" y="173" fill="#111111">■</text>
+    <rect x="210" y="160" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="211" y="173" fill="#111111">■</text>
+    <text x="4" y="193" fill="#2c3e50">step 09</text>
+    <rect x="190" y="180" width="10" height="18" fill="#ffffff" />
+    <rect x="200" y="180" width="10" height="18" fill="#ffffff" />
+    <rect x="210" y="180" width="10" height="18" fill="#ffffff" />
+    <rect x="220" y="180" width="10" height="18" fill="hsl(141, 62%, 82%)" />
+    <text x="221" y="193" fill="#111111">■</text>
+    <rect x="230" y="180" width="10" height="18" fill="hsl(94, 62%, 82%)" />
+    <text x="231" y="193" fill="#111111">■</text>
+    <rect x="240" y="180" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="241" y="193" fill="#111111">■</text>
+    <text x="4" y="213" fill="#2c3e50">step 10</text>
+    <rect x="220" y="200" width="10" height="18" fill="#ffffff" />
+    <rect x="230" y="200" width="10" height="18" fill="#ffffff" />
+    <rect x="240" y="200" width="10" height="18" fill="#ffffff" />
+    <rect x="270" y="200" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="271" y="213" fill="#111111">■</text>
+    <text x="4" y="233" fill="#2c3e50">step 11</text>
+    <rect x="240" y="220" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+    <text x="241" y="233" fill="#111111">■</text>
+    <rect x="250" y="220" width="10" height="18" fill="hsl(94, 62%, 82%)" />
+    <text x="251" y="233" fill="#111111">■</text>
+    <rect x="260" y="220" width="10" height="18" fill="hsl(141, 62%, 82%)" />
+    <text x="261" y="233" fill="#111111">■</text>
+    <rect x="270" y="220" width="10" height="18" fill="#ffffff" />
+  </g>
+</svg>

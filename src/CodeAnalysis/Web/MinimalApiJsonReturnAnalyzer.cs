@@ -25,7 +25,8 @@ public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
                                                     true,
                                                     Description);
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+        ImmutableArray.Create(Rule);
 
     public override void Initialize(AnalysisContext context)
     {
@@ -44,7 +45,9 @@ public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
             return;
 
         // Check if it's on TypedResults or Results
-        var symbol = context.SemanticModel.GetSymbolInfo(invocation, context.CancellationToken).Symbol as IMethodSymbol;
+        var symbol =
+            context.SemanticModel.GetSymbolInfo(invocation, context.CancellationToken).Symbol as
+                IMethodSymbol;
         if (symbol == null) return;
 
         var containingType = symbol.ContainingType.ToDisplayString();
@@ -67,13 +70,16 @@ public class MinimalApiJsonReturnAnalyzer : DiagnosticAnalyzer
             if (current is LambdaExpressionSyntax or LocalFunctionStatementSyntax)
             {
                 // Check if this lambda/function is passed to a Map... method
-                var parentInvocation = current.Ancestors().OfType<InvocationExpressionSyntax>().FirstOrDefault();
+                var parentInvocation = current.Ancestors()
+                                              .OfType<InvocationExpressionSyntax>()
+                                              .FirstOrDefault();
                 if (parentInvocation != null)
                 {
                     if (parentInvocation.Expression is MemberAccessExpressionSyntax ma &&
                         ma.Name.Identifier.Text.StartsWith("Map"))
                         return true;
-                    if (parentInvocation.Expression is IdentifierNameSyntax id && id.Identifier.Text.StartsWith("Map"))
+                    if (parentInvocation.Expression is IdentifierNameSyntax id &&
+                        id.Identifier.Text.StartsWith("Map"))
                         return true;
                 }
             }

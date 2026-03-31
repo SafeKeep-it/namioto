@@ -1,0 +1,64 @@
+{
+  "name": "70s Ledger (Day)",
+  "id": "comptatata-70s-light",
+  "description": "Warm 1970s-inspired day theme. Paper ledger background, brown ink text, burnt orange accents. Designed for financial clarity with human warmth.",
+  "author": "Comptatata",
+  "variant": "light",
+  "version": 1,
+  "colors": {
+    "background": {
+      "rgb": "#f4efe8",
+      "xterm256": 255,
+      "ansi": "white",
+      "description": "Alt-screen background. Creamy paper tone."
+    },
+    "text": {
+      "rgb": "#2b241d",
+      "xterm256": 235,
+      "ansi": "black",
+      "description": "Primary text. Warm brown ink."
+    },
+    "dim": {
+      "rgb": "#6f665c",
+      "xterm256": 242,
+      "ansi": "bright_black",
+      "description": "Secondary text. Timestamps, hints, inactive UI."
+    },
+    "border": {
+      "rgb": "#b9a995",
+      "xterm256": 250,
+      "ansi": "bright_black",
+      "description": "Structural elements. Borders, separators, frames."
+    },
+    "accent": {
+      "rgb": "#c46a1a",
+      "xterm256": 166,
+      "ansi": "yellow",
+      "description": "Focus, selection, links. Burnt orange signature color."
+    },
+    "notify": {
+      "rgb": "#de8f3d",
+      "xterm256": 214,
+      "ansi": "bright_yellow",
+      "description": "Notifications and AI activity highlights."
+    },
+    "success": {
+      "rgb": "#6f8450",
+      "xterm256": 101,
+      "ansi": "green",
+      "description": "Positive financial signals."
+    },
+    "warning": {
+      "rgb": "#b89b2e",
+      "xterm256": 178,
+      "ansi": "yellow",
+      "description": "Warnings and attention-required states."
+    },
+    "error": {
+      "rgb": "#a44a33",
+      "xterm256": 131,
+      "ansi": "red",
+      "description": "Errors and critical states."
+    }
+  }
+}

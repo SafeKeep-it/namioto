@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="18" viewBox="0 0 160 18">
+  <metadata id="thoth-snapshot" type="application/json"><![CDATA[
+{"Width":16,"Height":1,"Cells":[{"X":0,"Y":0,"GlyphId":104,"StyleIndex":0,"Width":1,"Glyph":"h"},{"X":1,"Y":0,"GlyphId":101,"StyleIndex":0,"Width":1,"Glyph":"e"},{"X":2,"Y":0,"GlyphId":108,"StyleIndex":0,"Width":1,"Glyph":"l"},{"X":3,"Y":0,"GlyphId":108,"StyleIndex":0,"Width":1,"Glyph":"l"},{"X":4,"Y":0,"GlyphId":111,"StyleIndex":0,"Width":1,"Glyph":"o"},{"X":5,"Y":0,"GlyphId":32,"StyleIndex":0,"Width":1,"Glyph":" "},{"X":6,"Y":0,"GlyphId":119,"StyleIndex":0,"Width":1,"Glyph":"w"},{"X":7,"Y":0,"GlyphId":111,"StyleIndex":0,"Width":1,"Glyph":"o"},{"X":8,"Y":0,"GlyphId":114,"StyleIndex":0,"Width":1,"Glyph":"r"},{"X":9,"Y":0,"GlyphId":108,"StyleIndex":0,"Width":1,"Glyph":"l"},{"X":10,"Y":0,"GlyphId":100,"StyleIndex":0,"Width":1,"Glyph":"d"},{"X":11,"Y":0,"GlyphId":32,"StyleIndex":1,"Width":1,"Glyph":" "},{"X":12,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":13,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":14,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":15,"Y":0,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null}]}
+  ]]></metadata>
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <rect x="0" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="13" fill="#111111">h</text>
+    <rect x="10" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="13" fill="#111111">e</text>
+    <rect x="20" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="13" fill="#111111">l</text>
+    <rect x="30" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="13" fill="#111111">l</text>
+    <rect x="40" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="13" fill="#111111">o</text>
+    <rect x="50" y="0" width="10" height="18" fill="#ffffff" />
+    <rect x="60" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="13" fill="#111111">w</text>
+    <rect x="70" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="13" fill="#111111">o</text>
+    <rect x="80" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="13" fill="#111111">r</text>
+    <rect x="90" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="13" fill="#111111">l</text>
+    <rect x="100" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="13" fill="#111111">d</text>
+    <rect x="110" y="0" width="10" height="18" fill="hsl(47, 62%, 82%)" />
+  </g>
+</svg>

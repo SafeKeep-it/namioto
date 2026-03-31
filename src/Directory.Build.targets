@@ -3,21 +3,21 @@
         <_BalorHeartbeat>$(MSBuildThisFileDirectory).ontology/.heartbeat</_BalorHeartbeat>
         <_BalorDaemonScript>$(MSBuildThisFileDirectory)../sh/balor-ensure.sh</_BalorDaemonScript>
     </PropertyGroup>
-<!--    -->
-<!--    &lt;!&ndash; Ensure Balor daemon is running (once per solution build, including IDE) &ndash;&gt;-->
-<!--    <Target Name="EnsureBalorDaemon" BeforeTargets="CoreCompile"-->
-<!--            Condition="'$(DesignTimeBuild)' != 'true'">-->
-<!--        <Exec Command='bash "$(_BalorDaemonScript)"' ContinueOnError="true" StandardOutputImportance="low" />-->
-<!--    </Target>-->
-<!--    -->
-<!--    &lt;!&ndash; Touch heartbeat file quickly (one bash call per project but minimal work) &ndash;&gt;-->
-<!--    <Target Name="EnsureBalorHeartbeat" BeforeTargets="CoreCompile" DependsOnTargets="EnsureBalorDaemon"-->
-<!--            Condition="'$(DesignTimeBuild)' != 'true'">-->
-<!--        <Touch Files="$(_BalorHeartbeat)" AlwaysCreate="true" ContinueOnError="true" />-->
-<!--    </Target>-->
-<!--    -->
-<!--    &lt;!&ndash; GenOntology runs per project after compile (needed for each project's symbols) &ndash;&gt;-->
-<!--    <Target Name="GenOntology" AfterTargets="CoreCompile">-->
-<!--        <Exec Command='bash "$(MSBuildThisFileDirectory)../sh/ontology-project-build.sh" "$(MSBuildProjectFullPath)" "$(RootNamespace)" "@(ProjectReference->&apos;%(FullPath)&apos;, &apos;;&apos;)" "$(AssemblyName)"' />-->
-<!--    </Target>-->
+    <!--    -->
+    <!--    &lt;!&ndash; Ensure Balor daemon is running (once per solution build, including IDE) &ndash;&gt;-->
+    <!--    <Target Name="EnsureBalorDaemon" BeforeTargets="CoreCompile"-->
+    <!--            Condition="'$(DesignTimeBuild)' != 'true'">-->
+    <!--        <Exec Command='bash "$(_BalorDaemonScript)"' ContinueOnError="true" StandardOutputImportance="low" />-->
+    <!--    </Target>-->
+    <!--    -->
+    <!--    &lt;!&ndash; Touch heartbeat file quickly (one bash call per project but minimal work) &ndash;&gt;-->
+    <!--    <Target Name="EnsureBalorHeartbeat" BeforeTargets="CoreCompile" DependsOnTargets="EnsureBalorDaemon"-->
+    <!--            Condition="'$(DesignTimeBuild)' != 'true'">-->
+    <!--        <Touch Files="$(_BalorHeartbeat)" AlwaysCreate="true" ContinueOnError="true" />-->
+    <!--    </Target>-->
+    <!--    -->
+    <!--    &lt;!&ndash; GenOntology runs per project after compile (needed for each project's symbols) &ndash;&gt;-->
+    <!--    <Target Name="GenOntology" AfterTargets="CoreCompile">-->
+    <!--        <Exec Command='bash "$(MSBuildThisFileDirectory)../sh/ontology-project-build.sh" "$(MSBuildProjectFullPath)" "$(RootNamespace)" "@(ProjectReference->&apos;%(FullPath)&apos;, &apos;;&apos;)" "$(AssemblyName)"' />-->
+    <!--    </Target>-->
 </Project>

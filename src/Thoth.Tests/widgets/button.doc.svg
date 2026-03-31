@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="432" viewBox="0 0 800 432">
+  <rect width="100%" height="100%" fill="#0d1117"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <g>
+      <text x="351 361 371 381 391 401 411 421 431 441" y="193" fill="#e0d2ae">╔════════╗</text>
+      <text x="351 361 371 381 391 401 421 431 441" y="211" fill="#e0d2ae">║ClickMe║</text>
+      <text x="351 361 371 381 391 401 411 421 431 441" y="229" fill="#e0d2ae">╚════════╝</text>
+    </g>
+  </g>
+</svg>

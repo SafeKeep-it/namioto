@@ -1,0 +1,64 @@
+{
+  "name": "Neutral Console",
+  "id": "comptatata-neutral-dark",
+  "description": "Neutral baseline theme matching current dark console rendering.",
+  "author": "Comptatata",
+  "variant": "dark",
+  "version": 1,
+  "colors": {
+    "background": {
+      "rgb": "#1e1e28",
+      "xterm256": 235,
+      "ansi": "black",
+      "description": "Primary app background."
+    },
+    "text": {
+      "rgb": "#ffffff",
+      "xterm256": 15,
+      "ansi": "white",
+      "description": "Primary text color."
+    },
+    "dim": {
+      "rgb": "#808080",
+      "xterm256": 8,
+      "ansi": "bright_black",
+      "description": "Muted helper text."
+    },
+    "border": {
+      "rgb": "#505064",
+      "xterm256": 60,
+      "ansi": "bright_black",
+      "description": "Borders and separators."
+    },
+    "accent": {
+      "rgb": "#ffa500",
+      "xterm256": 214,
+      "ansi": "yellow",
+      "description": "Focus and accent color."
+    },
+    "notify": {
+      "rgb": "#ffd166",
+      "xterm256": 221,
+      "ansi": "bright_yellow",
+      "description": "Notification highlights."
+    },
+    "success": {
+      "rgb": "#00ff00",
+      "xterm256": 10,
+      "ansi": "green",
+      "description": "Success state color."
+    },
+    "warning": {
+      "rgb": "#ffa500",
+      "xterm256": 214,
+      "ansi": "yellow",
+      "description": "Warning state color."
+    },
+    "error": {
+      "rgb": "#ff0000",
+      "xterm256": 9,
+      "ansi": "red",
+      "description": "Error state color."
+    }
+  }
+}

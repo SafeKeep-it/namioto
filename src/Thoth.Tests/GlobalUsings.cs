@@ -1,0 +1,17 @@
+global using Canvas = Thoth.Rendering.Canvas;
+global using RenderContext = Thoth.Rendering.RenderContext;
+global using UiContext = Thoth.Rendering.UiContext;
+global using ScreenBuffer = Thoth.Rendering.Grid.GridBuffer;
+global using Cell = Thoth.Rendering.Grid.Cell;
+global using Style = Thoth.Rendering.Style;
+global using Rect = Thoth.Rendering.Rect;
+global using Size = Thoth.Rendering.Layout.Size;
+global using SizeConstraint = Thoth.Rendering.Layout.SizeConstraint;
+global using Color = Thoth.Rendering.Color;
+global using InvalidationKind = Thoth.Rendering.InvalidationKind;
+global using FrameRenderer = Thoth.Rendering.FrameEngine;
+global using AttentionManager = Thoth.Eventing.AttentionManager;
+global using JsonTerminal = Thoth.Rendering.Snapshots.JsonTerminal;
+global using HorizontalAlignment = Thoth.Widgets.Layout.HorizontalAlignment;
+global using StackPanel = Thoth.Widgets.StackPanel;
+global using Thoth.Tests.utilities;

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>preview</LangVersion>
+        <RootNamespace>Thoth</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <NoWarn>$(NoWarn);IL2026;IL3050</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Comptatata.Thoth.Tests"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Include="Themes\70s.dark.theme.json"/>
+        <EmbeddedResource CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Include="Themes\70s.light.theme.json"/>
+        <EmbeddedResource CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Include="Themes\thoth.light.theme.json"/>
+        <EmbeddedResource CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Include="Themes\thoth.dark.theme.json"/>
+        <EmbeddedResource CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Include="Themes\neutral.dark.theme.json"/>
+    </ItemGroup>
+
+</Project>

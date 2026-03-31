@@ -59,16 +59,21 @@ public sealed class GeneratorManifest
         var manifestPath = GetManifestPath(generatorName, projectDirectory, projectName);
         var directory = Path.GetDirectoryName(manifestPath);
 
-        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory)) Directory.CreateDirectory(directory);
+        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            Directory.CreateDirectory(directory);
 
-        var lines = Entries.Select(e => $"{e.Key}|{e.Value.GeneratedFilePath}|{string.Join(",", e.Value.SymbolNames)}");
+        var lines =
+            Entries.Select(e =>
+                               $"{e.Key}|{e.Value.GeneratedFilePath}|{string.Join(",", e.Value.SymbolNames)}");
         File.WriteAllLines(manifestPath, lines);
     }
 
     /// <summary>
     ///     Records a generated file in the manifest.
     /// </summary>
-    public void RecordGeneration(string sourceFilePath, string generatedFilePath, IEnumerable<string> symbolNames)
+    public void RecordGeneration(string sourceFilePath,
+                                 string generatedFilePath,
+                                 IEnumerable<string> symbolNames)
     {
         var normalizedSourcePath = Path.GetFullPath(sourceFilePath);
         var normalizedGeneratedPath = Path.GetFullPath(generatedFilePath);
@@ -106,14 +111,17 @@ public sealed class GeneratorManifest
     /// <summary>
     ///     Handles file rename by updating manifest and renaming/deleting old generated file.
     /// </summary>
-    public void HandleFileRename(string oldSourcePath, string newSourcePath, string newGeneratedPath)
+    public void HandleFileRename(string oldSourcePath,
+                                 string newSourcePath,
+                                 string newGeneratedPath)
     {
         var normalizedOldPath = Path.GetFullPath(oldSourcePath);
         var normalizedNewGeneratedPath = Path.GetFullPath(newGeneratedPath);
         if (Entries.TryGetValue(normalizedOldPath, out var oldInfo))
         {
             // Delete old generated file if it exists and differs from new path
-            if (oldInfo.GeneratedFilePath != normalizedNewGeneratedPath && File.Exists(oldInfo.GeneratedFilePath))
+            if (oldInfo.GeneratedFilePath != normalizedNewGeneratedPath &&
+                File.Exists(oldInfo.GeneratedFilePath))
                 try
                 {
                     File.Delete(oldInfo.GeneratedFilePath);
@@ -144,12 +152,19 @@ public sealed class GeneratorManifest
         foreach (var key in staleKeys) RemoveEntry(key, false);
     }
 
-    static string GetManifestPath(string generatorName, string projectDirectory, string? projectName = null)
+    static string GetManifestPath(string generatorName,
+                                  string projectDirectory,
+                                  string? projectName = null)
     {
         var artifactsRoot = FindArtifactsRoot(projectDirectory);
-        var manifestFileName = (projectName ?? Path.GetFileName(projectDirectory)) + "." + ManifestFileName;
+        var manifestFileName = (projectName ?? Path.GetFileName(projectDirectory)) + "." +
+                               ManifestFileName;
         if (artifactsRoot != null)
-            return Path.Combine(artifactsRoot, "obj", "generators", generatorName, manifestFileName);
+            return Path.Combine(artifactsRoot,
+                                "obj",
+                                "generators",
+                                generatorName,
+                                manifestFileName);
 
         return Path.Combine(projectDirectory, "obj", manifestFileName);
     }

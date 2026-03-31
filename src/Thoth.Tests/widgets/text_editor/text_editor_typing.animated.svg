@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="432" viewBox="0 0 800 432">
+  <style>
+    .thoth-f0 { animation: thoth-kf0 4.8s linear infinite; }
+    .thoth-f1 { animation: thoth-kf1 4.8s linear infinite; }
+    .thoth-f2 { animation: thoth-kf2 4.8s linear infinite; }
+    .thoth-f3 { animation: thoth-kf3 4.8s linear infinite; }
+    .thoth-f4 { animation: thoth-kf4 4.8s linear infinite; }
+    .thoth-f5 { animation: thoth-kf5 4.8s linear infinite; }
+    .thoth-f6 { animation: thoth-kf6 4.8s linear infinite; }
+    .thoth-f7 { animation: thoth-kf7 4.8s linear infinite; }
+    .thoth-f8 { animation: thoth-kf8 4.8s linear infinite; }
+    .thoth-f9 { animation: thoth-kf9 4.8s linear infinite; }
+    .thoth-f10 { animation: thoth-kf10 4.8s linear infinite; }
+    .thoth-f11 { animation: thoth-kf11 4.8s linear infinite; }
+    .thoth-f12 { animation: thoth-kf12 4.8s linear infinite; }
+    .thoth-f13 { animation: thoth-kf13 4.8s linear infinite; }
+    @keyframes thoth-kf0 { 0%,31.25%{opacity:1} 31.26%,100%{opacity:0} }
+    @keyframes thoth-kf1 { 0%,31.25%{opacity:0} 31.26%,34.38%{opacity:1} 34.38%,100%{opacity:0} }
+    @keyframes thoth-kf2 { 0%,34.38%{opacity:0} 34.38%,37.50%{opacity:1} 37.51%,100%{opacity:0} }
+    @keyframes thoth-kf3 { 0%,37.50%{opacity:0} 37.51%,40.62%{opacity:1} 40.63%,100%{opacity:0} }
+    @keyframes thoth-kf4 { 0%,40.62%{opacity:0} 40.63%,43.75%{opacity:1} 43.76%,100%{opacity:0} }
+    @keyframes thoth-kf5 { 0%,43.75%{opacity:0} 43.76%,46.88%{opacity:1} 46.88%,100%{opacity:0} }
+    @keyframes thoth-kf6 { 0%,46.88%{opacity:0} 46.88%,50.00%{opacity:1} 50.01%,100%{opacity:0} }
+    @keyframes thoth-kf7 { 0%,50.00%{opacity:0} 50.01%,53.12%{opacity:1} 53.13%,100%{opacity:0} }
+    @keyframes thoth-kf8 { 0%,53.12%{opacity:0} 53.13%,56.25%{opacity:1} 56.26%,100%{opacity:0} }
+    @keyframes thoth-kf9 { 0%,56.25%{opacity:0} 56.26%,59.38%{opacity:1} 59.38%,100%{opacity:0} }
+    @keyframes thoth-kf10 { 0%,59.38%{opacity:0} 59.38%,62.50%{opacity:1} 62.51%,100%{opacity:0} }
+    @keyframes thoth-kf11 { 0%,62.50%{opacity:0} 62.51%,65.62%{opacity:1} 65.64%,100%{opacity:0} }
+    @keyframes thoth-kf12 { 0%,65.62%{opacity:0} 65.64%,68.75%{opacity:1} 68.76%,100%{opacity:0} }
+    @keyframes thoth-kf13 { 0%,68.75%{opacity:0} 68.76%,100%{opacity:1} }
+  </style>
+  <rect width="100%" height="100%" fill="#0d1117"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <g class="thoth-f0">
+    </g>
+    <g class="thoth-f1">
+      <text x="1" y="13" fill="#e0d2ae">H</text>
+    </g>
+    <g class="thoth-f2">
+      <text x="1 11" y="13" fill="#e0d2ae">He</text>
+    </g>
+    <g class="thoth-f3">
+      <text x="1 11 21" y="13" fill="#e0d2ae">Hel</text>
+    </g>
+    <g class="thoth-f4">
+      <text x="1 11 21 31" y="13" fill="#e0d2ae">Hell</text>
+    </g>
+    <g class="thoth-f5">
+      <text x="1 11 21 31 41" y="13" fill="#e0d2ae">Hello</text>
+    </g>
+    <g class="thoth-f6">
+      <text x="1 11 21 31 41 51" y="13" fill="#e0d2ae">Hello,</text>
+    </g>
+    <g class="thoth-f7">
+      <text x="1 11 21 31 41 51" y="13" fill="#e0d2ae">Hello,</text>
+    </g>
+    <g class="thoth-f8">
+      <text x="1 11 21 31 41 51 71" y="13" fill="#e0d2ae">Hello,T</text>
+    </g>
+    <g class="thoth-f9">
+      <text x="1 11 21 31 41 51 71 81" y="13" fill="#e0d2ae">Hello,Th</text>
+    </g>
+    <g class="thoth-f10">
+      <text x="1 11 21 31 41 51 71 81 91" y="13" fill="#e0d2ae">Hello,Tho</text>
+    </g>
+    <g class="thoth-f11">
+      <text x="1 11 21 31 41 51 71 81 91 101" y="13" fill="#e0d2ae">Hello,Thot</text>
+    </g>
+    <g class="thoth-f12">
+      <text x="1 11 21 31 41 51 71 81 91 101 111" y="13" fill="#e0d2ae">Hello,Thoth</text>
+    </g>
+    <g class="thoth-f13">
+      <text x="1 11 21 31 41 51 71 81 91 101 111 121" y="13" fill="#e0d2ae">Hello,Thoth!</text>
+    </g>
+  </g>
+</svg>

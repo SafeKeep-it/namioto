@@ -1,0 +1,64 @@
+{
+  "name": "Thoth (Day)",
+  "id": "thoth-light",
+  "description": "Sunlit lapis, gilded stone, and ruby palette.",
+  "author": "Comptatata",
+  "variant": "light",
+  "version": 1,
+  "colors": {
+    "background": {
+      "rgb": "#f7f0dc",
+      "xterm256": 230,
+      "ansi": "white",
+      "description": "Sunlit limestone background."
+    },
+    "text": {
+      "rgb": "#3a2a1a",
+      "xterm256": 235,
+      "ansi": "black",
+      "description": "Primary text, dark ink on stone."
+    },
+    "dim": {
+      "rgb": "#6b5a3c",
+      "xterm256": 95,
+      "ansi": "bright_black",
+      "description": "Secondary and helper text."
+    },
+    "border": {
+      "rgb": "#a3acc6",
+      "xterm256": 146,
+      "ansi": "bright_black",
+      "description": "Structural borders and separators."
+    },
+    "accent": {
+      "rgb": "#2b6fd6",
+      "xterm256": 33,
+      "ansi": "blue",
+      "description": "Lapis-driven focus and active controls."
+    },
+    "notify": {
+      "rgb": "#ffcc33",
+      "xterm256": 220,
+      "ansi": "yellow",
+      "description": "Gold highlight for notifications."
+    },
+    "success": {
+      "rgb": "#2d8f59",
+      "xterm256": 29,
+      "ansi": "green",
+      "description": "Success and positive states."
+    },
+    "warning": {
+      "rgb": "#cd8526",
+      "xterm256": 172,
+      "ansi": "yellow",
+      "description": "Warning states."
+    },
+    "error": {
+      "rgb": "#a5263e",
+      "xterm256": 124,
+      "ansi": "red",
+      "description": "Error and critical states."
+    }
+  }
+}

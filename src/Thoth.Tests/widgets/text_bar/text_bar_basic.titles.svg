@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="18" viewBox="0 0 200 18">
+  <metadata id="thoth-snapshot" type="application/json"><![CDATA[
+{"Width":20,"Height":1,"Cells":[{"X":0,"Y":0,"GlyphId":76,"StyleIndex":0,"Width":1,"Glyph":"L"},{"X":1,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":2,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":3,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":4,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":5,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":6,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":7,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":8,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":9,"Y":0,"GlyphId":67,"StyleIndex":0,"Width":1,"Glyph":"C"},{"X":10,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":11,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":12,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":13,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":14,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":15,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":16,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":17,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"},{"X":18,"Y":0,"GlyphId":82,"StyleIndex":0,"Width":1,"Glyph":"R"},{"X":19,"Y":0,"GlyphId":45,"StyleIndex":0,"Width":1,"Glyph":"-"}]}
+  ]]></metadata>
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <rect x="0" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="13" fill="#111111">L</text>
+    <rect x="10" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="13" fill="#111111">-</text>
+    <rect x="20" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="13" fill="#111111">-</text>
+    <rect x="30" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="13" fill="#111111">-</text>
+    <rect x="40" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="13" fill="#111111">-</text>
+    <rect x="50" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="13" fill="#111111">-</text>
+    <rect x="60" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="13" fill="#111111">-</text>
+    <rect x="70" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="13" fill="#111111">-</text>
+    <rect x="80" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="13" fill="#111111">-</text>
+    <rect x="90" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="13" fill="#111111">C</text>
+    <rect x="100" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="13" fill="#111111">-</text>
+    <rect x="110" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="13" fill="#111111">-</text>
+    <rect x="120" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="13" fill="#111111">-</text>
+    <rect x="130" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="13" fill="#111111">-</text>
+    <rect x="140" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="13" fill="#111111">-</text>
+    <rect x="150" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="13" fill="#111111">-</text>
+    <rect x="160" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="13" fill="#111111">-</text>
+    <rect x="170" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="13" fill="#111111">-</text>
+    <rect x="180" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="13" fill="#111111">R</text>
+    <rect x="190" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="13" fill="#111111">-</text>
+  </g>
+</svg>

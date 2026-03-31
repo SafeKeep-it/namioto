@@ -1,0 +1,31 @@
+{
+  "profiles": {
+    "Thoth Stress (Default)": {
+      "commandName": "Project",
+      "commandLineArgs": "--iterations 2 --frames 300 --full-render true --widths 80,120,160,200 --heights 24,36,48,60 --terminal-bound true",
+      "environmentVariables": {
+        "THOTH_TIMING": "1",
+        "THOTH_TIMING_EMIT_MS": "1000",
+        "THOTH_RUN_PERF": "1"
+      }
+    },
+    "Thoth Stress (Full Render)": {
+      "commandName": "Project",
+      "commandLineArgs": "--iterations 2 --frames 400 --full-render true --widths 120,160,200 --heights 36,48,60 --terminal-bound true",
+      "environmentVariables": {
+        "THOTH_TIMING": "1",
+        "THOTH_TIMING_EMIT_MS": "1000",
+        "THOTH_RUN_PERF": "1"
+      }
+    },
+    "Thoth Stress (Perf Long)": {
+      "commandName": "Project",
+      "commandLineArgs": "--iterations 24 --frames 600 --full-render true --widths 80,120,160,200 --heights 24,36,48,60 --terminal-bound true",
+      "environmentVariables": {
+        "THOTH_TIMING": "1",
+        "THOTH_TIMING_EMIT_MS": "1000",
+        "THOTH_RUN_PERF": "1"
+      }
+    }
+  }
+}

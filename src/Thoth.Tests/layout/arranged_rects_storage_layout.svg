@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="54" viewBox="0 0 200 54">
+  <metadata id="thoth-snapshot" type="application/json"><![CDATA[
+{"Width":20,"Height":3,"Cells":[{"X":0,"Y":0,"GlyphId":97,"StyleIndex":0,"Width":1,"Glyph":"a"},{"X":1,"Y":0,"GlyphId":114,"StyleIndex":0,"Width":1,"Glyph":"r"},{"X":2,"Y":0,"GlyphId":114,"StyleIndex":0,"Width":1,"Glyph":"r"},{"X":3,"Y":0,"GlyphId":97,"StyleIndex":0,"Width":1,"Glyph":"a"},{"X":4,"Y":0,"GlyphId":110,"StyleIndex":0,"Width":1,"Glyph":"n"},{"X":5,"Y":0,"GlyphId":103,"StyleIndex":0,"Width":1,"Glyph":"g"},{"X":6,"Y":0,"GlyphId":101,"StyleIndex":0,"Width":1,"Glyph":"e"},{"X":7,"Y":0,"GlyphId":100,"StyleIndex":0,"Width":1,"Glyph":"d"},{"X":8,"Y":0,"GlyphId":95,"StyleIndex":0,"Width":1,"Glyph":"_"},{"X":9,"Y":0,"GlyphId":114,"StyleIndex":0,"Width":1,"Glyph":"r"},{"X":10,"Y":0,"GlyphId":101,"StyleIndex":0,"Width":1,"Glyph":"e"},{"X":11,"Y":0,"GlyphId":99,"StyleIndex":0,"Width":1,"Glyph":"c"},{"X":12,"Y":0,"GlyphId":116,"StyleIndex":0,"Width":1,"Glyph":"t"},{"X":13,"Y":0,"GlyphId":115,"StyleIndex":0,"Width":1,"Glyph":"s"},{"X":14,"Y":0,"GlyphId":95,"StyleIndex":0,"Width":1,"Glyph":"_"},{"X":15,"Y":0,"GlyphId":115,"StyleIndex":0,"Width":1,"Glyph":"s"},{"X":16,"Y":0,"GlyphId":116,"StyleIndex":0,"Width":1,"Glyph":"t"},{"X":17,"Y":0,"GlyphId":111,"StyleIndex":0,"Width":1,"Glyph":"o"},{"X":18,"Y":0,"GlyphId":114,"StyleIndex":0,"Width":1,"Glyph":"r"},{"X":19,"Y":0,"GlyphId":97,"StyleIndex":0,"Width":1,"Glyph":"a"},{"X":0,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":1,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":2,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":3,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":4,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":5,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":6,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":7,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":8,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":9,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":10,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":11,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":12,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":13,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":14,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":15,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":16,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":17,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":18,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":19,"Y":1,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":0,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":1,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":2,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":3,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":4,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":5,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":6,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":7,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":8,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":9,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":10,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":11,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":12,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":13,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":14,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":15,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":16,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":17,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":18,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null},{"X":19,"Y":2,"GlyphId":0,"StyleIndex":0,"Width":0,"Glyph":null}]}
+  ]]></metadata>
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="13" text-rendering="optimizeSpeed">
+    <rect x="0" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="1" y="13" fill="#111111">a</text>
+    <rect x="10" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="11" y="13" fill="#111111">r</text>
+    <rect x="20" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="21" y="13" fill="#111111">r</text>
+    <rect x="30" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="31" y="13" fill="#111111">a</text>
+    <rect x="40" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="41" y="13" fill="#111111">n</text>
+    <rect x="50" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="51" y="13" fill="#111111">g</text>
+    <rect x="60" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="61" y="13" fill="#111111">e</text>
+    <rect x="70" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="71" y="13" fill="#111111">d</text>
+    <rect x="80" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="81" y="13" fill="#111111">_</text>
+    <rect x="90" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="91" y="13" fill="#111111">r</text>
+    <rect x="100" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="101" y="13" fill="#111111">e</text>
+    <rect x="110" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="111" y="13" fill="#111111">c</text>
+    <rect x="120" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="121" y="13" fill="#111111">t</text>
+    <rect x="130" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="131" y="13" fill="#111111">s</text>
+    <rect x="140" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="141" y="13" fill="#111111">_</text>
+    <rect x="150" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="151" y="13" fill="#111111">s</text>
+    <rect x="160" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="161" y="13" fill="#111111">t</text>
+    <rect x="170" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="171" y="13" fill="#111111">o</text>
+    <rect x="180" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="181" y="13" fill="#111111">r</text>
+    <rect x="190" y="0" width="10" height="18" fill="#ffffff" />
+    <text x="191" y="13" fill="#111111">a</text>
+  </g>
+</svg>
